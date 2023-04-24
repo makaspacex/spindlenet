@@ -1,35 +1,30 @@
-import torch
-from torch.nn import functional as F;
-from torch.nn.init import xavier_uniform_,constant_,xavier_normal_
-from typing import Optional, Any,Tuple,List
+import copy
 import math
 import warnings
-import copy
+from typing import Optional, Tuple, List
+
+import torch
+import torch.nn
+from torch.nn import functional as F
+from torch.nn.init import xavier_uniform_, constant_, xavier_normal_
+
 
 class NonDynamicallyQuantizableLinear(torch.nn.Linear):
     def __init__(self, in_features: int, out_features: int, bias: bool = True,
                  device=None, dtype=None) -> None:
-        super().__init__(in_features, out_features, bias=bias)
+        super(NonDynamicallyQuantizableLinear, self).__init__(in_features, out_features, bias=bias)
+
 
 def _get_clones(module, N):
     return torch.nn.ModuleList([copy.deepcopy(module) for i in range(N)])
 
 
-def _get_activation_fn(activation):
-    if activation == "relu":
-        return F.relu
-    elif activation == "gelu":
-        return F.gelu
-
-    raise RuntimeError("activation should be relu/gelu, not {}".format(activation))
-
-
 def _in_projection_packed(
-    q: torch.Tensor,
-    k: torch.Tensor,
-    v: torch.Tensor,
-    w: torch.Tensor,
-    b: Optional[torch.Tensor] = None,
+        q: torch.Tensor,
+        k: torch.Tensor,
+        v: torch.Tensor,
+        w: torch.Tensor,
+        b: Optional[torch.Tensor] = None,
 ) -> List[torch.Tensor]:
     r"""
     Performs the in-projection step of the attention operation, using packed weights.
@@ -81,15 +76,15 @@ def _in_projection_packed(
 
 
 def _in_projection(
-    q: torch.Tensor,
-    k: torch.Tensor,
-    v: torch.Tensor,
-    w_q: torch.Tensor,
-    w_k: torch.Tensor,
-    w_v: torch.Tensor,
-    b_q: Optional[torch.Tensor] = None,
-    b_k: Optional[torch.Tensor] = None,
-    b_v: Optional[torch.Tensor] = None,
+        q: torch.Tensor,
+        k: torch.Tensor,
+        v: torch.Tensor,
+        w_q: torch.Tensor,
+        w_k: torch.Tensor,
+        w_v: torch.Tensor,
+        b_q: Optional[torch.Tensor] = None,
+        b_k: Optional[torch.Tensor] = None,
+        b_v: Optional[torch.Tensor] = None,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     r"""
     Performs the in-projection step of the attention operation. This is simply
@@ -134,11 +129,11 @@ def _in_projection(
 
 
 def _scaled_dot_product_attention(
-    q: torch.Tensor,
-    k: torch.Tensor,
-    v: torch.Tensor,
-    attn_mask: Optional[torch.Tensor] = None,
-    dropout_p: float = 0.0,
+        q: torch.Tensor,
+        k: torch.Tensor,
+        v: torch.Tensor,
+        attn_mask: Optional[torch.Tensor] = None,
+        dropout_p: float = 0.0,
 ) -> Tuple[torch.Tensor, torch.Tensor]:
     r"""
     Computes scaled dot product attention on query, key and value tensors, using
@@ -180,30 +175,30 @@ def _scaled_dot_product_attention(
 
 
 def multi_head_attention_forward(
-    query: torch.Tensor,
-    key: torch.Tensor,
-    value: torch.Tensor,
-    embed_dim_to_check: int,
-    num_heads: int,
-    in_proj_weight: torch.Tensor,
-    in_proj_bias: Optional[torch.Tensor],
-    bias_k: Optional[torch.Tensor],
-    bias_v: Optional[torch.Tensor],
-    add_zero_attn: bool,
-    dropout_p: float,
-    out_proj_weight: torch.Tensor,
-    out_proj_bias: Optional[torch.Tensor],
-    training: bool = True,
-    key_padding_mask: Optional[torch.Tensor] = None,
-    need_weights: bool = True,
-    attn_mask: Optional[torch.Tensor] = None,
-    use_separate_proj_weight: bool = False,
-    q_proj_weight: Optional[torch.Tensor] = None,
-    k_proj_weight: Optional[torch.Tensor] = None,
-    v_proj_weight: Optional[torch.Tensor] = None,
-    static_k: Optional[torch.Tensor] = None,
-    static_v: Optional[torch.Tensor] = None,
-    minf=-1e9
+        query: torch.Tensor,
+        key: torch.Tensor,
+        value: torch.Tensor,
+        embed_dim_to_check: int,
+        num_heads: int,
+        in_proj_weight: torch.Tensor,
+        in_proj_bias: Optional[torch.Tensor],
+        bias_k: Optional[torch.Tensor],
+        bias_v: Optional[torch.Tensor],
+        add_zero_attn: bool,
+        dropout_p: float,
+        out_proj_weight: torch.Tensor,
+        out_proj_bias: Optional[torch.Tensor],
+        training: bool = True,
+        key_padding_mask: Optional[torch.Tensor] = None,
+        need_weights: bool = True,
+        attn_mask: Optional[torch.Tensor] = None,
+        use_separate_proj_weight: bool = False,
+        q_proj_weight: Optional[torch.Tensor] = None,
+        k_proj_weight: Optional[torch.Tensor] = None,
+        v_proj_weight: Optional[torch.Tensor] = None,
+        static_k: Optional[torch.Tensor] = None,
+        static_v: Optional[torch.Tensor] = None,
+        minf=-1e9
 ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
     r"""
     Args:
@@ -307,12 +302,14 @@ def multi_head_attention_forward(
         if attn_mask.dim() == 2:
             correct_2d_size = (tgt_len, src_len)
             if attn_mask.shape != correct_2d_size:
-                raise RuntimeError(f"The shape of the 2D attn_mask is {attn_mask.shape}, but should be {correct_2d_size}.")
+                raise RuntimeError(
+                    f"The shape of the 2D attn_mask is {attn_mask.shape}, but should be {correct_2d_size}.")
             attn_mask = attn_mask.unsqueeze(0)
         elif attn_mask.dim() == 3:
             correct_3d_size = (bsz * num_heads, tgt_len, src_len)
             if attn_mask.shape != correct_3d_size:
-                raise RuntimeError(f"The shape of the 3D attn_mask is {attn_mask.shape}, but should be {correct_3d_size}.")
+                raise RuntimeError(
+                    f"The shape of the 3D attn_mask is {attn_mask.shape}, but should be {correct_3d_size}.")
         else:
             raise RuntimeError(f"attn_mask's dimension {attn_mask.dim()} is not supported")
 
@@ -375,7 +372,7 @@ def multi_head_attention_forward(
     if key_padding_mask is not None:
         assert key_padding_mask.shape == (bsz, src_len), \
             f"expecting key_padding_mask shape of {(bsz, src_len)}, but got {key_padding_mask.shape}"
-        key_padding_mask = key_padding_mask.view(bsz, 1, 1, src_len).   \
+        key_padding_mask = key_padding_mask.view(bsz, 1, 1, src_len). \
             expand(-1, num_heads, -1, -1).reshape(bsz * num_heads, 1, src_len)
         if attn_mask is None:
             attn_mask = key_padding_mask
@@ -408,6 +405,7 @@ def multi_head_attention_forward(
     else:
         return attn_output, None
 
+
 def _get_activation_fn(activation):
     if activation == "relu":
         return F.relu
@@ -415,6 +413,7 @@ def _get_activation_fn(activation):
         return F.gelu
 
     raise RuntimeError("activation should be relu/gelu, not {}".format(activation))
+
 
 class neko_MultiheadAttention(torch.nn.Module):
     r"""Allows the model to jointly attend to information
@@ -518,8 +517,10 @@ class neko_MultiheadAttention(torch.nn.Module):
 
         super(neko_MultiheadAttention, self).__setstate__(state)
 
-    def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor, key_padding_mask: Optional[torch.Tensor] = None,
-                need_weights: bool = True, attn_mask: Optional[torch.Tensor] = None) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
+    def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor,
+                key_padding_mask: Optional[torch.Tensor] = None,
+                need_weights: bool = True, attn_mask: Optional[torch.Tensor] = None) -> Tuple[
+        torch.Tensor, Optional[torch.Tensor]]:
         r"""
     Args:
         query, key, value: map a query and a set of key-value pairs to an output.
@@ -588,6 +589,7 @@ class neko_MultiheadAttention(torch.nn.Module):
         else:
             return attn_output, attn_output_weights
 
+
 class neko_TransformerEncoderLayer(torch.nn.Module):
     r"""TransformerEncoderLayer is made up of self-attn and feedforward network.
     This standard encoder layer is based on the paper "Attention Is All You Need".
@@ -626,7 +628,7 @@ class neko_TransformerEncoderLayer(torch.nn.Module):
 
         super(neko_TransformerEncoderLayer, self).__init__()
         self.self_attn = neko_MultiheadAttention(d_model, nhead, dropout=dropout, batch_first=batch_first,
-                                            **factory_kwargs)
+                                                 **factory_kwargs)
         # Implementation of Feedforward model
         self.linear1 = torch.nn.Linear(d_model, dim_feedforward, **factory_kwargs)
         self.dropout = torch.nn.Dropout(dropout)
@@ -644,7 +646,8 @@ class neko_TransformerEncoderLayer(torch.nn.Module):
             state['activation'] = F.relu
         super(neko_TransformerEncoderLayer, self).__setstate__(state)
 
-    def forward(self, src: torch.Tensor, src_mask: Optional[torch.Tensor] = None, src_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+    def forward(self, src: torch.Tensor, src_mask: Optional[torch.Tensor] = None,
+                src_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         r"""Pass the input through the encoder layer.
 
         Args:
@@ -663,6 +666,7 @@ class neko_TransformerEncoderLayer(torch.nn.Module):
         src = src + self.dropout2(src2)
         src = self.norm2(src)
         return src
+
 
 class neko_TransformerDecoderLayer(torch.nn.Module):
     r"""TransformerDecoderLayer is made up of self-attn, multi-head-attn and feedforward network.
@@ -701,9 +705,9 @@ class neko_TransformerDecoderLayer(torch.nn.Module):
         factory_kwargs = {'device': device, 'dtype': dtype}
         super(neko_TransformerDecoderLayer, self).__init__()
         self.self_attn = neko_MultiheadAttention(d_model, nhead, dropout=dropout, batch_first=batch_first,
-                                            **factory_kwargs)
-        self.multihead_attn = neko_MultiheadAttention(d_model, nhead, dropout=dropout, batch_first=batch_first,
                                                  **factory_kwargs)
+        self.multihead_attn = neko_MultiheadAttention(d_model, nhead, dropout=dropout, batch_first=batch_first,
+                                                      **factory_kwargs)
         # Implementation of Feedforward model
         self.linear1 = torch.nn.Linear(d_model, dim_feedforward, **factory_kwargs)
         self.dropout = torch.nn.Dropout(dropout)
@@ -723,8 +727,10 @@ class neko_TransformerDecoderLayer(torch.nn.Module):
             state['activation'] = F.relu
         super(neko_TransformerDecoderLayer, self).__setstate__(state)
 
-    def forward(self, tgt: torch.Tensor, memory: torch.Tensor, tgt_mask: Optional[torch.Tensor] = None, memory_mask: Optional[torch.Tensor] = None,
-                tgt_key_padding_mask: Optional[torch.Tensor] = None, memory_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+    def forward(self, tgt: torch.Tensor, memory: torch.Tensor, tgt_mask: Optional[torch.Tensor] = None,
+                memory_mask: Optional[torch.Tensor] = None,
+                tgt_key_padding_mask: Optional[torch.Tensor] = None,
+                memory_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
         r"""Pass the inputs (and mask) through the decoder layer.
 
         Args:
@@ -750,4 +756,3 @@ class neko_TransformerDecoderLayer(torch.nn.Module):
         tgt = tgt + self.dropout3(tgt2)
         tgt = self.norm3(tgt)
         return tgt
-

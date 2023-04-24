@@ -5,10 +5,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+runtime/*
 # C extensions
 *.so
-
+.idea/
 # Distribution / packaging
 .Python
 env/

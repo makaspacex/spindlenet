@@ -1,44 +1,56 @@
 class neko_res45_binorm_bogo:
-    def cuda(this):
-        pass;
-    def freeze(this):
-        this.container.eval();
-    def freezebn(this):
-        this.container.model.freezebnprefix(this.bnname);
-    def unfreezebn(this):
-        this.container.model.unfreezebnprefix(this.bnname);
+    def cuda(self):
+        pass
 
-    def unfreeze(this):
-        this.container.model.train();
-    def get_torch_module_dict(this):
-        return this.container.model;
-    def __init__(this,args,mod_dict):
-        this.container=mod_dict[args["container"]];
-        this.name=args["name"];
-        this.bnname=args["name"].replace("res","bn");
-        this.model=mod_dict[args["container"]].model.bogo_modules[args["name"]]
-    def __call__(this,x):
-        return this.model(x);
+    def freeze(self):
+        self.container.eval()
+
+    def freezebn(self):
+        self.container.model.freezebnprefix(self.bnname)
+
+    def unfreezebn(self):
+        self.container.model.unfreezebnprefix(self.bnname)
+
+    def unfreeze(self):
+        self.container.model.train()
+
+    def get_torch_module_dict(self):
+        return self.container.model
+
+    def __init__(self, args, mod_dict):
+        self.container = mod_dict[args["container"]]
+        self.name = args["name"]
+        self.bnname = args["name"].replace("res", "bn")
+        self.model = mod_dict[args["container"]].model.bogo_modules[args["name"]]
+
+    def __call__(self, x):
+        return self.model(x)
+
 
 class neko_res45cco_binorm_bogo:
-    def cuda(this):
-        pass;
-    def freeze(this):
-        this.container.eval();
-    def freezebn(this):
-        this.container.model.freezebnprefix(this.bnname);
-    def unfreezebn(this):
-        this.container.model.unfreezebnprefix(this.bnname);
+    def cuda(self):
+        pass
 
-    def unfreeze(this):
-        this.container.model.train();
-    def get_torch_module_dict(this):
-        return this.container.model;
-    def __init__(this,args,mod_dict):
-        this.container=mod_dict[args["container"]];
-        this.name=args["name"];
-        this.bnname=args["name"].replace("res","bn");
-        this.model=mod_dict[args["container"]].model.bogo_modules[args["name"]]
-    def __call__(this,x):
-        return this.model(x);
+    def freeze(self):
+        self.container.eval()
 
+    def freezebn(self):
+        self.container.model.freezebnprefix(self.bnname)
+
+    def unfreezebn(self):
+        self.container.model.unfreezebnprefix(self.bnname)
+
+    def unfreeze(self):
+        self.container.model.train()
+
+    def get_torch_module_dict(self):
+        return self.container.model
+
+    def __init__(self, args, mod_dict):
+        self.container = mod_dict[args["container"]]
+        self.name = args["name"]
+        self.bnname = args["name"].replace("res", "bn")
+        self.model = mod_dict[args["container"]].model.bogo_modules[args["name"]]
+
+    def __call__(self, x):
+        return self.model(x)

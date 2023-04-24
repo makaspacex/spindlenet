@@ -1,6 +1,7 @@
-from torch import nn;
+from torch import nn
 
-from torchvision.models.resnet import conv1x1,BasicBlock,Bottleneck,model_urls;
+from torchvision.models.resnet import conv1x1, BasicBlock, Bottleneck
+
 
 class ResNetNP(nn.Module):
 
@@ -16,7 +17,7 @@ class ResNetNP(nn.Module):
         self.layer2 = self._make_layer(block, 128, layers[1], stride=2)
         self.layer3 = self._make_layer(block, 256, layers[2], stride=2)
         self.layer4 = self._make_layer(block, 512, layers[3], stride=2)
-        self.fc=conv1x1(512,outch,1)
+        self.fc = conv1x1(512, outch, 1)
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 nn.init.kaiming_normal_(m.weight, mode='fan_out', nonlinearity='relu')
@@ -51,7 +52,7 @@ class ResNetNP(nn.Module):
         return nn.Sequential(*layers)
 
     def forward(self, x):
-        assert (x.shape[2]==32)
+        assert (x.shape[2] == 32)
         x = self.conv1(x)
         x = self.bn1(x)
         x = self.relu(x)

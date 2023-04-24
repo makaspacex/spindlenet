@@ -1,34 +1,34 @@
 import torch.nn as nn
+
 from neko_sdk.AOF.blocks import BasicBlockNoLens
-import torch;
 
 
 class neko_reslayer(nn.Module):
-    def __init__(this,in_planes, planes, blocks=1, stride=1):
-        super(neko_reslayer, this).__init__()
-        this.in_planes=in_planes
-        this.downsample = None
+    def __init__(self, in_planes, planes, blocks=1, stride=1):
+        super(neko_reslayer, self).__init__()
+        self.in_planes = in_planes
+        self.downsample = None
         if stride != 1 or in_planes != planes * BasicBlockNoLens.expansion:
-            this.downsample = nn.Sequential(
+            self.downsample = nn.Sequential(
                 nn.Conv2d(in_planes, planes * BasicBlockNoLens.expansion,
                           kernel_size=1, stride=stride, bias=False),
                 nn.BatchNorm2d(planes * BasicBlockNoLens.expansion),
             )
 
-        this.layers = []
-        this.layers.append(BasicBlockNoLens(this.in_planes, planes, stride, this.downsample))
-        this.add_module("blk" + "init", this.layers[-1]);
+        self.layers = []
+        self.layers.append(BasicBlockNoLens(self.in_planes, planes, stride, self.downsample))
+        self.add_module("blk" + "init", self.layers[-1])
         in_planes = planes * BasicBlockNoLens.expansion
         for i in range(1, blocks):
-            this.layers.append(BasicBlockNoLens(in_planes, planes))
-            this.add_module("blk"+str(i),this.layers[-1]);
-        this.out_planes=planes;
+            self.layers.append(BasicBlockNoLens(in_planes, planes))
+            self.add_module("blk" + str(i), self.layers[-1])
+        self.out_planes = planes
 
-    def forward(this, input):
-        fields=[];
-        feat=input;
-        for l in  this.layers:
-            feat,f=l(feat);
-            if(f is not None):
-                fields.append(f);
-        return feat,fields;
+    def forward(self, input):
+        fields = []
+        feat = input
+        for l in self.layers:
+            feat, f = l(feat)
+            if (f is not None):
+                fields.append(f)
+        return feat, fields

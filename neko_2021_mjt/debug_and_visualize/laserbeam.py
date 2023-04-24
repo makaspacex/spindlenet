@@ -1,17 +1,16 @@
-
 import warnings
 
 import matplotlib.pyplot as plt
-
 import torch
 import torch.nn as nn
 
 try:
     from flashtorch.utils import (denormalize,
-                              format_for_plotting,
-                              standardize_and_clip)
+                                  format_for_plotting,
+                                  standardize_and_clip)
 except:
     print("Flash torch not installed, unable to visualize reception field! >_<")
+
 
 class neko_Backprop:
     """Provides an interface to perform backpropagation.
@@ -31,17 +30,17 @@ class neko_Backprop:
         model: A neural network model from `torchvision.models
             <https://pytorch.org/docs/stable/torchvision/models.html>`_.
 
-    """ # noqa
+    """  # noqa
 
     ####################
     # Public interface #
     ####################
 
-    def __init__(self, model,conv1=None,gid=0):
+    def __init__(self, model, conv1=None, gid=0):
         self.model = model
         self.model.eval()
         self.gradients = None
-        self._register_conv_hook(conv1,gid)
+        self._register_conv_hook(conv1, gid)
 
     def calculate_gradients(self,
                             input_,
@@ -69,7 +68,7 @@ class neko_Backprop:
         Returns:
             gradients (torch.Tensor): With shape :math:`(C, H, W)`.
 
-        """ # noqa
+        """  # noqa
 
         if 'inception' in self.model.__class__.__name__.lower():
             if input_.size()[1:] != (3, 299, 299):
@@ -90,8 +89,8 @@ class neko_Backprop:
         # Get a raw prediction value (logit) from the last linear layer
 
         output = self.model(input_)
-        if(output is None):
-            return None;
+        if (output is None):
+            return None
         # Don't set the gradient target if the model is a binary classifier
         # i.e. has one class prediction
 
@@ -163,7 +162,7 @@ class neko_Backprop:
 
         Returns:
             gradients (torch.Tensor): With shape :math:`(C, H, W)`.
-        """ # noqa
+        """  # noqa
 
         # Calculate gradients
 
@@ -185,12 +184,12 @@ class neko_Backprop:
              [(format_for_plotting(denormalize(input_)), None, None)]),
             ('Gradients across RGB channels',
              [(format_for_plotting(standardize_and_clip(gradients)),
-              None,
-              None)]),
+               None,
+               None)]),
             ('Max gradients',
              [(format_for_plotting(standardize_and_clip(max_gradients)),
-              cmap,
-              None)]),
+               cmap,
+               None)]),
             ('Overlay',
              [(format_for_plotting(denormalize(input_)), None, None),
               (format_for_plotting(standardize_and_clip(max_gradients)),
@@ -215,25 +214,26 @@ class neko_Backprop:
     # Private interface #
     #####################
 
-    def _register_conv_hook(self,module=None,gid=0):
+    def _register_conv_hook(self, module=None, gid=0):
         def _record_gradients(module, grad_in, grad_out):
             print("engaging")
 
-            if( grad_in[gid] is None):
+            if (grad_in[gid] is None):
                 print("why")
                 print(grad_in)
-                return ;
+                return
             if self.gradients.shape == grad_in[gid].shape:
                 self.gradients = grad_in[gid]
                 print("hit")
             else:
-                print(grad_in[gid].shape,"vs",self.gradients.shape);
-                print(grad_in[gid].max());
+                print(grad_in[gid].shape, "vs", self.gradients.shape)
+                print(grad_in[gid].max())
+
         if module is None:
             for module in self.model.feature_extractor.modules():
                 if isinstance(module, nn.modules.conv.Conv2d):
                     module.register_full_backward_hook(_record_gradients)
-                    continue;
+                    continue
                     break
         else:
             module.register_backward_hook(_record_gradients)

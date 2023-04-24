@@ -1,5 +1,6 @@
 from functools import partial
 
+
 def multi_apply(func, *args, **kwargs):
     """Apply function to a list of arguments.
     Note:

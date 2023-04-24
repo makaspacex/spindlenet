@@ -1,25 +1,29 @@
-import torch
-from torch import Tensor
-import torch.nn as nn
 # from .._internally_replaced_utils import load_state_dict_from_url
 from typing import Type, Any, Callable, Union, List, Optional
-from neko_sdk.encoders.tv_res_utils import Bottleneck,BasicBlock,conv1x1
+
+import torch
+import torch.nn as nn
+from torch import Tensor
+
+from neko_sdk.encoders.tv_res_utils import Bottleneck, BasicBlock, conv1x1
+
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152', 'resnext50_32x4d', 'resnext101_32x8d',
            'wide_resnet50_2', 'wide_resnet101_2']
 
+
 class ResNet(nn.Module):
 
     def __init__(
-        self,
-        block: Type[Union[BasicBlock, Bottleneck]],
-        layers: List[int],
-        num_classes: int = 1000,
-        zero_init_residual: bool = False,
-        groups: int = 1,
-        width_per_group: int = 64,
-        replace_stride_with_dilation: Optional[List[bool]] = None,
-        norm_layer: Optional[Callable[..., nn.Module]] = None
+            self,
+            block: Type[Union[BasicBlock, Bottleneck]],
+            layers: List[int],
+            num_classes: int = 1000,
+            zero_init_residual: bool = False,
+            groups: int = 1,
+            width_per_group: int = 64,
+            replace_stride_with_dilation: Optional[List[bool]] = None,
+            norm_layer: Optional[Callable[..., nn.Module]] = None
     ) -> None:
         super(ResNet, self).__init__()
         if norm_layer is None:
@@ -117,15 +121,15 @@ class ResNet(nn.Module):
 
 
 def _resnet(
-    arch: str,
-    block: Type[Union[BasicBlock, Bottleneck]],
-    layers: List[int],
-    pretrained: bool,
-    progress: bool,
-    **kwargs: Any
+        arch: str,
+        block: Type[Union[BasicBlock, Bottleneck]],
+        layers: List[int],
+        pretrained: bool,
+        progress: bool,
+        **kwargs: Any
 ) -> ResNet:
     model = ResNet(block, layers, **kwargs)
-  
+
     return model
 
 

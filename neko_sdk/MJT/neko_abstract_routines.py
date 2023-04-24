@@ -152,10 +152,6 @@ class neko_abstract_eval_routine:
             idict[k] = input_dict[self.inp_cvt_dict[k]]
         return idict, mdict
 
-
-w
-
-
 def pretest_impl(self, modular_dict, metaargs, **kwargs):
     rot = kwargs["rot"]
     normproto, plabel, tdict = modular_dict["sampler"].model.dump_all(metaargs=metaargs)

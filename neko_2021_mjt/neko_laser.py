@@ -5,9 +5,9 @@ from neko_2021_mjt.debug_and_visualize.laserbeam import NekoBackprop
 
 # we need something to wrap the routine.
 
-class bogomod(torch.nn.Module):
+class Bogomod(torch.nn.Module):
     def __init__(self, visible, moddict):
-        super(bogomod, self).__init__()
+        super(Bogomod, self).__init__()
         self.core = visible
         mcvt = self.core.mod_cvt_dict
         tmoddict = {}
@@ -41,9 +41,9 @@ class bogomod(torch.nn.Module):
 
 
 # cats LOVE laser dots.
-class neko_laser:
+class NekoLaser(object):
     def __init__(self, model, moddict):
-        self.model = bogomod(model, moddict)
+        self.model = Bogomod(model, moddict)
         self.bper = NekoBackprop(self.model, self.model.feature_extractor.shared_fe_0_conv, 0)
 
     def vis_chars(self, input_dict, modular_dict):

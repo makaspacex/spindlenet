@@ -13,7 +13,7 @@ from neko_2021_mjt.routines.ocr_routines.mk5.osdan_routine_mk5 import NekoHdos2c
 
 # A GP branch will be added if it's ever to be supported
 # Mk7 CF branch uses CAM to perform length prediction, [s] is no more needed
-class Nekohdos2croutinecfmk7(NekoHdos2cRoutineCfmk5):
+class NekoHDOS2cRoutineCfmk7(NekoHdos2cRoutineCfmk5):
 
     def mk_proto(self, label, sampler, prototyper):
         normprotos, plabel, tdict = sampler.model.sample_charset_by_text(label, use_sp=False)
@@ -71,7 +71,7 @@ class Nekohdos2croutinecfmk7(NekoHdos2cRoutineCfmk5):
         return loss
 
 
-class Nekohdos2cRoutineCfmk7dt(Nekohdos2croutinecfmk7):
+class NekoHDOS2cRoutineCfmk7dt(NekoHDOS2cRoutineCfmk7):
 
     def fe_seq(self, clips, module_dict, length):
         seq = module_dict["seq"]
@@ -82,7 +82,7 @@ class Nekohdos2cRoutineCfmk7dt(Nekohdos2croutinecfmk7):
         return out_emb, A, pred_length
 
 
-class Nekohdos2cRoutineCfmk7dtf(Nekohdos2croutinecfmk7):
+class NekoHDOS2cRoutineCfmk7dtf(NekoHDOS2cRoutineCfmk7):
 
     def fe_seq(self, clips, module_dict, length):
         seq = module_dict["seq"]
@@ -94,7 +94,7 @@ class Nekohdos2cRoutineCfmk7dtf(Nekohdos2croutinecfmk7):
         return out_emb, A, pred_length
 
 
-class NekoHdos2cEvalRoutineCfmk7(NekoAbstractEvalRoutine):
+class NekoHDOS2cEvalRoutineCfmk7(NekoAbstractEvalRoutine):
 
     def set_etc(self, args):
         self.maxT = args["maxT"]

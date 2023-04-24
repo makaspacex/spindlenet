@@ -397,7 +397,7 @@ class multiscale_conv_iResNet(nn.Module):
             z_dim = np.prod(z_shape)
             this_z = z[:, cur_dim: cur_dim + z_dim]
             this_z = this_z.view(z.size(0), *z_shape)
-            zs.append(self_z)
+            zs.append(this_z)
             cur_dim += z_dim
         return zs
 

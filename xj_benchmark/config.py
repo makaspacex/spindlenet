@@ -12,18 +12,22 @@ from neko_2021_mjt.configs.routines.ocr_routines.mk8.osdanmk8_routine_cfg import
 from neko_2021_mjt.dss_presets.dual_chhwctw_32 import get_eval_dss as get_eval_dss2
 from neko_2021_mjt.dss_presets.dual_no_lsct_32 import get_eval_dss
 
+
 def model_mod_cfg(tr_meta_path_chs, tr_meta_path_mjst, maxT_mjst, maxT_chs):
     capacity = 256
     feat_ch = 512
     mods = {}
-    mods = arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7(mods, "base_chs_", maxT_chs, capacity, feat_ch,tr_meta_path_chs, wemb=0)
+    mods = arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7(mods, "base_chs_", maxT_chs, capacity, feat_ch,
+                                                         tr_meta_path_chs, wemb=0)
     return mods
+
 
 def model_mod_cfg3(tr_meta_path_chs, tr_meta_path_mjst, maxT_mjst, maxT_chs):
     capacity = 256
     feat_ch = 512
     mods = {}
-    mods = arm_trinorm_mk8hnp_module_set_dan_r45(mods, "base_chs_", maxT_chs, capacity, feat_ch, tr_meta_path_chs, ccnt=3824, wemb=0)
+    mods = arm_trinorm_mk8hnp_module_set_dan_r45(mods, "base_chs_", maxT_chs, capacity, feat_ch, tr_meta_path_chs,
+                                                 ccnt=3824, wemb=0)
     return mods
 
 
@@ -31,7 +35,8 @@ def model_mod_cfg4(tr_meta_path_chs, tr_meta_path_mjst, maxT_mjst, maxT_chs):
     capacity = 256
     feat_ch = 512
     mods = {}
-    mods = arm_trinorm_mk8hnp_module_set_dan_r45ptpt(mods, "base_chs_", maxT_chs, capacity, feat_ch, tr_meta_path_chs, ccnt=3824, wemb=0, expf=1.5)
+    mods = arm_trinorm_mk8hnp_module_set_dan_r45ptpt(mods, "base_chs_", maxT_chs, capacity, feat_ch, tr_meta_path_chs,
+                                                     ccnt=3824, wemb=0, expf=1.5)
     return mods
 
 
@@ -39,7 +44,8 @@ def model_mod_cfg5(tr_meta_path_chs, tr_meta_path_mjst, maxT_mjst, maxT_chs):
     capacity = 256
     feat_ch = 512
     mods = {}
-    mods = arm_trinorm_mk8hnp_module_set_dan_r45ptpt(mods, "base_mjst_", maxT_mjst, capacity, feat_ch, tr_meta_path_mjst, ccnt=38, wemb=0, expf=1.5)
+    mods = arm_trinorm_mk8hnp_module_set_dan_r45ptpt(mods, "base_mjst_", maxT_mjst, capacity, feat_ch,
+                                                     tr_meta_path_mjst, ccnt=38, wemb=0, expf=1.5)
     return mods
 
 
@@ -68,25 +74,21 @@ def get_argv(name):
 
 
 def get_modcfg_dict(name, model_root, datasets_root, export_root, iterkey):
-
     epath = os.path.join(export_root, "benchmarks")
-
-    task_dict = {}
     log_path = export_root
 
+    modules = {}
+    task_dict = {}
+
+    te_meta_path_chsjap, _, _, chs_eval_ds = get_eval_dss(datasets_root, 25, 30)
+
+
     if name in ["OSTR_C2J_BaseModel", "OSTR_C2J_DTAOnly"]:
-        te_meta_path_chsjap, te_meta_path_mjst, mjst_eval_ds, chs_eval_ds = get_eval_dss(datasets_root, 25, 30)
-        task_dict = arm_base_task_default2(task_dict, "base_chs_", osdanmk7_eval_routine_cfg, 30, te_meta_path_chsjap,  chs_eval_ds, log_path)
-        return {
-            "root": model_root,
-            "iterkey": iterkey,  # something makes no sense to start fresh
-            "modules": model_mod_cfg(None, None, 25, 30),
-            "export_path": epath,
-            "tasks": task_dict
-        }
+        task_dict = arm_base_task_default2(task_dict, "base_chs_", osdanmk7_eval_routine_cfg, 30, te_meta_path_chsjap,
+                                           chs_eval_ds, log_path)
+        modules = model_mod_cfg(None, None, 25, 30)
+
     elif name == "OSTR_C2J_Full":
-        te_meta_path_chsjap, te_meta_path_mjst, mjst_eval_ds, chs_eval_ds = get_eval_dss(datasets_root, 25, 30)
-        task_dict = {}
         task_dict = arm_base_mk8_task_default(task_dict, "base_chs_", osdanmk8_eval_routine_cfg, 30,
                                               te_meta_path_chsjap, chs_eval_ds,
                                               log_path, force_skip_ctx=True)
@@ -99,8 +101,6 @@ def get_modcfg_dict(name, model_root, datasets_root, export_root, iterkey):
             "tasks": task_dict
         }
     elif name == "OSTR_C2J_FullLarge":
-        te_meta_path_chsjap, te_meta_path_mjst, mjst_eval_ds, chs_eval_ds = get_eval_dss(datasets_root, 25, 30)
-        task_dict = {}
         task_dict = arm_base_mk8_task_default(task_dict, "base_chs_", osdanmk8_eval_routine_cfg, 30,
                                               te_meta_path_chsjap, chs_eval_ds,
                                               log_path, force_skip_ctx=True)
@@ -112,9 +112,8 @@ def get_modcfg_dict(name, model_root, datasets_root, export_root, iterkey):
             "tasks": task_dict
         }
     elif name == "CSTR_FullLarge":
-        te_meta_path_chsjap, te_meta_path_mjst, mjst_eval_ds, chs_eval_ds = get_eval_dss(datasets_root, 25, 30)
         task_dict = {}
-        task_dict = arm_base_mk8_task_default(task_dict, "base_chs_", osdanmk8_eval_routine_cfg, 30,
+        task_dict = arm_base_mk8_task_default(task_dict, "base_mjst_", osdanmk8_eval_routine_cfg, 30,
                                               te_meta_path_chsjap, chs_eval_ds,
                                               log_path, force_skip_ctx=True)
 
@@ -164,7 +163,17 @@ def get_modcfg_dict(name, model_root, datasets_root, export_root, iterkey):
             "tasks": task_dict
         }
 
-    raise  Exception("未知的名称")
+
+    return {
+        "root": model_root,
+        "iterkey": iterkey,  # something makes no sense to start fresh
+        "modules": modules,
+        "export_path": epath,
+        "tasks": task_dict
+    }
+
+    # raise Exception("未知的名称")
+
 
 def get_profile(name):
     argv, modcfg_dict = None, None
@@ -180,10 +189,10 @@ def get_profile(name):
         "CSTR_FullLarge": "_E3",
         "ZSCR_CTW_Full": "_E4",
         "ZSCR_Handwritten_Full": "_E4"
-         }
+    }
 
     itk = itk_names[name]
-    datasets_root =  find_data_root()
+    datasets_root = find_data_root()
     modcfg_dict = get_modcfg_dict(name, model_root, datasets_root, export_root, itk)
 
     return modcfg_dict

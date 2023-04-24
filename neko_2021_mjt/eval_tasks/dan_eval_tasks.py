@@ -8,7 +8,7 @@ from torch.utils.data.dataloader import DataLoader
 
 from neko_2020nocr.result_renderer import render_words
 from neko_2021_mjt.neko_abstract_jtr import NekoModuleSet
-from neko_2021_mjt.neko_laser import neko_laser
+from neko_2021_mjt.neko_laser import NekoLaser
 from neko_sdk.ocr_modules.charset.chs_cset import t1_3755
 from neko_sdk.ocr_modules.charset.etc_cset import latin62
 from neko_sdk.ocr_modules.img_eval import keepratio_resize
@@ -135,7 +135,7 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
         tmetastart = time.time()
         with torch.no_grad():
             global_cache = self.eval_routine.pretest(self.modulars, metaargs=self.temeta_args, rot=rot)
-        visualizer = neko_laser(self.eval_routine, self.modulars)
+        visualizer = NekoLaser(self.eval_routine, self.modulars)
         mdict = torch.load(self.temeta_args["meta_path"])
 
         # doing some irrelevant shit.

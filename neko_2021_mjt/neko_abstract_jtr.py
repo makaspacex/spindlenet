@@ -314,22 +314,22 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
 
 
 class NekoAbstractModularJointEval(NekoModuleSet):
-    def __init__(self, cfgs, mitr):
+    def __init__(self, cfgs, miter):
         root = cfgs["root"]
         # set to "latest" for resuming, whatever does not make sense to start fresh.
         self.arm_modules(root, cfgs["modules"], cfgs["iterkey"])
         for mk in self.modular_dict:
             self.modular_dict[mk].model.cuda()
-        if ("export_path" in cfgs and cfgs["export_path"] is not None):
+        if "export_path" in cfgs and cfgs["export_path"] is not None:
             for k in cfgs["tasks"]:
                 cfgs["tasks"][k]["export_path"] = cfgs["export_path"]
 
-        self.set_val_tasks(cfgs["tasks"], mitr)
+        self.set_val_tasks(cfgs["tasks"], miter)
 
-    def set_val_tasks(self, val_cfgs, mitr):
+    def set_val_tasks(self, val_cfgs, miter):
         self.val_tasks = []
         for vk in val_cfgs:
-            self.val_tasks.append(val_cfgs[vk]["type"](None, None, self.modular_dict, val_cfgs[vk], mitr))
+            self.val_tasks.append(val_cfgs[vk]["type"](None, None, self.modular_dict, val_cfgs[vk], miter))
 
     def test_img(self, id, image_path, globalcache, h=32, w=100):
         return self.val_tasks[id].test_image(image_path, globalcache)

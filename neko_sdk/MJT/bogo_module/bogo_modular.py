@@ -23,7 +23,7 @@ class neko_bogo_modular:
 
     def dnattach_fwd(self, *args, **kwargs):
         self.detach()
-        ret = this(*args, **kwargs)
+        ret = self(*args, **kwargs)
         self.attach()
         return ret
 

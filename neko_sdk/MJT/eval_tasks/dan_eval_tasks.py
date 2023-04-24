@@ -6,7 +6,7 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 
-from neko_2021_mjt.neko_laser import neko_laser
+from neko_2021_mjt.neko_laser import NekoLaser
 from neko_sdk.MJT.neko_abstract_jtr import neko_module_set
 from neko_sdk.ocr_modules.charset.chs_cset import t1_3755
 from neko_sdk.ocr_modules.charset.etc_cset import latin62
@@ -169,7 +169,7 @@ class neko_odan_eval_tasks(neko_abstract_eval_tasks):
         tmetastart = time.time()
         with torch.no_grad():
             global_cache = self.eval_routine.pretest(self.modulars, metaargs=self.temeta_args, rot=rot)
-        visualizer = neko_laser(self.eval_routine, self.modulars)
+        visualizer = NekoLaser(self.eval_routine, self.modulars)
         mdict = torch.load(self.temeta_args["meta_path"])
 
         # doing some irrelevant shit.

@@ -2,6 +2,7 @@ import numpy as np
 import pylcs
 import regex
 import torch
+import cv2
 
 
 def render_imgschscore(dict, im_file, t, dstfile):

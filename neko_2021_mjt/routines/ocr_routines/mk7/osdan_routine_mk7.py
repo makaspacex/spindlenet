@@ -3,17 +3,17 @@ import regex
 import torch.nn.functional
 
 from neko_2020nocr.dan.common.common import flatten_label
-from neko_2020nocr.dan.utils import Loss_counter, neko_os_Attention_AR_counter, neko_oswr_Attention_AR_counter
-from neko_2021_mjt.modulars.neko_inflater import neko_inflater
-from neko_2021_mjt.routines.neko_abstract_routines import neko_abstract_eval_routine
-from neko_2021_mjt.routines.ocr_routines.mk5.osdan_routine_mk5 import neko_HDOS2C_routine_CFmk5
+from neko_2020nocr.dan.utils import LossCounter, NekoOsAttentionArCounter, NekoOswrAttentionArCounter
+from neko_2021_mjt.modulars.neko_inflater import NekoInflater
+from neko_2021_mjt.routines.neko_abstract_routines import NekoAbstractEvalRoutine
+from neko_2021_mjt.routines.ocr_routines.mk5.osdan_routine_mk5 import NekoHdos2cRoutineCfmk5
 
 
 # mk5 CF branch dropped predict-sample-predict support.
 
 # A GP branch will be added if it's ever to be supported
 # Mk7 CF branch uses CAM to perform length prediction, [s] is no more needed
-class neko_HDOS2C_routine_CFmk7(neko_HDOS2C_routine_CFmk5):
+class Nekohdos2croutinecfmk7(NekoHdos2cRoutineCfmk5):
 
     def mk_proto(self, label, sampler, prototyper):
         normprotos, plabel, tdict = sampler.model.sample_charset_by_text(label, use_sp=False)
@@ -71,7 +71,7 @@ class neko_HDOS2C_routine_CFmk7(neko_HDOS2C_routine_CFmk5):
         return loss
 
 
-class neko_HDOS2C_routine_CFmk7dt(neko_HDOS2C_routine_CFmk7):
+class Nekohdos2cRoutineCfmk7dt(Nekohdos2croutinecfmk7):
 
     def fe_seq(self, clips, module_dict, length):
         seq = module_dict["seq"]
@@ -82,7 +82,7 @@ class neko_HDOS2C_routine_CFmk7dt(neko_HDOS2C_routine_CFmk7):
         return out_emb, A, pred_length
 
 
-class neko_HDOS2C_routine_CFmk7dtf(neko_HDOS2C_routine_CFmk7):
+class Nekohdos2cRoutineCfmk7dtf(Nekohdos2croutinecfmk7):
 
     def fe_seq(self, clips, module_dict, length):
         seq = module_dict["seq"]
@@ -94,26 +94,26 @@ class neko_HDOS2C_routine_CFmk7dtf(neko_HDOS2C_routine_CFmk7):
         return out_emb, A, pred_length
 
 
-class neko_HDOS2C_eval_routine_CFmk7(neko_abstract_eval_routine):
+class NekoHdos2cEvalRoutineCfmk7(NekoAbstractEvalRoutine):
 
     def set_etc(self, args):
         self.maxT = args["maxT"]
-        self.inflater = neko_inflater()
+        self.inflater = NekoInflater()
 
     def set_loggers(self, log_path, name, args):
         try:
             if (args["measure_rej"] == True):
-                self.logger_dict = {"accr": neko_oswr_Attention_AR_counter("[" + name + "]" + "test_accr", False),
+                self.logger_dict = {"accr": NekoOswrAttentionArCounter("[" + name + "]" + "test_accr", False),
                                     }
             else:
                 self.logger_dict = {
-                    "accr": neko_os_Attention_AR_counter("[" + name + "]" + "test_accr", False),
-                    "loss": Loss_counter("[" + name + "]" + "train_accr"),
+                    "accr": NekoOsAttentionArCounter("[" + name + "]" + "test_accr", False),
+                    "loss": LossCounter("[" + name + "]" + "train_accr"),
                 }
         except:
             self.logger_dict = {
-                "accr": neko_os_Attention_AR_counter("[" + name + "]" + "test_accr", False),
-                "loss": Loss_counter("[" + name + "]" + "train_accr"),
+                "accr": NekoOsAttentionArCounter("[" + name + "]" + "test_accr", False),
+                "loss": LossCounter("[" + name + "]" + "train_accr"),
             }
 
     def test_impl(self, data_dict, module_dict, logger_dict):

@@ -1,12 +1,12 @@
 from neko_2020nocr.dan.configs.pipelines_pami import get_cco_fe_args
-from neko_2020nocr.dan.dan_modules_pami.neko_xtra_fe import neko_cco_Feature_Extractor
+from neko_2020nocr.dan.dan_modules_pami.neko_xtra_fe import NekoCcoFeatureExtractor
 from neko_2020nocr.dan.dan_modules_pami.neko_xtra_fe_xl import neko_cco_Feature_Extractor_thicc
 from neko_2021_mjt.modulars.default_config import get_default_model
 
 
 def get_cco(arg_dict, path, optim_path=None):
     args = get_cco_fe_args(arg_dict["hardness"], arg_dict["ouch"], arg_dict["ich"], expf=arg_dict["expf"])
-    return get_default_model(neko_cco_Feature_Extractor, args, path, arg_dict["with_optim"], optim_path)
+    return get_default_model(NekoCcoFeatureExtractor, args, path, arg_dict["with_optim"], optim_path)
 
 
 def config_fe_cco(ich, feat_ch, input_shape=None, expf=1):

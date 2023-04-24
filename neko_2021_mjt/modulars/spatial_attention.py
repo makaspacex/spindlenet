@@ -3,9 +3,9 @@ from torch import nn
 from torch.nn import functional as trnf
 
 
-class spatial_attention(nn.Module):
+class SpatialAttention(nn.Module):
     def __init__(self, ifc):
-        super(spatial_attention, self).__init__()
+        super(SpatialAttention, self).__init__()
         self.core = torch.nn.Sequential(
             torch.nn.Conv2d(
                 ifc, ifc, (3, 3), (1, 1), (1, 1),
@@ -21,7 +21,7 @@ class spatial_attention(nn.Module):
         return self.core(x)
 
 
-class spatial_attention_mk2(spatial_attention):
+class SpatialAttentionMk2(SpatialAttention):
 
     def forward(self, input):
         x = input[-2]
@@ -31,7 +31,7 @@ class spatial_attention_mk2(spatial_attention):
         return self.core(x)
 
 
-class spatial_attention_mk3(spatial_attention):
+class SpatialAttentionMk3(SpatialAttention):
     def forward(self, input):
         x = input[0]
         d = input[-1]
@@ -40,7 +40,7 @@ class spatial_attention_mk3(spatial_attention):
         return self.core(x)
 
 
-class spatial_attention_mk4(spatial_attention):
+class SpatialAttentionMk4(SpatialAttention):
 
     def forward(self, input):
         x = input[0]
@@ -51,9 +51,9 @@ class spatial_attention_mk4(spatial_attention):
         return y
 
 
-class spatial_attention_mk5(spatial_attention):
+class SpatialAttentionMk5(SpatialAttention):
     def __init__(self, ifc):
-        super(spatial_attention, self).__init__()
+        super(SpatialAttention, self).__init__()
         self.core = torch.nn.Sequential(
             torch.nn.Conv2d(
                 ifc, ifc, (3, 3), (1, 1), (1, 1),

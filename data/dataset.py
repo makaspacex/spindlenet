@@ -9,6 +9,7 @@ class SliceDataset(TorchDataset, Configurable):
     end = State()
 
     def __init__(self, **kwargs):
+        super().__init__()
         self.load_all(**kwargs)
 
         if self.start is None:

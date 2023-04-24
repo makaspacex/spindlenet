@@ -1,9 +1,9 @@
-from neko_2021_mjt.modulars.dan.danloss import osdanloss, osdanloss_trident, osdanloss_clsemb, fsldanloss_clsembohem, \
-    osdanloss_clsctx
+from neko_2021_mjt.modulars.dan.danloss import OsdanLoss, OsdanlossTrident, OsdanLossClsemb, FsldanlossClsembohem, \
+    OsdanLossClsctx
 
 
 def get_loss(arg_dict, path, optim_path=None):
-    mod = osdanloss(arg_dict)
+    mod = OsdanLoss(arg_dict)
     return mod, None, None
 
 
@@ -23,7 +23,7 @@ def config_cls_emb_loss():
 
 
 def get_loss_trident(arg_dict, path, optim_path=None):
-    mod = osdanloss_trident(arg_dict)
+    mod = OsdanlossTrident(arg_dict)
     return mod, None, None
 
 
@@ -43,7 +43,7 @@ def config_cls_emb_loss_trident():
 
 
 def get_loss_cls_emb2(arg_dict, path, optim_path=None):
-    mod = osdanloss_clsemb(arg_dict)
+    mod = OsdanLossClsemb(arg_dict)
     return mod, None, None
 
 
@@ -62,7 +62,7 @@ def config_cls_emb_loss2(wemb=0.3, reduction=True):
 
 
 def get_loss_cls_emb_fslohem(arg_dict, path, optim_path=None):
-    mod = fsldanloss_clsembohem(arg_dict)
+    mod = FsldanlossClsembohem(arg_dict)
     return mod, None, None
 
 
@@ -112,7 +112,7 @@ def config_cls_lossohem(dirty_frac=0.1, too_simple_frac=0.01, wcls=1):
 
 
 def get_loss_clsctx(arg_dict, path, optim_path=None):
-    mod = osdanloss_clsctx(arg_dict)
+    mod = OsdanLossClsctx(arg_dict)
     return mod, None, None
 
 

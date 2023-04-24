@@ -10,7 +10,7 @@ from torch.nn import functional as trnf
 # A uses [ac] B uses [ab] C uses [ad]...
 # There is no better way than simply put a,b,c,d in a big basket.
 
-class prototyper_gen3:
+class PrototyperGen3(object):
     def __init__(self, args, moddict):
         self.force_proto_shape = args["force_proto_shape"]
         self.capacity = args["capacity"]
@@ -94,7 +94,7 @@ class prototyper_gen3:
         return self.forward(*args, **kwargs)
 
 
-class prototyper_gen3d(prototyper_gen3):
+class PrototyperGen3d(PrototyperGen3):
     def proto_engine(self, clips):
         features = self.backbone(clips)
         A = self.cam([f.detach() for f in features])

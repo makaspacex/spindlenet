@@ -13,7 +13,7 @@ from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import neko_ocr_lmdb_mgmt
 # we have a few anchors. The model selects on aspect ratios, and the model selects for sort edge size.
 
 
-class neko_gfsl_eval_task_dataset(Dataset):
+class NekoGfslEvalTaskDataset(Dataset):
     def __init__(self, db_root, labelset=None, dsize=[32, 32]):
         meta = torch.load(os.path.join(db_root, "meta.pt"))
         self.samples = []
@@ -59,7 +59,7 @@ def show_batch(sample, label):
 
 
 if __name__ == '__main__':
-    l = neko_gfsl_eval_task_dataset("/home/lasercat/ssddata/jrc_tt100k_mmcls_train/")
+    l = NekoGfslEvalTaskDataset("/home/lasercat/ssddata/jrc_tt100k_mmcls_train/")
     dl = DataLoader(l, 13, num_workers=0)
     for d in dl:
         show_batch(d["samples"], d["labels"])

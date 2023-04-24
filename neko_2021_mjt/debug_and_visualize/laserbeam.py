@@ -12,7 +12,7 @@ except:
     print("Flash torch not installed, unable to visualize reception field! >_<")
 
 
-class neko_Backprop:
+class NekoBackprop(object):
     """Provides an interface to perform backpropagation.
 
     This class provids a way to calculate the gradients of a target class

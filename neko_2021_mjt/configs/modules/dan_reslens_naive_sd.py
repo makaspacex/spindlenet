@@ -1,36 +1,36 @@
 from neko_sdk.AOF.neko_lens import neko_lens, vis_lenses
-from neko_sdk.AOF.neko_reslayer_sd import neko_reslayer_sd, neko_reslayer_sdlr
-from neko_sdk.encoders.ocr_networks.dan.dan_reslens_naive import dan_ResNet
+from neko_sdk.AOF.neko_reslayer_sd import NekoReslayerSd, NekoReslayerSdlr
+from neko_sdk.encoders.ocr_networks.dan.dan_reslens_naive import DanResnet
 
 
-class dan_ResNet_sd(dan_ResNet):
-    LAYER = neko_reslayer_sd
+class DanResnetSd(DanResnet):
+    LAYER = NekoReslayerSd
     LENS = neko_lens
 
 
 def res_naive_lens45_sd(strides, compress_layer, hardness, inpch=1, oupch=512):
-    model = dan_ResNet_sd([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch)
+    model = DanResnetSd([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch)
     return model
 
 
 def res_naive_lens45_sd_thicc(strides, compress_layer, hardness, inpch=1, oupch=512):
-    model = dan_ResNet_sd([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch, expf=1.5)
+    model = DanResnetSd([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch, expf=1.5)
     return model
 
 
-class dan_ResNet_sdlr(dan_ResNet):
-    LAYER = neko_reslayer_sdlr
+class DanResnetSdlr(DanResnet):
+    LAYER = NekoReslayerSdlr
     LENS = neko_lens
 
 
 def res_naive_lens45_sdlr(strides, compress_layer, hardness, inpch=1, oupch=512):
-    model = dan_ResNet_sdlr([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch)
+    model = DanResnetSdlr([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch)
     return model
 
 
 def res_naive_lens45_sdlr_thicc(strides, compress_layer, hardness, inpch=1, oupch=512):
-    model = dan_ResNet_sdlr([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch,
-                            expf=1.5)
+    model = DanResnetSdlr([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch,
+                          expf=1.5)
     return model
 
 

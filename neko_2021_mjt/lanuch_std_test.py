@@ -66,10 +66,10 @@ def launchtest(modcfg_dict, itr_override=None, miter=10000, rot=0, auf=True, max
 
 
 def launchtest_image(src_path, export_path, itk, root, tskcfg, miter=10000, rot=0, auf=True):
-    from neko_2021_mjt.eval_tasks.dan_eval_tasks import neko_odan_eval_tasks
+    from neko_2021_mjt.eval_tasks.dan_eval_tasks import NekoOdanEvalTasks
     shutil.rmtree(export_path, ignore_errors=True)
     os.makedirs(export_path)
-    tsk = neko_odan_eval_tasks(root, itk, None, tskcfg, miter)
+    tsk = NekoOdanEvalTasks(root, itk, None, tskcfg, miter)
     if not auf:
         import torch
         tsk.modular_dict["pred"].model.UNK_SCR = torch.nn.Parameter(

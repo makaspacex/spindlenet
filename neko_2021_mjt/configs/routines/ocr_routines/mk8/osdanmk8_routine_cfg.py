@@ -1,5 +1,5 @@
-from neko_2021_mjt.routines.ocr_routines.mk8.osdan_routine_mk8 import neko_HDOS2C_routine_CFmk8, \
-    neko_HDOS2C_eval_routine_CFmk8, neko_HDOS2C_routine_CFmk8a, neko_HDOS2C_routine_CFmk8adt
+from neko_2021_mjt.routines.ocr_routines.mk8.osdan_routine_mk8 import Nekohdos2croutinecfmk8, \
+    NekoHdos2cEvalRoutineCfmk8, NekoHdos2cRoutineCfmk8a, NekoHdos2cRoutineCfmk8adt
 
 
 def osdanmk8_ocr_routine(sampler_name, prototyper_name, semantic_branch_name, feature_extractor_name, seq_name,
@@ -10,7 +10,7 @@ def osdanmk8_ocr_routine(sampler_name, prototyper_name, semantic_branch_name, fe
 
             "maxT": maxT,
             "name": name,
-            "routine": neko_HDOS2C_routine_CFmk8,
+            "routine": Nekohdos2croutinecfmk8,
             "mod_cvt_dicts":
                 {
                     "semantic_branch": semantic_branch_name,
@@ -43,7 +43,7 @@ def osdanmk8a_ocr_routine(sampler_name, prototyper_name, semantic_branch_name, f
 
             "maxT": maxT,
             "name": name,
-            "routine": neko_HDOS2C_routine_CFmk8a,
+            "routine": NekoHdos2cRoutineCfmk8a,
             "mod_cvt_dicts":
                 {
                     "semantic_branch": semantic_branch_name,
@@ -76,7 +76,7 @@ def osdanmk8adt_ocr_routine(sampler_name, prototyper_name, semantic_branch_name,
 
             "maxT": maxT,
             "name": name,
-            "routine": neko_HDOS2C_routine_CFmk8adt,
+            "routine": NekoHdos2cRoutineCfmk8adt,
             "mod_cvt_dicts":
                 {
                     "semantic_branch": semantic_branch_name,
@@ -108,7 +108,7 @@ def osdanmk8_eval_routine_cfg(sampler_name, prototyper_name, semantic_branch_nam
         {
             "name": name,
             "maxT": maxT,
-            "routine": neko_HDOS2C_eval_routine_CFmk8,
+            "routine": NekoHdos2cEvalRoutineCfmk8,
             "mod_cvt_dicts":
                 {
                     "sampler": sampler_name,

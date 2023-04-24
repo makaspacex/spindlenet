@@ -13,7 +13,7 @@ from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import neko_ocr_lmdb_mgmt
 
 # we have a few anchors. The model selects on aspect ratios, and the model selects for sort edge size.
 
-class neko_fsl_task_loader_no_proto_gen2:
+class NekoFslTaskLoaderNoProtoGen2(object):
     def __init__(self, db_root, waycnt, ucnt, labelset=None, dsize=[32, 32]):
         meta = torch.load(os.path.join(db_root, "meta.pt"))
         self.meta = {}
@@ -109,12 +109,12 @@ class neko_fsl_task_loader_no_proto_gen2:
         }
 
 
-class neko_fsl_no_proto_task_datasetg2(Dataset):
+class NekoFslNoProtoTaskDatasetg2(Dataset):
     def __init__(self, db_root, waycnt, ucnt, labelset=None, dsize=[32, 32], shots=2, vlen=2000):
         self.shots = shots
         self.vlen = vlen
 
-        self.core = neko_fsl_task_loader_no_proto_gen2(db_root, waycnt, ucnt, labelset, dsize)
+        self.core = NekoFslTaskLoaderNoProtoGen2(db_root, waycnt, ucnt, labelset, dsize)
 
     def __len__(self):
         return 10000

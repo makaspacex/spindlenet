@@ -5,9 +5,9 @@ from torch import nn
 # PROTOENGINE = neko_visual_only_interprinter
 
 
-class neko_prototyper_sp(nn.Module):
+class NekoPrototyperSp(nn.Module):
     def __init__(self, output_channel, spks, has_sem=False):
-        super(neko_prototyper_sp, self).__init__()
+        super(NekoPrototyperSp, self).__init__()
         self.output_channel = output_channel
         self.sp_cnt = len(spks)
         self.EOS = 0

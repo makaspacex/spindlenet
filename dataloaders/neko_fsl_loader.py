@@ -13,7 +13,7 @@ from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import neko_ocr_lmdb_mgmt
 
 # we have a few anchors. The model selects on aspect ratios, and the model selects for sort edge size.
 
-class neko_fsl_task_loader_no_proto:
+class NekoFslTaskLoaderNoProto(object):
     def __init__(self, db_root, waycnt, ucnt, labelset=None, dsize=[32, 32]):
         meta = torch.load(os.path.join(db_root, "meta.pt"))
         self.meta = {}
@@ -77,12 +77,12 @@ class neko_fsl_task_loader_no_proto:
         }
 
 
-class neko_fsl_no_proto_task_dataset(Dataset):
+class NekoFslNoProtoTaskDataset(Dataset):
     def __init__(self, db_root, waycnt, ucnt, labelset=None, dsize=[32, 32], shots=2, vlen=2000):
         self.shots = shots
         self.vlen = vlen
 
-        self.core = neko_fsl_task_loader_no_proto(db_root, waycnt, ucnt, labelset, dsize)
+        self.core = NekoFslTaskLoaderNoProto(db_root, waycnt, ucnt, labelset, dsize)
 
     def __len__(self):
         return 10000
@@ -112,11 +112,11 @@ def collate_fn(d):
     return d[0]
 
 
-from dataloaders.sampler import randomsampler
+from dataloaders.sampler import RandomSampler
 
 if __name__ == '__main__':
-    l = neko_fsl_no_proto_task_dataset("/home/lasercat/ssddata/OBC306/", 32, 4)
-    dl = DataLoader(l, collate_fn=collate_fn, num_workers=3, sampler=randomsampler(None))
+    l = NekoFslNoProtoTaskDataset("/home/lasercat/ssddata/OBC306/", 32, 4)
+    dl = DataLoader(l, collate_fn=collate_fn, num_workers=3, sampler=RandomSampler(None))
     for d in dl:
         show_batch(d["samples"], d["labels"], d["tdict"])
         pass

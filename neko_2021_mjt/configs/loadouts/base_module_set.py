@@ -2,7 +2,7 @@ from neko_2021_mjt.configs.common_subs.arm_postfe import arm_rest_common
 from neko_2021_mjt.configs.modules.config_cam import config_cam
 from neko_2021_mjt.configs.modules.config_fe_cco import config_fe_cco_thicc
 from neko_2021_mjt.configs.modules.config_fe_std import config_fe_r45
-from neko_2021_mjt.eval_tasks.dan_eval_tasks import neko_odan_eval_tasks
+from neko_2021_mjt.eval_tasks.dan_eval_tasks import NekoOdanEvalTasks
 
 
 def arm_base_module_set_dan_r45(srcdst, prefix, maxT, capacity, feat_ch, tr_meta_path, expf=1, wemb=0.3):
@@ -103,7 +103,7 @@ def arm_base_task_default(srcdst, prefix, routine_type, maxT, te_meta_path, data
     te_routine = {}
     te_routine = arm_base_eval_routine(te_routine, "close_set_benchmark", prefix, routine_type, log_path, maxT)
     srcdst[prefix + name] = {
-        "type": neko_odan_eval_tasks,
+        "type": NekoOdanEvalTasks,
         "protoname": prefix + "prototyper",
         "temeta":
             {
@@ -122,7 +122,7 @@ def arm_base_task_default2(srcdst, prefix, routine_type, maxT, te_meta_path, dat
     te_routine = arm_base_eval_routine2(te_routine, "close_set_benchmark", prefix, routine_type, log_path, maxT,
                                         measure_rej=measure_rej)
     srcdst[prefix + name] = {
-        "type": neko_odan_eval_tasks,
+        "type": NekoOdanEvalTasks,
         "protoname": prefix + "prototyper",
         "temeta":
             {

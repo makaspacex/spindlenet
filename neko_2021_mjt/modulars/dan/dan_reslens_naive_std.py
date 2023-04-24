@@ -1,9 +1,9 @@
 from neko_sdk.AOF.neko_lens import neko_lens, vis_lenses
 from neko_sdk.AOF.neko_reslayer_std import neko_reslayer_std, neko_reslayer_stdlr
-from neko_sdk.encoders.ocr_networks.dan.dan_reslens_naive import dan_ResNet
+from neko_sdk.encoders.ocr_networks.dan.dan_reslens_naive import DanResnet
 
 
-class dan_ResNet_std(dan_ResNet):
+class dan_ResNet_std(DanResnet):
     LAYER = neko_reslayer_std
     LENS = neko_lens
 
@@ -18,7 +18,7 @@ def res_naive_lens45_std_thicc(strides, compress_layer, hardness, inpch=1, oupch
     return model
 
 
-class dan_ResNet_stdlr(dan_ResNet):
+class dan_ResNet_stdlr(DanResnet):
     LAYER = neko_reslayer_stdlr
     LENS = neko_lens
 

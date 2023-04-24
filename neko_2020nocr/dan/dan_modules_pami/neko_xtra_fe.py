@@ -8,9 +8,9 @@ Lens_Feature_Extractor
 '''
 
 
-class neko_cco_Feature_Extractor(nn.Module):
+class NekoCcoFeatureExtractor(nn.Module):
     def __init__(self, strides, compress_layer, input_shape, hardness=2, oupch=512, expf=1):
-        super(neko_cco_Feature_Extractor, self).__init__()
+        super(NekoCcoFeatureExtractor, self).__init__()
         self.model = rescco.res_naive_lens45(strides, compress_layer, hardness, oupch=oupch, inpch=input_shape[0],
                                              expf=expf)
         self.input_shape = input_shape

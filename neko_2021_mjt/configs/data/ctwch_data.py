@@ -1,7 +1,7 @@
 from torchvision import transforms
 
-from neko_2020nocr.dan.dataloaders.dataset_scene import colored_lmdbDataset, colored_lmdbDataset_repeatS
-from neko_2020nocr.dan.dataloaders.dataset_scene import lmdbDataset_repeatS, lmdbDataset
+from neko_2020nocr.dan.dataloaders.dataset_scene import ColoredLmdbDataset, ColoredLmdbDatasetRepeatS
+from neko_2020nocr.dan.dataloaders.dataset_scene import LmdbDatasetRepeatS, LmdbDataset
 from neko_2020nocr.dan.methods_pami.pami_osds_paths import \
     get_stdctwchtr, get_stdctwchte
 
@@ -22,9 +22,9 @@ def get_chs_ctwS(root, trcnt, rgb=False, bsize=160):
         rep = 2
     trroot, _ = get_stdctwchtr(trcnt, root)
     if (rgb is False):
-        dstype = lmdbDataset_repeatS
+        dstype = LmdbDatasetRepeatS
     else:
-        dstype = colored_lmdbDataset_repeatS
+        dstype = ColoredLmdbDatasetRepeatS
 
     return \
         {
@@ -50,9 +50,9 @@ def get_chs_ctwS(root, trcnt, rgb=False, bsize=160):
 
 def get_eval_chs_ctwS_core(teroot, rgb=False):
     if (rgb is False):
-        dstype = lmdbDataset
+        dstype = LmdbDataset
     else:
-        dstype = colored_lmdbDataset
+        dstype = ColoredLmdbDataset
     return \
         {
             "type": dstype,

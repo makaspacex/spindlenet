@@ -1,11 +1,11 @@
-from neko_2020nocr.dan.DAN import Feature_Extractor
+from neko_2020nocr.dan.DAN import FeatureExtractor
 from neko_2020nocr.dan.configs.pipelines_pami import get_bl_fe_args
 from neko_2021_mjt.modulars.default_config import get_default_model
 
 
 def get_dan_r45(arg_dict, path, optim_path=None):
     args = get_bl_fe_args(arg_dict["ouch"], arg_dict["ich"])
-    return get_default_model(Feature_Extractor, args, path, arg_dict["with_optim"], optim_path)
+    return get_default_model(FeatureExtractor, args, path, arg_dict["with_optim"], optim_path)
 
 
 def config_fe_r45(ich, feat_ch, input_shape=None):

@@ -3,18 +3,19 @@ import os
 
 from neko_2020nocr.dan.common.common import Zero_Grad, Train_or_Eval, flatten_label
 from neko_2020nocr.dan.common.common_xos import load_network
-from neko_2020nocr.dan.danframework.neko_abstract_dan import neko_abstract_DAN
+from neko_2020nocr.dan.danframework.neko_abstract_dan import NekoAbstractDan
 from neko_2020nocr.dan.utils import *
-from neko_2020nocr.dan.visdan import visdan
+from neko_2020nocr.dan.visdan import Visdan
 from neko_sdk.ocr_modules.neko_confusion_matrix import neko_confusion_matrix
 # from torch_scatter import scatter_mean
 from neko_sdk.ocr_modules.trainable_losses.cosloss import neko_cos_loss
 from neko_sdk.ocr_modules.trainable_losses.neko_url import neko_unknown_ranking_loss
+from torch import nn
 
 
-class neko_cos_loss3(nn.Module):
+class NekoCosLoss3(nn.Module):
     def __init__(self):
-        super(neko_cos_loss3, self).__init__()
+        super(NekoCosLoss3, self).__init__()
         pass
 
     def forward(self, pred, gt, weight=None):
@@ -40,7 +41,7 @@ class neko_cos_loss3(nn.Module):
 
 # HSOS, HDOS, HDOSCS
 # the main feature is that the DPE returns embeddings for characters.
-class HXOS(neko_abstract_DAN):
+class HXOS(NekoAbstractDan):
     def setuploss(self):
         self.criterion_CE = nn.CrossEntropyLoss().cuda()
 
@@ -48,10 +49,10 @@ class HXOS(neko_abstract_DAN):
         return load_network(self.cfgs)
 
     def get_ar_cntr(self, key, case_sensitive):
-        return neko_os_Attention_AR_counter(key, case_sensitive)
+        return NekoOsAttentionArCounter(key, case_sensitive)
 
     def get_loss_cntr(self, show_interval):
-        return Loss_counter(show_interval)
+        return LossCounter(show_interval)
 
     def test(self, test_loader, model, tools, miter=1000, debug=False, dbgpath=None):
         Train_or_Eval(model, 'Eval')
@@ -59,7 +60,7 @@ class HXOS(neko_abstract_DAN):
         i = 0
         visualizer = None
         if dbgpath is not None:
-            visualizer = visdan(dbgpath)
+            visualizer = Visdan(dbgpath)
         cfm = neko_confusion_matrix()
 
         for sample_batched in test_loader:

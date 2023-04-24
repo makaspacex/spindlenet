@@ -1,12 +1,12 @@
 from torchvision import transforms
 
 from neko_2020nocr.dan.configs.datasets.ds_paths import *
-from neko_2020nocr.dan.dataloaders.dataset_scene import colored_lmdbDataset, colored_lmdbDatasetT
+from neko_2020nocr.dan.dataloaders.dataset_scene import ColoredLmdbDataset, ColoredLmdbDatasetT
 
 
-def get_mjstcqa_cfg(root, maxT, bs=48, hw=[32, 128], random_aug=True):
+def get_mjstcqa_cfg(root, maxT, bs=48, hw=(32, 128), random_aug=True):
     rdic = {
-        "type": colored_lmdbDataset,
+        "type": ColoredLmdbDataset,
         'ds_args': {
             'roots': [get_nips14(root), get_cvpr16(root)],
             'img_height': hw[0],
@@ -26,9 +26,9 @@ def get_mjstcqa_cfg(root, maxT, bs=48, hw=[32, 128], random_aug=True):
     return rdic
 
 
-def get_dataset_testC(maxT, root, dict_dir, batch_size=128, hw=[32, 128]):
+def get_dataset_testC(maxT, root, dict_dir, batch_size=128, hw=(32, 128)):
     return {
-        'type': colored_lmdbDatasetT,
+        'type': ColoredLmdbDatasetT,
         'ds_args': {
             'roots': [root],
             'img_height': hw[0],
@@ -46,7 +46,7 @@ def get_dataset_testC(maxT, root, dict_dir, batch_size=128, hw=[32, 128]):
 
 
 def get_test_all_uncased_dsrgb(maxT=25, root="/home/lasercat/ssddata/", dict_dir='../../dict/dic_36.txt', batchsize=128,
-                               hw=[32, 128]):
+                               hw=(32, 128)):
     return {
         "dict_dir": dict_dir,
         "case_sensitive": False,
@@ -62,7 +62,7 @@ def get_test_all_uncased_dsrgb(maxT=25, root="/home/lasercat/ssddata/", dict_dir
 
 
 def get_test_synth_train_uncased_dsrgb(maxT=25, root="/home/lasercat/ssddata/", dict_dir='../../dict/dic_36.txt',
-                                       batchsize=128, hw=[32, 128]):
+                                       batchsize=128, hw=(32, 128)):
     return {
         "dict_dir": dict_dir,
         "case_sensitive": False,

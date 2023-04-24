@@ -45,6 +45,14 @@ def get_SVT(root="/home/lasercat/ssddata/"):
     return os.path.join(root, 'SVT')
 
 
+def get_SVTP(root="/home/lasercat/ssddata/"):
+    return os.path.join(root, 'SVTP')
+
+
+def get_SVTPget_SVT(root="/home/lasercat/ssddata/"):
+    return os.path.join(root, 'SVT')
+
+
 def get_lsvt_path(root="/home/lasercat/ssddata/"):
     return os.path.join(root, 'lsvtdb')
 

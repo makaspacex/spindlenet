@@ -1,6 +1,6 @@
 import torch
 
-from neko_2021_mjt.debug_and_visualize.laserbeam import neko_Backprop
+from neko_2021_mjt.debug_and_visualize.laserbeam import NekoBackprop
 
 
 # we need something to wrap the routine.
@@ -44,7 +44,7 @@ class bogomod(torch.nn.Module):
 class neko_laser:
     def __init__(self, model, moddict):
         self.model = bogomod(model, moddict)
-        self.bper = neko_Backprop(self.model, self.model.feature_extractor.shared_fe_0_conv, 0)
+        self.bper = NekoBackprop(self.model, self.model.feature_extractor.shared_fe_0_conv, 0)
 
     def vis_chars(self, input_dict, modular_dict):
         bs = input_dict["image"].shape[0]

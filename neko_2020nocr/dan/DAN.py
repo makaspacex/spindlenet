@@ -8,9 +8,9 @@ Feature_Extractor
 '''
 
 
-class Feature_Extractor(nn.Module):
+class FeatureExtractor(nn.Module):
     def __init__(self, strides, compress_layer, input_shape, oupch=512):
-        super(Feature_Extractor, self).__init__()
+        super(FeatureExtractor, self).__init__()
         self.model = resnet.resnet45(strides, compress_layer, oupch=oupch, inpch=input_shape[0])
         self.input_shape = input_shape
 

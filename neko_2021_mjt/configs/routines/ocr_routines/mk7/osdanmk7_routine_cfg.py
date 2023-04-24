@@ -1,5 +1,5 @@
-from neko_2021_mjt.routines.ocr_routines.mk7.osdan_routine_mk7 import neko_HDOS2C_routine_CFmk7, \
-    neko_HDOS2C_eval_routine_CFmk7, neko_HDOS2C_routine_CFmk7dtf
+from neko_2021_mjt.routines.ocr_routines.mk7.osdan_routine_mk7 import Nekohdos2croutinecfmk7, \
+    NekoHdos2cEvalRoutineCfmk7, Nekohdos2cRoutineCfmk7dtf
 
 
 def osdanmk7_ocr_routine(sampler_name, prototyper_name, feature_extractor_name, seq_name,
@@ -9,7 +9,7 @@ def osdanmk7_ocr_routine(sampler_name, prototyper_name, feature_extractor_name, 
 
             "maxT": maxT,
             "name": name,
-            "routine": neko_HDOS2C_routine_CFmk7,
+            "routine": Nekohdos2croutinecfmk7,
             "mod_cvt_dicts":
                 {
                     "sampler": sampler_name,
@@ -37,7 +37,7 @@ def osdanmk7dt_ocr_routine(sampler_name, prototyper_name, feature_extractor_name
 
             "maxT": maxT,
             "name": name,
-            "routine": neko_HDOS2C_routine_CFmk7dtf,
+            "routine": Nekohdos2cRoutineCfmk7dtf,
             "mod_cvt_dicts":
                 {
                     "sampler": sampler_name,
@@ -65,7 +65,7 @@ def osdanmk7_eval_routine_cfg(sampler_name, prototyper_name, feature_extractor_n
         {
             "name": name,
             "maxT": maxT,
-            "routine": neko_HDOS2C_eval_routine_CFmk7,
+            "routine": NekoHdos2cEvalRoutineCfmk7,
             "mod_cvt_dicts":
                 {
                     "sampler": sampler_name,

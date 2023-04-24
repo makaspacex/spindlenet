@@ -1,11 +1,11 @@
 from neko_2021_mjt.configs.data.quickviet_data import get_quickviet_training_cfg, get_test_quickviet_uncased_dsrgb
-from dataloaders import neko_joint_loader
+from dataloaders import NekoJointLoader
 
 
 def get_dataloadercfgs(root, te_meta_path, tr_meta_path, maxT_mjst, maxT_chsHS, bsize, random_aug):
     return \
         {
-            "loadertype": neko_joint_loader,
+            "loadertype": NekoJointLoader,
             "subsets":
                 {
                     # reset iterator gives deadlock, so we give a large enough repeat number

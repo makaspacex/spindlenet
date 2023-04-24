@@ -1,12 +1,12 @@
 from neko_2021_mjt.configs.data.ctwch_data import get_ctw_tr_meta, get_ctw_te_meta, get_chs_ctwS, get_eval_chs_ctwS
 from neko_2021_mjt.configs.data.hwdbch_data import get_hwdb_tr_meta, get_hwdb_te_meta, get_chs_hwdbS, get_eval_chs_hwdbS
-from dataloaders import neko_joint_loader
+from dataloaders import NekoJointLoader
 
 
 def get_dataloadercfgs(root, chcnt, bsize=160):
     return \
         {
-            "loadertype": neko_joint_loader,
+            "loadertype": NekoJointLoader,
             "subsets":
                 {
                     # reset iterator gives deadlock, so we give a large enough repeat number

@@ -1,11 +1,18 @@
 import torch
 from torchvision import transforms
 
-from neko_2020nocr.dan.configs.datasets.ds_paths import *
-from dataloaders import colored_asize_lmdbDataset
+from neko_2020nocr.dan.configs.datasets.ds_paths import get_nips14
+from neko_2020nocr.dan.configs.datasets.ds_paths import get_cvpr16
+from neko_2020nocr.dan.configs.datasets.ds_paths import get_cute
+from neko_2020nocr.dan.configs.datasets.ds_paths import get_iiit5k
+from neko_2020nocr.dan.configs.datasets.ds_paths import get_SVT
+from neko_2020nocr.dan.configs.datasets.ds_paths import get_SVTP
+from neko_2020nocr.dan.configs.datasets.ds_paths import get_IC13_1015
+from neko_2020nocr.dan.configs.datasets.ds_paths import get_IC03_867
+from dataloaders.neko_asize_dataloader import ColoredAsizeLmdbDataset
 
 
-def neko_asize_collate(batch):
+def asize_collate(batch):
     ret = {}
     # print("a")
     ret["rectimage"] = torch.stack([batch[i]["rectimage"] for i in range(len(batch))])
@@ -16,7 +23,7 @@ def neko_asize_collate(batch):
 
 def get_mjstcqaAS_cfg(root, maxT):
     rdic = {
-        "type": colored_asize_lmdbDataset,
+        "type": ColoredAsizeLmdbDataset,
         'ds_args': {
             'roots': [get_nips14(root), get_cvpr16(root)],
             'img_height': 32,
@@ -31,7 +38,7 @@ def get_mjstcqaAS_cfg(root, maxT):
                 'batch_size': 48,
                 'shuffle': False,
                 'num_workers': 3,
-                "collate_fn": neko_asize_collate,
+                "collate_fn": asize_collate,
             }
     }
     return rdic
@@ -39,7 +46,7 @@ def get_mjstcqaAS_cfg(root, maxT):
 
 def get_datasetAS_testC(maxT, root, dict_dir, batch_size=128):
     return {
-        'type': colored_asize_lmdbDataset,
+        'type': ColoredAsizeLmdbDataset,
         'ds_args': {
             'roots': [root],
             'img_height': 32,
@@ -49,7 +56,7 @@ def get_datasetAS_testC(maxT, root, dict_dir, batch_size=128):
             "maxT": maxT,
         },
         'dl_args': {
-            "collate_fn": neko_asize_collate,
+            "collate_fn": asize_collate,
             'batch_size': batch_size,
             'shuffle': False,
             'num_workers': 4,

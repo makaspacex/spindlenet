@@ -5,7 +5,7 @@ import numpy as np
 import six
 from PIL import Image
 
-from neko_2020nocr.dan.dataloaders.dataset_scene import colored_lmdbDataset
+from neko_2020nocr.dan.dataloaders.dataset_scene import ColoredLmdbDataset
 from neko_sdk.ocr_modules.augmentation.qhbaug import qhbwarp
 
 
@@ -13,7 +13,7 @@ from neko_sdk.ocr_modules.augmentation.qhbaug import qhbwarp
 # let's make this a small 2-phasemodel
 # we have a few anchors. The model selects on aspect ratios, and the model selects for sort edge size.
 
-class colored_asize_lmdbDataset(colored_lmdbDataset):
+class ColoredAsizeLmdbDataset(ColoredLmdbDataset):
     def keepratio_resize(self, img):
         cur_ratio = img.size[0] / float(img.size[1])
         mask_height = self.img_height

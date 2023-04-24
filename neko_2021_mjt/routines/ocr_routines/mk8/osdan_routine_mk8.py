@@ -3,11 +3,11 @@ import copy
 
 import torch.nn.functional
 
-from neko_2020nocr.dan.utils import Loss_counter, neko_os_Attention_AR_counter, neko_oswr_Attention_AR_counter
-from neko_2021_mjt.modulars.neko_inflater import neko_inflater
-from neko_2021_mjt.routines.neko_abstract_routines import neko_abstract_eval_routine
-from neko_2021_mjt.routines.ocr_routines.mk5.osdan_routine_mk5 import neko_HDOS2C_routine_CFmk5
-from neko_2021_mjt.routines.subroutines.context_subroutines.neko_ctx_subroutine import neko_ctx_subroutine_v1
+from neko_2020nocr.dan.utils import LossCounter, NekoOsAttentionArCounter, NekoOswrAttentionArCounter
+from neko_2021_mjt.modulars.neko_inflater import NekoInflater
+from neko_2021_mjt.routines.neko_abstract_routines import NekoAbstractEvalRoutine
+from neko_2021_mjt.routines.ocr_routines.mk5.osdan_routine_mk5 import NekoHdos2cRoutineCfmk5
+from neko_2021_mjt.routines.subroutines.context_subroutines.neko_ctx_subroutine import NekoCtxSubroutineV1
 from neko_2021_mjt.routines.subroutines.fe_seq.TA import temporal_attention_v2, temporal_attention_v2dt
 from neko_2021_mjt.routines.subroutines.mk8common import mk8_log, mklabel_mk8
 from neko_2021_mjt.routines.subroutines.proto_making.contextual_v1 import mk_proto_contextual_v1
@@ -32,20 +32,20 @@ def debug_mk8(chouts, ctxouts, gt):
             print("[" + feat + "]", gt[i], ":", chouts[i], "->-", ctxouts[i])
 
 
-class neko_HDOS2C_routine_CFmk8(neko_HDOS2C_routine_CFmk5):
+class Nekohdos2croutinecfmk8(NekoHdos2cRoutineCfmk5):
     def set_etc(self, args):
         self.maxT = args["maxT"]
-        self.inflater = neko_inflater()
+        self.inflater = NekoInflater()
         self.PROTO_FN = mk_proto_contextual_v1
-        self.context_mod = neko_ctx_subroutine_v1()
+        self.context_mod = NekoCtxSubroutineV1()
         self.attf = temporal_attention_v2
 
     # Hard coded case_insensitive logger.
     def set_loggers(self, log_path, log_each, name):
         self.logger_dict = {
-            "accr": neko_os_Attention_AR_counter("[" + name + "]" + "train_accr", False),
-            "ctxaccr": neko_os_Attention_AR_counter("[" + name + "]" + "train_accr_ctx", False),
-            "loss": Loss_counter("[" + name + "]" + "train_accr"),
+            "accr": NekoOsAttentionArCounter("[" + name + "]" + "train_accr", False),
+            "ctxaccr": NekoOsAttentionArCounter("[" + name + "]" + "train_accr_ctx", False),
+            "loss": LossCounter("[" + name + "]" + "train_accr"),
         }
 
     def fp_impl(self, input_dict, module_dict, logger_dict, nEpoch, batch_idx):
@@ -88,7 +88,7 @@ class neko_HDOS2C_routine_CFmk8(neko_HDOS2C_routine_CFmk5):
         return tloss
 
 
-class neko_HDOS2C_routine_CFmk8a(neko_HDOS2C_routine_CFmk8):
+class NekoHdos2cRoutineCfmk8a(Nekohdos2croutinecfmk8):
     def fp_impl(self, input_dict, module_dict, logger_dict, nEpoch, batch_idx):
         label = input_dict["label"]
         clips = input_dict["image"]
@@ -129,16 +129,16 @@ class neko_HDOS2C_routine_CFmk8a(neko_HDOS2C_routine_CFmk8):
         return tloss
 
 
-class neko_HDOS2C_routine_CFmk8adt(neko_HDOS2C_routine_CFmk8a):
+class NekoHdos2cRoutineCfmk8adt(NekoHdos2cRoutineCfmk8a):
     def set_etc(self, args):
         self.maxT = args["maxT"]
-        self.inflater = neko_inflater()
+        self.inflater = NekoInflater()
         self.PROTO_FN = mk_proto_contextual_v1
-        self.context_mod = neko_ctx_subroutine_v1()
+        self.context_mod = NekoCtxSubroutineV1()
         self.attf = temporal_attention_v2dt
 
 
-class neko_HDOS2C_eval_routine_CFmk8(neko_abstract_eval_routine):
+class NekoHdos2cEvalRoutineCfmk8(NekoAbstractEvalRoutine):
     def pretest_impl(self, modular_dict, metaargs, **kwargs):
         rot = kwargs["rot"]
         normproto, plabels, gplabels, tdict, gbidict = modular_dict["sampler"].model.dump_allg(metaargs=metaargs,
@@ -165,27 +165,27 @@ class neko_HDOS2C_eval_routine_CFmk8(neko_abstract_eval_routine):
             self.has_ctx = True
         else:
             self.has_ctx = False
-        self.inflater = neko_inflater()
+        self.inflater = NekoInflater()
 
     # Hard coded case_insensitive logger.
     def set_loggers(self, log_path, name, args):
 
         try:
             if (args["measure_rej"] == True):
-                self.logger_dict = {"accr": neko_oswr_Attention_AR_counter("[" + name + "]" + "test_accr", False),
+                self.logger_dict = {"accr": NekoOswrAttentionArCounter("[" + name + "]" + "test_accr", False),
                                     }
             else:
                 self.logger_dict = {
-                    "accr": neko_os_Attention_AR_counter("[" + name + "]" + "test_accr", False),
-                    "loss": Loss_counter("[" + name + "]" + "train_accr"),
+                    "accr": NekoOsAttentionArCounter("[" + name + "]" + "test_accr", False),
+                    "loss": LossCounter("[" + name + "]" + "train_accr"),
                 }
         except:
             self.logger_dict = {
-                "accr": neko_os_Attention_AR_counter("[" + name + "]" + "test_accr", False),
-                "loss": Loss_counter("[" + name + "]" + "train_accr"),
+                "accr": NekoOsAttentionArCounter("[" + name + "]" + "test_accr", False),
+                "loss": LossCounter("[" + name + "]" + "train_accr"),
             }
         if (self.has_ctx):
-            self.logger_dict["ctxaccr"] = neko_os_Attention_AR_counter("[" + name + "]" + "test_accr_ctx", False)
+            self.logger_dict["ctxaccr"] = NekoOsAttentionArCounter("[" + name + "]" + "test_accr_ctx", False)
 
     def test_impl(self, data_dict, module_dict, logger_dict):
 

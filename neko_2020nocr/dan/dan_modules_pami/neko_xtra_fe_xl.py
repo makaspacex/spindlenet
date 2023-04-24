@@ -5,9 +5,9 @@ import neko_sdk.encoders.ocr_networks.dan.dan_reslens_naive as rescco
 import neko_sdk.encoders.ocr_networks.dan.dan_resnet as resnet
 
 
-class neko_Feature_Extractor_thicc(nn.Module):
+class NekoFeatureExtractorThicc(nn.Module):
     def __init__(self, strides, compress_layer, input_shape, oupch=512):
-        super(neko_Feature_Extractor_thicc, self).__init__()
+        super(NekoFeatureExtractorThicc, self).__init__()
         self.model = resnet.resnet45_thicc(strides, compress_layer, oupch=oupch, inpch=input_shape[0])
         self.input_shape = input_shape
 

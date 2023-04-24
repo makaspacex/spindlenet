@@ -4,7 +4,7 @@ import torch
 import torch.nn.functional as F
 
 
-class cha_encdec():
+class ChaEncdec():
     def __init__(self, dict_file, case_sensitive=True):
         self.dict = []
         self.case_sensitive = case_sensitive
@@ -44,7 +44,7 @@ class cha_encdec():
         return (out, out_prob)
 
 
-class neko_osfsl_ACR_counter():
+class NekoOsfslAcrCounter():
     def __init__(self, display_string):
         self.correct = 0
         self.total_samples = 0.
@@ -71,7 +71,7 @@ class neko_osfsl_ACR_counter():
             self.correct / self.total_samples, ))
 
 
-class neko_os_ACR_counter():
+class NekoOsAcrCounter():
     def __init__(self, display_string):
         self.correct = 0
         self.total_samples = 0.
@@ -95,7 +95,7 @@ class neko_os_ACR_counter():
             self.correct / self.total_samples, ))
 
 
-class neko_os_Attention_AR_counter():
+class NekoOsAttentionArCounter(object):
     def __init__(self, display_string, case_sensitive):
         self.correct = 0
         self.total_samples = 0.
@@ -153,7 +153,7 @@ class neko_os_Attention_AR_counter():
             self.distance_W / self.total_W))
 
 
-class Attention_AR_counter():
+class AttentionArCounter():
     def __init__(self, display_string, dict_file, case_sensitive):
         self.correct = 0
         self.total_samples = 0.
@@ -163,7 +163,7 @@ class Attention_AR_counter():
         self.total_W = 0.
         self.display_string = display_string
         self.case_sensitive = case_sensitive
-        self.de = cha_encdec(dict_file, case_sensitive)
+        self.de = ChaEncdec(dict_file, case_sensitive)
 
     def clear(self):
         self.correct = 0
@@ -219,7 +219,7 @@ class Attention_AR_counter():
             self.distance_W / self.total_W))
 
 
-class Attention_AR_counter_node():
+class AttentionArCounterNode():
     def __init__(self, display_string, case_sensitive):
         self.correct = 0
         self.total_samples = 0.
@@ -275,7 +275,7 @@ class Attention_AR_counter_node():
             self.distance_W / self.total_W))
 
 
-class Loss_counter():
+class LossCounter():
     def __init__(self, display_interval):
         self.display_interval = display_interval
         self.total_iters = 0.
@@ -319,7 +319,7 @@ class Loss_counter():
         return loss, retterms
 
 
-class neko_oswr_Attention_AR_counter():
+class NekoOswrAttentionArCounter(object):
     def __init__(self, display_string, case_sensitive):
         self.clear()
         self.display_string = display_string

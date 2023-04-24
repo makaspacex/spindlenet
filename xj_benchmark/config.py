@@ -74,7 +74,7 @@ def get_modcfg_dict(name, model_root, datasets_root, export_root, iterkey):
     task_dict = {}
     log_path = export_root
 
-    if name in ["DUAL_a_Odancukmk7hdtfnp_r45_C_trinorm_dsa3", "DUAL_a_Odancukmk7hnp_r45_C_trinorm_dsa3"]:
+    if name in ["OSTR_C2J_BaseModel", "OSTR_C2J_DTAOnly"]:
         te_meta_path_chsjap, te_meta_path_mjst, mjst_eval_ds, chs_eval_ds = get_eval_dss(datasets_root, 25, 30)
         task_dict = arm_base_task_default2(task_dict, "base_chs_", osdanmk7_eval_routine_cfg, 30, te_meta_path_chsjap,  chs_eval_ds, log_path)
         return {
@@ -84,7 +84,7 @@ def get_modcfg_dict(name, model_root, datasets_root, export_root, iterkey):
             "export_path": epath,
             "tasks": task_dict
         }
-    elif name == "DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3":
+    elif name == "OSTR_C2J_Full":
         te_meta_path_chsjap, te_meta_path_mjst, mjst_eval_ds, chs_eval_ds = get_eval_dss(datasets_root, 25, 30)
         task_dict = {}
         task_dict = arm_base_mk8_task_default(task_dict, "base_chs_", osdanmk8_eval_routine_cfg, 30,
@@ -98,7 +98,7 @@ def get_modcfg_dict(name, model_root, datasets_root, export_root, iterkey):
             "export_path": epath,
             "tasks": task_dict
         }
-    elif name == "DUAL_a_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3":
+    elif name == "OSTR_C2J_FullLarge":
         te_meta_path_chsjap, te_meta_path_mjst, mjst_eval_ds, chs_eval_ds = get_eval_dss(datasets_root, 25, 30)
         task_dict = {}
         task_dict = arm_base_mk8_task_default(task_dict, "base_chs_", osdanmk8_eval_routine_cfg, 30,
@@ -111,7 +111,7 @@ def get_modcfg_dict(name, model_root, datasets_root, export_root, iterkey):
             "export_path": epath,
             "tasks": task_dict
         }
-    elif name == "DUAL_b_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3":
+    elif name == "CSTR_FullLarge":
         te_meta_path_chsjap, te_meta_path_mjst, mjst_eval_ds, chs_eval_ds = get_eval_dss(datasets_root, 25, 30)
         task_dict = {}
         task_dict = arm_base_mk8_task_default(task_dict, "base_chs_", osdanmk8_eval_routine_cfg, 30,
@@ -126,7 +126,7 @@ def get_modcfg_dict(name, model_root, datasets_root, export_root, iterkey):
             "tasks": task_dict
         }
     # 这个比较特殊，和其他的不一样 先暂时搁置
-    elif name == "DUAL_ch_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3":
+    elif name == "ZSCR_CTW_Full":
 
         te_meta_path_hwdb, te_meta_path_ctw, hwdb_eval_ds, ctw_eval_ds = get_eval_dss2(datasets_root)
         task_dict = {}
@@ -146,7 +146,7 @@ def get_modcfg_dict(name, model_root, datasets_root, export_root, iterkey):
         }
 
     # 这个比较特殊，和其他的不一样 先暂时搁置
-    elif name == "DUAL_chhw_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3":
+    elif name == "ZSCR_Handwritten_Full":
         te_meta_path_hwdb, te_meta_path_ctw, hwdb_eval_ds, ctw_eval_ds = get_eval_dss2(datasets_root)
         task_dict = {}
         task_dict = arm_base_mk8_task_default(task_dict,
@@ -173,13 +173,13 @@ def get_profile(name):
     model_root = find_model_root() + f"/{name}/jtrmodels/"
 
     itk_names = {
-        "DUAL_a_Odancukmk7hdtfnp_r45_C_trinorm_dsa3": "_E0",
-        "DUAL_a_Odancukmk7hnp_r45_C_trinorm_dsa3": "_E0",
-        "DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "_E0",
-        "DUAL_a_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3": "_E0",
-        "DUAL_b_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3": "_E3",
-        "DUAL_ch_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "_E4",
-        "DUAL_chhw_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "_E4"
+        "OSTR_C2J_DTAOnly": "_E0",
+        "OSTR_C2J_BaseModel": "_E0",
+        "OSTR_C2J_Full": "_E0",
+        "OSTR_C2J_FullLarge": "_E0",
+        "CSTR_FullLarge": "_E3",
+        "ZSCR_CTW_Full": "_E4",
+        "ZSCR_Handwritten_Full": "_E4"
          }
 
     itk = itk_names[name]
@@ -190,7 +190,7 @@ def get_profile(name):
 
 
 if __name__ == '__main__':
-    argv1, modcfg_dict1 = get_profile("DUAL_a_Odancukmk7hdtfnp_r45_C_trinorm_dsa3")
-    argv2, modcfg_dict2 = get_profile("DUAL_a_Odancukmk7hnp_r45_C_trinorm_dsa3")
-    argv3, modcfg_dict3 = get_profile("DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3")
-    argv4, modcfg_dict4 = get_profile("DUAL_a_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3")
+    argv1, modcfg_dict1 = get_profile("OSTR_C2J_DTAOnly")
+    argv2, modcfg_dict2 = get_profile("OSTR_C2J_BaseModel")
+    argv3, modcfg_dict3 = get_profile("OSTR_C2J_Full")
+    argv4, modcfg_dict4 = get_profile("OSTR_C2J_FullLarge")

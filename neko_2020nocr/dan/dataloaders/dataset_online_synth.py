@@ -8,7 +8,7 @@ from neko_sdk.ocr_modules.trdg_driver.corpus_data_generator_driver import neko_r
 from neko_sdk.ocr_modules.trdg_driver.corpus_data_generator_driver import neko_skip_missing_string_generator
 
 
-class nekoOLSDataset(Dataset):
+class Nekoolsdataset(Dataset):
 
     def load_random_generator(self, root, maxT):
         meta = torch.load(root)
@@ -47,7 +47,7 @@ class nekoOLSDataset(Dataset):
         return sample
 
 
-class nekoOLSCDataset(nekoOLSDataset):
+class NekoOLSCDataset(Nekoolsdataset):
     def load_random_generator(self, root):
         meta = torch.load(root)
         g = neko_skip_missing_string_generator(meta, meta["bgims"])

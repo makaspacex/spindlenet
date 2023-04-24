@@ -3,14 +3,14 @@ import cv2
 import numpy as np
 
 from neko_2020nocr.dan.common.common import flatten_label
-from neko_2020nocr.dan.utils import Loss_counter, neko_os_Attention_AR_counter
-from neko_2021_mjt.modulars.neko_inflater import neko_inflater
-from neko_2021_mjt.routines.neko_abstract_routines import neko_abstract_routine, neko_abstract_eval_routine
+from neko_2020nocr.dan.utils import LossCounter, NekoOsAttentionArCounter
+from neko_2021_mjt.modulars.neko_inflater import NekoInflater
+from neko_2021_mjt.routines.neko_abstract_routines import NekoAbstractRoutine, NekoAbstractEvalRoutine
 
 
 # mk5 CF branch dropped predict-sample-predict support.
 # A GP branch will be added if it's ever to be supported
-class neko_HDOS2C_routine_CFmk5(neko_abstract_routine):
+class NekoHdos2cRoutineCfmk5(NekoAbstractRoutine):
     def mk_proto(self, label, sampler, prototyper):
         normprotos, plabel, tdict = sampler.model.sample_charset_by_text(label)
         # im=(torch.cat(normprotos,3)*127+128)[0][0].numpy().astype(np.uint8)
@@ -24,12 +24,12 @@ class neko_HDOS2C_routine_CFmk5(neko_abstract_routine):
 
     def set_etc(self, args):
         self.maxT = args["maxT"]
-        self.inflater = neko_inflater()
+        self.inflater = NekoInflater()
 
     def set_loggers(self, log_path, log_each, name):
         self.logger_dict = {
-            "accr": neko_os_Attention_AR_counter("[" + name + "]" + "train_accr", False),
-            "loss": Loss_counter("[" + name + "]" + "train_accr"),
+            "accr": NekoOsAttentionArCounter("[" + name + "]" + "train_accr", False),
+            "loss": LossCounter("[" + name + "]" + "train_accr"),
         }
 
     def show_clip(self, clip, label):
@@ -84,15 +84,15 @@ class neko_HDOS2C_routine_CFmk5(neko_abstract_routine):
         return loss
 
 
-class neko_HDOS2C_eval_routine_CFmk5(neko_abstract_eval_routine):
+class NekoHdos2cEvalRoutineCfmk5(NekoAbstractEvalRoutine):
     def set_etc(self, args):
         self.maxT = args["maxT"]
-        self.inflater = neko_inflater()
+        self.inflater = NekoInflater()
 
     def set_loggers(self, log_path, name, args):
         self.logger_dict = {
-            "accr": neko_os_Attention_AR_counter("[" + name + "]" + "test_accr", False),
-            "loss": Loss_counter("[" + name + "]" + "train_accr"),
+            "accr": NekoOsAttentionArCounter("[" + name + "]" + "test_accr", False),
+            "loss": LossCounter("[" + name + "]" + "train_accr"),
         }
 
     def test_impl(self, data_dict, module_dict, logger_dict):

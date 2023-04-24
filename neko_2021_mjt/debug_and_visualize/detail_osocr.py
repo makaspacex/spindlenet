@@ -6,7 +6,7 @@ import shutil
 import cv2
 import numpy as np
 
-from neko_2020nocr.dan.utils import neko_os_Attention_AR_counter
+from neko_2020nocr.dan.utils import NekoOsAttentionArCounter
 from neko_sdk.ocr_modules.charset.chs_cset import t1_3755
 from neko_sdk.ocr_modules.charset.etc_cset import latin62
 from neko_sdk.ocr_modules.charset.jap_cset import hira, kata
@@ -54,7 +54,7 @@ def accrfolder(root, filter, dst, thresh):
     tot = 0
     corr = 0
     tned = 0
-    arcntr = neko_os_Attention_AR_counter(root, case_sensitive=False)
+    arcntr = NekoOsAttentionArCounter(root, case_sensitive=False)
     tlen = 0
     for f in files:
         gt, pr = getres(f)
@@ -369,9 +369,9 @@ def make_ch2(root):
 
 # make_ch2("/run/media/lasercat/ssddata/ijcai22_candidates/g2/DUAL_ch_asc_Odancukmk7hnp_r45_C_trinorm_dsa3_va9r_lsct3sp_2x/")
 methods = [
-    find_export_root() + "/DUAL_a_Odancukmk7hdtfnp_r45_C_trinorm_dsa3/jtrmodels/closeset_benchmarks/",
-    find_export_root() + "/DUAL_a_Odancukmk7hnp_r45_C_trinorm_dsa3/jtrmodels/closeset_benchmarks/",
-    find_export_root() + "/DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3/jtrmodels/closeset_benchmarks/",
+    find_export_root() + "/OSTR_C2J_DTAOnly/jtrmodels/closeset_benchmarks/",
+    find_export_root() + "/OSTR_C2J_BaseModel/jtrmodels/closeset_benchmarks/",
+    find_export_root() + "/OSTR_C2J_Full/jtrmodels/closeset_benchmarks/",
 ]
 for m in methods:
     makejpg(m, 960, extra_terms=0, rows=1)

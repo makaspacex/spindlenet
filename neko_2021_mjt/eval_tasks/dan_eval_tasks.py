@@ -15,7 +15,7 @@ from neko_sdk.ocr_modules.img_eval import keepratio_resize
 from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_label_sampler import neko_prototype_sampler_static
 
 
-class neko_abstract_eval_tasks(NekoModuleSet):
+class NekoAbstractEvalTasks(NekoModuleSet):
     def setupthis(self, cfgs):
         pass
 
@@ -63,7 +63,7 @@ class neko_abstract_eval_tasks(NekoModuleSet):
         pass
 
 
-class neko_odan_eval_tasks(neko_abstract_eval_tasks):
+class NekoOdanEvalTasks(NekoAbstractEvalTasks):
     def setupthis(self, cfgs):
         self.temeta_args = cfgs["temeta"]
         self.protoname = cfgs["protoname"]
@@ -215,7 +215,7 @@ class neko_odan_eval_tasks(neko_abstract_eval_tasks):
         return self.eval_routine.ret_log()
 
 
-class neko_odan_eval_tasks_mk8(neko_odan_eval_tasks):
+class NekoOdanEvalTasksMk8(NekoOdanEvalTasks):
     # I think this changed....
     def get_proto_and_handle(self, rot):
         sampler = neko_prototype_sampler_static(self.temeta_args, None)

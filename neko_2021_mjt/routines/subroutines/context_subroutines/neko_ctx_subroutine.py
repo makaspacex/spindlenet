@@ -1,4 +1,4 @@
-class neko_ctx_subroutine_v1head:
+class NekoCtxSubroutineV1head(object):
     def engage(self, module_dict, fsp, csp, logits, lengthl, length, plabel, glabel_flatten, gtdict):
         ctx_logits, compact_ctx_logits = module_dict["ctxmodule"](logits, lengthl, csp, fsp, length.max().item())
         gchoutput, gprdt_prob = module_dict["sampler"].model.decode(ctx_logits, length, fsp, plabel, gtdict)
@@ -6,7 +6,7 @@ class neko_ctx_subroutine_v1head:
         return gloss_, gchoutput, compact_ctx_logits
 
 
-class neko_ctx_subroutine_v1:
+class NekoCtxSubroutineV1(object):
     def engage_eval(self, module_dict, fsp, csp, logits, lengthl, length, plabel, gtdict):
         ctx_logits, compact_ctx_logits = module_dict["ctxmodule"](logits, lengthl, csp, fsp, length.max().item())
         gchoutput, gprdt_prob = module_dict["sampler"].model.decode(ctx_logits, length, fsp, plabel, gtdict)
@@ -19,7 +19,7 @@ class neko_ctx_subroutine_v1:
         return gloss_, gchoutput, compact_ctx_logits
 
 
-class neko_ctx_subroutine_v1d(neko_ctx_subroutine_v1):
+class NekoCtxSubroutineV1d(NekoCtxSubroutineV1):
 
     def engage(self, module_dict, fsp, csp, logits, lengthl, length, plabel, glabel_flatten, gtdict):
         ctx_logits, gchoutput, compact_ctx_logits = self.engage_eval(module_dict, fsp, csp, logits.detach(), lengthl,
@@ -28,7 +28,7 @@ class neko_ctx_subroutine_v1d(neko_ctx_subroutine_v1):
         return gloss_, gchoutput, compact_ctx_logits
 
 
-class neko_ctx_subroutine_v1fb:
+class NekoCtxSubroutineV1fb(object):
     def engage(self, module_dict, fsp, csp, logits, lengthl, length, plabel, glabel_flatten, gtdict):
         ctx_logits, compact_ctx_logits = module_dict["ctxmodule"](logits, lengthl, csp, fsp, length.max().item())
         gchoutput, gprdt_prob = module_dict["sampler"].model.decode(ctx_logits, length, fsp, plabel, gtdict)

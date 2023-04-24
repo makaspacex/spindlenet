@@ -4,7 +4,7 @@ from neko_sdk.dataloaders.neko_vlwrapper import neko_vlwrapper
 
 
 # dataloader like, but capable for multitasking.
-class neko_joint_data_loader:
+class NekoJointDataLoader:
     def __init__(self, subsets):
         self.loaders = []
         self.maxlen = 0

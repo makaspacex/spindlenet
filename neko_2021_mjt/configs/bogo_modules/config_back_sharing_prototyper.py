@@ -1,9 +1,9 @@
-from neko_2021_mjt.bogo_modules.prototype_gen3 import prototyper_gen3d, prototyper_gen3
+from neko_2021_mjt.bogo_modules.prototype_gen3 import PrototyperGen3d, PrototyperGen3
 
 
 def config_prototyper_gen3d(sp_proto, backbone, cam, drop=None, capacity=512, force_proto_shape=None):
     return {
-        "bogo_mod": prototyper_gen3d,
+        "bogo_mod": PrototyperGen3d,
         "args":
             {
                 "capacity": capacity,
@@ -18,7 +18,7 @@ def config_prototyper_gen3d(sp_proto, backbone, cam, drop=None, capacity=512, fo
 
 def config_prototyper_gen3(sp_proto, backbone, cam, drop=None, capacity=512, force_proto_shape=None):
     return {
-        "bogo_mod": prototyper_gen3,
+        "bogo_mod": PrototyperGen3,
         "args":
             {
                 "capacity": capacity,

@@ -6,7 +6,7 @@ from neko_sdk.AOF.neko_lens import neko_lens, neko_lensnn, vis_lenses
 from neko_sdk.AOF.neko_reslayers import neko_reslayer
 
 
-class dan_ResNet(nn.Module):
+class DanResnet(nn.Module):
     LAYER = neko_reslayer
     LENS = neko_lens
 
@@ -28,7 +28,7 @@ class dan_ResNet(nn.Module):
 
     def __init__(self, layers, strides, layertype, hardness, compress_layer=True, inpch=1, oupch=512, expf=1.0):
         self.inplanes = int(32 * expf)
-        super(dan_ResNet, self).__init__()
+        super(DanResnet, self).__init__()
         self.freeze_bn_affine = False
         self.conv1 = nn.Conv2d(inpch, int(32 * expf), kernel_size=3, stride=strides[0], padding=1,
                                bias=False)
@@ -109,27 +109,27 @@ class dan_ResNet(nn.Module):
         return out_features, grids
 
 
-class dan_ResNetnn(dan_ResNet):
+class DanResnetnn(DanResnet):
     LENS = neko_lensnn
 
 
 def res_naive_lens45(strides, compress_layer, hardness, inpch=1, oupch=512, expf=1):
-    model = dan_ResNet([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch, expf=expf)
+    model = DanResnet([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch, expf=expf)
     return model
 
 
 def res_naive_lens45_thicc(strides, compress_layer, hardness, inpch=1, oupch=512):
-    model = dan_ResNet([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch, expf=1.5)
+    model = DanResnet([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch, expf=1.5)
     return model
 
 
 def res_naive_lens45_Thicc(strides, compress_layer, hardness, inpch=1, oupch=512):
-    model = dan_ResNet([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch, expf=2.0)
+    model = DanResnet([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch, expf=2.0)
     return model
 
 
 def res_naive_lens45_thicc_nn(strides, compress_layer, hardness, inpch=1, oupch=512):
-    model = dan_ResNetnn([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch, expf=1.5)
+    model = DanResnetnn([3, 4, 6, 6, 3], strides, None, hardness, compress_layer, inpch=inpch, oupch=oupch, expf=1.5)
     return model
 
 

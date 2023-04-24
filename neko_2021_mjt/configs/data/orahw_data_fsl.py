@@ -1,8 +1,8 @@
 import os
 
-from dataloaders import neko_gfsl_eval_task_dataset
-from dataloaders import neko_fsl_no_proto_task_datasetg2
-from dataloaders import randomsampler
+from dataloaders import NekoGfslEvalTaskDataset
+from dataloaders import NekoFslNoProtoTaskDatasetg2
+from dataloaders import RandomSampler
 from neko_sdk.ds_meta.oracle_1 import all
 
 
@@ -19,7 +19,7 @@ def get_orahw_train(root):
     rep = 1
     return \
         {
-            "type": neko_fsl_no_proto_task_datasetg2,
+            "type": NekoFslNoProtoTaskDatasetg2,
             'ds_args':
                 {
                     "db_root": trroot,
@@ -31,7 +31,7 @@ def get_orahw_train(root):
             'dl_args':
                 {
                     'batch_size': 1,
-                    "sampler": randomsampler(None),
+                    "sampler": RandomSampler(None),
                     'num_workers': 5,
                 },
         }
@@ -41,7 +41,7 @@ def get_eval_orahw_core(root):
     teroot = os.path.join(root, "oraclehw")
     return \
         {
-            "type": neko_gfsl_eval_task_dataset,
+            "type": NekoGfslEvalTaskDataset,
             'ds_args':
                 {
                     'db_root': teroot,

@@ -1,11 +1,11 @@
 from neko_2021_mjt.configs.data.orahw_data_fsl import get_eval_orahw, get_orahw_train, get_orahw_te_meta
-from dataloaders import neko_joint_loader
+from dataloaders import NekoJointLoader
 
 
 def get_dataloadercfgs(root):
     return \
         {
-            "loadertype": neko_joint_loader,
+            "loadertype": NekoJointLoader,
             "subsets":
                 {
                     # reset iterator gives deadlock, so we give a large enough repeat number

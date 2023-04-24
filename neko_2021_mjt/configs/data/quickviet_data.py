@@ -1,12 +1,12 @@
 from torchvision import transforms
 
 from neko_2020nocr.dan.configs.datasets.ds_paths import *
-from neko_2020nocr.dan.dataloaders.dataset_scene import colored_lmdbDataset, colored_lmdbDatasetT
+from neko_2020nocr.dan.dataloaders.dataset_scene import ColoredLmdbDataset, ColoredLmdbDatasetT
 
 
 def get_quickviet_training_cfg(root, maxT, bs=48, hw=[32, 128], random_aug=True):
     rdic = {
-        "type": colored_lmdbDataset,
+        "type": ColoredLmdbDataset,
         'ds_args': {
             'roots': ["/run/media/lasercat/writebuffer/quickviet/lmdb/"],
             'img_height': hw[0],
@@ -28,7 +28,7 @@ def get_quickviet_training_cfg(root, maxT, bs=48, hw=[32, 128], random_aug=True)
 
 def get_quickviet_testC(maxT, root, dict_dir, batch_size=128, hw=[32, 128]):
     return {
-        'type': colored_lmdbDatasetT,
+        'type': ColoredLmdbDatasetT,
         'ds_args': {
             'roots': ["/run/media/lasercat/writebuffer/quickviet/lmdb/"],
             'img_height': hw[0],

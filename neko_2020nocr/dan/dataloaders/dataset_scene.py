@@ -13,30 +13,7 @@ from torch.utils.data import Dataset
 from neko_sdk.ocr_modules.qhbaug import qhbwarp
 
 
-class lmdbDataset(Dataset):
-    def init_etc(self):
-        pass
-
-    def set_dss(self, roots):
-        for i in range(0, len(roots)):
-            env = lmdb.open(
-                roots[i],
-                max_readers=1,
-                readonly=True,
-                lock=False,
-                readahead=False,
-                meminit=False)
-            if not env:
-                print('cannot creat lmdb from %s' % (roots[i]))
-                sys.exit(0)
-            with env.begin(write=False) as txn:
-                nSamples = int(txn.get('num-samples'.encode()))
-                self.nSamples += nSamples
-            self.lengths.append(nSamples)
-            self.roots.append(roots[i])
-            self.envs.append(env)
-            self.init_etc()
-
+class LmdbDataset(Dataset):
     def __init__(self, roots=None, ratio=None, img_height=32, img_width=128,
                  transform=None, global_state='Test', maxT=25, repeat=1, qhb_aug=False, force_target_ratio=None,
                  novert=True):
@@ -71,6 +48,29 @@ class lmdbDataset(Dataset):
                 print("failed setting target_ration")
         else:
             self.target_ratio = force_target_ratio
+
+    def init_etc(self):
+        pass
+
+    def set_dss(self, roots):
+        for i in range(0, len(roots)):
+            env = lmdb.open(
+                roots[i],
+                max_readers=1,
+                readonly=True,
+                lock=False,
+                readahead=False,
+                meminit=False)
+            if not env:
+                print('cannot creat lmdb from %s' % (roots[i]))
+                sys.exit(0)
+            with env.begin(write=False) as txn:
+                nSamples = int(txn.get('num-samples'.encode()))
+                self.nSamples += nSamples
+            self.lengths.append(nSamples)
+            self.roots.append(roots[i])
+            self.envs.append(env)
+            self.init_etc()
 
     def __fromwhich__(self):
         rd = random.random()
@@ -159,7 +159,7 @@ class lmdbDataset(Dataset):
             return sample
 
 
-class colored_lmdbDatasetT(lmdbDataset):
+class ColoredLmdbDatasetT(LmdbDataset):
     def clahe(self, bgr):
         lab = cv2.cvtColor(bgr, cv2.COLOR_RGB2LAB)
 
@@ -212,7 +212,7 @@ class colored_lmdbDatasetT(lmdbDataset):
         return img, bmask
 
 
-class colored_lmdbDataset(lmdbDataset):
+class ColoredLmdbDataset(LmdbDataset):
     def keepratio_resize(self, img):
         cur_ratio = img.size[0] / float(img.size[1])
 
@@ -247,11 +247,10 @@ class colored_lmdbDataset(lmdbDataset):
         return img, bmask
 
 
-class colored_lmdbDataset_semi(colored_lmdbDataset):
+class ColoredLmdbdatasetSemi(ColoredLmdbDataset):
     def __init__(self, roots=None, cased_annoatations=None, ratio=None, img_height=32, img_width=128,
                  transform=None, global_state='Test', maxT=25, repeat=1, qhb_aug=False):
-        super(colored_lmdbDataset_semi, self).__init__(roots, ratio, img_height, img_width, transform, global_state,
-                                                       maxT, repeat, qhb_aug)
+        super().__init__(roots, ratio, img_height, img_width, transform, global_state, maxT, repeat, qhb_aug)
         self.cased = cased_annoatations
 
     def __getitem__(self, index):
@@ -297,11 +296,11 @@ class colored_lmdbDataset_semi(colored_lmdbDataset):
             return sample
 
 
-class lmdbDataset_semi(lmdbDataset):
+class LmdbDatasetSemi(LmdbDataset):
     def __init__(self, roots=None, cased_annoatations=None, ratio=None, img_height=32, img_width=128,
                  transform=None, global_state='Test', maxT=25, repeat=1, qhb_aug=False):
-        super(lmdbDataset_semi, self).__init__(roots, ratio, img_height, img_width, transform, global_state, maxT,
-                                               repeat, qhb_aug)
+        super().__init__(roots, ratio, img_height, img_width, transform, global_state, maxT,
+                                              repeat, qhb_aug)
         self.cased = cased_annoatations
 
     def __getitem__(self, index):
@@ -348,7 +347,7 @@ class lmdbDataset_semi(lmdbDataset):
 
 
 # some chs datasets are too smol.
-class lmdbDataset_repeat(lmdbDataset):
+class LmdbDatasetRepeat(LmdbDataset):
     def __len__(self):
         return self.nSamples * self.repeat
 
@@ -394,7 +393,7 @@ class lmdbDataset_repeat(lmdbDataset):
             return sample
 
 
-class lmdbDataset_repeatH(lmdbDataset):
+class LmdbDatasetRepeatH(LmdbDataset):
     def __len__(self):
         return self.nSamples * self.repeat
 
@@ -447,7 +446,7 @@ class lmdbDataset_repeatH(lmdbDataset):
             return sample
 
 
-class lmdbDataset_repeatS(lmdbDataset):
+class LmdbDatasetRepeatS(LmdbDataset):
     def __len__(self):
         if (self.repeat == -1):
             return 2147483647
@@ -528,7 +527,7 @@ class lmdbDataset_repeatS(lmdbDataset):
         return sample
 
 
-class colored_lmdbDataset_repeatS(lmdbDataset_repeatS):
+class ColoredLmdbDatasetRepeatS(LmdbDatasetRepeatS):
     def grab(self, fromwhich, index):
         with self.envs[fromwhich].begin(write=False) as txn:
             img_key = 'image-%09d' % index
@@ -600,7 +599,7 @@ class colored_lmdbDataset_repeatS(lmdbDataset_repeatS):
         return img, bmask
 
 
-class lmdbDataset_repeatHS(lmdbDataset_repeatS):
+class LmdbDatasetRepeatHS(LmdbDatasetRepeatS):
     def __len__(self):
         if (self.repeat < 0):
             return 2147483647
@@ -654,7 +653,7 @@ class lmdbDataset_repeatHS(lmdbDataset_repeatS):
             return sample
 
 
-class colored_lmdbDataset_repeatHS(lmdbDataset_repeatHS):
+class ColoredLmdbDatasetRepeatHS(LmdbDatasetRepeatHS):
     def keepratio_resize(self, img):
         cur_ratio = img.size[0] / float(img.size[1])
 
@@ -729,9 +728,10 @@ class colored_lmdbDataset_repeatHS(lmdbDataset_repeatHS):
             return sample
 
 
-class lmdbDatasetTransform(lmdbDataset):
-    def __init__(self, roots=None, ratio=None, img_height=32, img_width=128,
-                 transform=None, global_state='Test', maxT=25, repeat=1):
+class Lmdbdatasettransform(LmdbDataset):
+    def __init__(self, roots=None, ratio=None, img_height=32, img_width=128, transform=None, global_state='Test',
+                 maxT=25, repeat=1):
+        super().__init__(roots, ratio, img_height, img_width, transform, global_state, maxT, repeat)
         self.envs = []
         self.roots = []
         self.maxT = maxT

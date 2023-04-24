@@ -45,7 +45,7 @@ class \
         return out
 
 
-class dan_ResNet(nn.Module):
+class DanResnet(nn.Module):
     def freezebn(self):
         for m in self.modules():
             if isinstance(m, nn.BatchNorm2d):
@@ -64,7 +64,7 @@ class dan_ResNet(nn.Module):
 
     def __init__(self, block, layers, strides, compress_layer=True, inpch=1, oupch=512, frac=1.0):
         self.inplanes = int(32 * frac)
-        super(dan_ResNet, self).__init__()
+        super(DanResnet, self).__init__()
         self.conv1 = nn.Conv2d(inpch, int(32 * frac), kernel_size=3, stride=strides[0], padding=1,
                                bias=False)
         self.bn1 = nn.BatchNorm2d(int(32 * frac))
@@ -192,12 +192,12 @@ class dan_ResNet(nn.Module):
 
 
 def resnet45(strides, compress_layer, oupch=512, inpch=1):
-    model = dan_ResNet(BasicBlock, [3, 4, 6, 6, 3], strides, compress_layer, oupch=oupch, inpch=inpch, frac=1)
+    model = DanResnet(BasicBlock, [3, 4, 6, 6, 3], strides, compress_layer, oupch=oupch, inpch=inpch, frac=1)
     return model
 
 
 def resnet45_thicc(strides, compress_layer, oupch=512, inpch=1):
-    model = dan_ResNet(BasicBlock, [3, 4, 6, 6, 3], strides, compress_layer, oupch=oupch, inpch=inpch, frac=1.5)
+    model = DanResnet(BasicBlock, [3, 4, 6, 6, 3], strides, compress_layer, oupch=oupch, inpch=inpch, frac=1.5)
     return model
 
 

@@ -7,10 +7,10 @@ from torch.utils.data import DataLoader
 
 from neko_2020nocr.dan.common.common import display_cfgs, load_dataset, load_all_dataset, Updata_Parameters, \
     generate_optimizer, flatten_label
-from neko_2020nocr.dan.utils import Loss_counter
+from neko_2020nocr.dan.utils import LossCounter
 
 
-class neko_abstract_DAN:
+class NekoAbstractDan:
 
     def get_ar_cntr(self, key, case_sensitive):
         return None
@@ -19,7 +19,7 @@ class neko_abstract_DAN:
         return None
 
     def get_loss_cntr(self, show_interval):
-        return Loss_counter(show_interval)
+        return LossCounter(show_interval)
 
     def set_cntrs(self):
         self.train_acc_counter = self.get_ar_cntr('train accuracy: ',

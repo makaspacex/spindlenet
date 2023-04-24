@@ -9,7 +9,7 @@ from xj_benchmark.config import get_profile
 def get_opts():
     pass
     parser = argparse.ArgumentParser()
-    parser.add_argument("--taskname", type=str, default="DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3")
+    parser.add_argument("--taskname", type=str, default="OSTR_C2J_Full")
     opt = parser.parse_args()
 
     return opt
@@ -26,7 +26,7 @@ def launchtest(modcfg_dict, itr_override=None, miter=10000, rot=0, auf=True, max
 if __name__ == '__main__':
     opt = get_opts()
     name = opt.taskname
-    # name = "DUAL_a_Odancukmk7hdtfnp_r45_C_trinorm_dsa3"
+    # name = "OSTR_C2J_DTAOnly"
     modcfg_dict = get_profile(name)
 
     launchtest(modcfg_dict, itr_override=None, miter=10000, rot=0, auf=True, maxT_overrider=None)

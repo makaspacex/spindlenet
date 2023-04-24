@@ -6,9 +6,9 @@ if __name__ == '__main__':
 
     if (len(sys.argv) < 2):
         argv = ["Meeeeooooowwww",
-                find_export_root() + "/DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3/jtrmodels/",
+                find_export_root() + "/OSTR_C2J_Full/jtrmodels/",
                 "_E0",
-                find_model_root() + "/DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3/jtrmodels/",
+                find_model_root() + "/OSTR_C2J_Full/jtrmodels/",
                 ]
     else:
         argv = sys.argv

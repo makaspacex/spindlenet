@@ -2,10 +2,10 @@ import os
 
 from torchvision import transforms
 
-from neko_2020nocr.dan.dataloaders.dataset_scene import colored_lmdbDataset_repeatHS, colored_lmdbDataset
+from neko_2020nocr.dan.dataloaders.dataset_scene import ColoredLmdbDatasetRepeatHS, ColoredLmdbDataset
 from neko_2020nocr.dan.methods_pami.pami_osds_paths import get_lsvtK_path, get_ctwK_path, \
     get_mlt_chlatK_path, get_artK_path, get_rctwK_path, get_mltjp_path, get_monkey_path, get_mltkr_path
-from dataloaders.sampler import randomsampler
+from dataloaders.sampler import RandomSampler
 
 
 def get_chs_tr_meta(root):
@@ -58,7 +58,7 @@ def get_kr_te_meta(root):
     return temeta
 
 
-def get_eval_kr_color(root, maxT, hw=[32, 128]):
+def get_eval_kr_color(root, maxT, hw=(32, 128)):
     teroot = get_mltkr_path(root)
     return {
         "dict_dir": None,
@@ -70,7 +70,7 @@ def get_eval_kr_color(root, maxT, hw=[32, 128]):
     }
 
 
-def get_chs_HScqa(root, maxT, bsize=48, rep=1, hw=[32, 128]):
+def get_chs_HScqa(root, maxT, bsize=48, rep=1, hw=(32, 128)):
     if (rep >= 0):
         dla = {
             'batch_size': bsize,
@@ -80,14 +80,14 @@ def get_chs_HScqa(root, maxT, bsize=48, rep=1, hw=[32, 128]):
     elif (rep == -1):
         dla = {
             'batch_size': bsize,
-            "sampler": randomsampler(None),
+            "sampler": RandomSampler(None),
             'num_workers': 8,
         }
 
     return \
         {
 
-            "type": colored_lmdbDataset_repeatHS,
+            "type": ColoredLmdbDatasetRepeatHS,
             'ds_args':
                 {
                     "repeat": rep,
@@ -108,10 +108,10 @@ def get_chs_HScqa(root, maxT, bsize=48, rep=1, hw=[32, 128]):
         }
 
 
-def get_eval_word_color_core(teroot, maxT, hw=[32, 128]):
+def get_eval_word_color_core(teroot, maxT, hw=(32, 128)):
     return \
         {
-            "type": colored_lmdbDataset,
+            "type": ColoredLmdbDataset,
             'ds_args':
                 {
                     'roots': [teroot],
@@ -130,7 +130,7 @@ def get_eval_word_color_core(teroot, maxT, hw=[32, 128]):
         }
 
 
-def get_eval_monkey_color(root, maxT, lang, hw=[32, 128]):
+def get_eval_monkey_color(root, maxT, lang, hw=(32, 128)):
     teroot = get_monkey_path(root, lang)
     return {
         "dict_dir": None,
@@ -142,7 +142,7 @@ def get_eval_monkey_color(root, maxT, lang, hw=[32, 128]):
     }
 
 
-def get_eval_jap_color(root, maxT, hw=[32, 128]):
+def get_eval_jap_color(root, maxT, hw=(32, 128)):
     teroot = get_mltjp_path(root)
     return {
         "dict_dir": None,
@@ -154,7 +154,7 @@ def get_eval_jap_color(root, maxT, hw=[32, 128]):
     }
 
 
-def get_train_chs_color(root, maxT, hw=[32, 128]):
+def get_train_chs_color(root, maxT, hw=(32, 128)):
     artroot = get_artK_path(root)
     return {
         "dict_dir": None,

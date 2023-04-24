@@ -4,7 +4,7 @@ import torch
 from torch.utils.data.dataloader import DataLoader
 
 
-class neko_joint_loader:
+class NekoJointLoader:
     def __init__(self, dataloadercfgs, length):
         self.dataloaders = []
         self.ddict = {}

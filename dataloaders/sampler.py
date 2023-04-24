@@ -3,7 +3,7 @@ import random
 from torch.utils.data import Sampler
 
 
-class randomsampler(Sampler):
+class RandomSampler(Sampler):
     def __len__(self):
         return 2147483647
 

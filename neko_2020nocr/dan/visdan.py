@@ -21,7 +21,7 @@ def resname(path, id):
     return os.path.join(path, str(id) + "_res.txt")
 
 
-class visdan:
+class Visdan(object):
     def __init__(self, path):
         self.path = path
         # shutil.rmtree(path,True)

@@ -12,9 +12,9 @@ except:
     print("no pylcs!, some loss (trident net) won't work!")
 
 
-class osdanloss(nn.Module):
+class OsdanLoss(nn.Module):
     def __init__(self, cfgs):
-        super(osdanloss, self).__init__()
+        super(OsdanLoss, self).__init__()
         self.setuploss(cfgs)
 
     def label_weight(self, shape, label):
@@ -66,9 +66,9 @@ class osdanloss(nn.Module):
         return loss, terms
 
 
-class osdanloss_clsctx(nn.Module):
+class OsdanLossClsctx(nn.Module):
     def __init__(self, cfgs):
-        super(osdanloss_clsctx, self).__init__()
+        super(OsdanLossClsctx, self).__init__()
         self.setuploss(cfgs)
 
     def setuploss(self, cfgs):
@@ -95,9 +95,9 @@ class osdanloss_clsctx(nn.Module):
         return loss, terms
 
 
-class osdanloss_clsemb(nn.Module):
+class OsdanLossClsemb(nn.Module):
     def __init__(self, cfgs):
-        super(osdanloss_clsemb, self).__init__()
+        super(OsdanLossClsemb, self).__init__()
         self.setuploss(cfgs)
 
     def label_weight(self, shape, label):
@@ -128,9 +128,9 @@ class osdanloss_clsemb(nn.Module):
         return loss, terms
 
 
-class fsldanloss_clsembohem(nn.Module):
+class FsldanlossClsembohem(nn.Module):
     def __init__(self, cfgs):
-        super(fsldanloss_clsembohem, self).__init__()
+        super(FsldanlossClsembohem, self).__init__()
         self.setuploss(cfgs)
 
     def setuploss(self, cfgs):
@@ -167,9 +167,9 @@ class fsldanloss_clsembohem(nn.Module):
         return loss, terms
 
 
-class osdanloss_trident(nn.Module):
+class OsdanlossTrident(nn.Module):
     def __init__(self, cfgs):
-        super(osdanloss_trident, self).__init__()
+        super(OsdanlossTrident, self).__init__()
         self.setuploss(cfgs)
 
     def label_weight(self, shape, label):

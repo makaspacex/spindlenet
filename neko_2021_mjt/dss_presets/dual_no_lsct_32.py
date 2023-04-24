@@ -4,13 +4,13 @@ from neko_2021_mjt.configs.data.chs_jap_data import get_chs_HScqa, get_eval_jap_
     get_chs_tr_meta, get_jap_te_meta, get_jap_te_metagosr, get_jap_te_metaosr, \
     get_eval_kr_color, get_kr_te_meta
 from neko_2021_mjt.configs.data.mjst_data import get_mjstcqa_cfg, get_test_all_uncased_dsrgb
-from dataloaders import neko_joint_loader
+from dataloaders import NekoJointLoader
 
 
 def get_dataloadercfgs(root, te_meta_path, tr_meta_path, maxT_mjst, maxT_chsHS, bsize):
     return \
         {
-            "loadertype": neko_joint_loader,
+            "loadertype": NekoJointLoader,
             "subsets":
                 {
                     # reset iterator gives deadlock, so we give a large enough repeat number

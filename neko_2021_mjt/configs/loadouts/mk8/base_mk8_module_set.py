@@ -19,7 +19,7 @@ from neko_2021_mjt.configs.modules.config_semantic_branches import \
 # depends on whether we fixed it for good), we don't really know for now.
 # That's why this is not included in the paper.
 from neko_2021_mjt.configs.modules.config_vpystat import config_vpystat
-from neko_2021_mjt.eval_tasks.dan_eval_tasks import neko_odan_eval_tasks_mk8
+from neko_2021_mjt.eval_tasks.dan_eval_tasks import NekoOdanEvalTasksMk8
 
 
 def arm_trinorm_mk8_common_noa(srcdst, prefix, capacity, feat_ch, tr_meta_path, expf=1, views=["synthw", "glyph"],
@@ -246,7 +246,7 @@ def arm_base_mk8_task_default(srcdst, prefix, routine_type, maxT, te_meta_path, 
                                            view_name=view_name, proto_viewname=proto_viewname,
                                            force_skip_ctx=force_skip_ctx, measure_rej=measure_rej)
     srcdst[prefix + name] = {
-        "type": neko_odan_eval_tasks_mk8,
+        "type": NekoOdanEvalTasksMk8,
         "protoname": prefix + "prototyper" + "glyph",
         "temeta":
             {

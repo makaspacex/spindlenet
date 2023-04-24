@@ -9,10 +9,10 @@ Decoupled Text Decoder
 # these dtds does not decode prediction according to prev timestamp classifications.
 # this is to get less bloating code. This starts from mk5.
 # to support conventional APIs, go for GPDTDs
-class neko_os_CFDTD_mk5(nn.Module):
+class NekoOsCfdtdMk5(nn.Module):
 
     def __init__(self):
-        super(neko_os_CFDTD_mk5, self).__init__()
+        super(NekoOsCfdtdMk5, self).__init__()
         self.setup_modules()
         self.baseline = 0
 
@@ -55,7 +55,7 @@ class neko_os_CFDTD_mk5(nn.Module):
         return out_emb
 
 
-class neko_os_CFDTD_mk6(neko_os_CFDTD_mk5):
+class NekoOsCfdtdMk6(NekoOsCfdtdMk5):
     def sample(self, feature, A):
         nB, nC, nH, nW = feature.size()
         nT = A.size()[1]

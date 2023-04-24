@@ -13,7 +13,7 @@ from neko_2020nocr.dan.dataloaders.dataset_common import keepratio_resize
 
 # ms : multi_sources
 # semi: Semi supervision
-class lmdbDataset_single_labeled(Dataset):
+class LmdbdatasetSingleLabeled(Dataset):
     def init_etc(self):
         pass
 
@@ -82,7 +82,7 @@ class lmdbDataset_single_labeled(Dataset):
             return sample
 
 
-class lmdbDataset_single_unlabeled(Dataset):
+class LmdbdatasetSingleUnlabeled(Dataset):
     def init_etc(self):
         pass
 
@@ -151,7 +151,7 @@ class lmdbDataset_single_unlabeled(Dataset):
             return sample
 
 
-class lmdbDataset_ms(Dataset):
+class LmdbdatasetMs(Dataset):
     def init_etc(self):
         pass
 

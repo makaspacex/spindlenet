@@ -23,6 +23,7 @@ def dan_mjst_eval_cfg(
 
     return \
     {
+        "prefix": prefix,
         "root": save_root,
         "iterkey": iterkey, # something makes no sense to start fresh
         "modules": modcfg(None,None,25,30),

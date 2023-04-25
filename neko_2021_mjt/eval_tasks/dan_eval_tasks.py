@@ -19,7 +19,7 @@ class NekoAbstractEvalTasks(NekoModuleSet):
     def setupthis(self, cfgs):
         pass
 
-    def test_ds(self, test_loader, dsname, miter=1000, debug=False, dbgpath=None, rot=0):
+    def test_dataset(self, test_loader, dsname, miter=1000, debug=False, dbgpath=None, rot=0):
         print("wrong path")
         pass
 
@@ -34,7 +34,7 @@ class NekoAbstractEvalTasks(NekoModuleSet):
             train_data_set = cfg['type'](**cfg['ds_args'])
             cfg['dl_args']['num_workers'] = 0
             train_loader = DataLoader(train_data_set, **cfg['dl_args'])
-            self.test_ds(train_loader, dsname, self.miter, rot=rot, debug=vdbg)
+            self.test_dataset(train_loader, dsname, self.miter, rot=rot, debug=vdbg)
             print(dsname, "ends")
 
     def visualize(self, rot=0, vdbg=None):
@@ -171,15 +171,15 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
         print((fwdend - fwdstart) / all, all)
         return self.eval_routine.ret_log()
 
-    def testready(self):
+    def test_ready(self):
         global_cache = self.eval_routine.pretest(self.modulars, metaargs=self.temeta_args, rot=False)
         mdict = torch.load(self.temeta_args["meta_path"])
         return global_cache, mdict
 
-    def test_ds(self, test_loader, dsname, miter=1000, debug=None, dbgpath=None, rot=0):
+    def test_dataset(self, test_loader, dsname, miter=1000, debug=None, dbgpath=None, rot=0):
 
         tmetastart = time.time()
-        global_cache, mdict = self.testready()
+        global_cache, mdict = self.test_ready()
 
         # doing some irrelevant shit.
         if (global_cache is None):

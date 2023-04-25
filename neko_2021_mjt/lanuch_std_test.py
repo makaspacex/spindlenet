@@ -7,7 +7,7 @@ import torch
 from neko_2021_mjt.neko_abstract_jtr import NekoAbstractModularJointEval
 from data_root import find_data_root
 from data_root import find_export_root
-
+from data_root import BASE_DIR
 
 def testready(argv, modcfg, temeta, itr_override=None, miter=10000, rot=0, auf=True, maxT_overrider=None):
     from neko_2021_mjt.neko_abstract_jtr import NekoAbstractModularJointEval
@@ -65,7 +65,7 @@ def testready(argv, modcfg, temeta, itr_override=None, miter=10000, rot=0, auf=T
 #     trainer.val(9, 9, rot)
 
 
-def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=True, maxT_overrider=None):
+def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=True, maxT_overrider=None, only_conf=True):
     # from neko_2021_mjt.neko_abstract_jtr import neko_abstract_modular_joint_eval
     from neko_2021_mjt.neko_abstract_jtr import NekoAbstractModularJointEval
     from data_root import find_data_root;
@@ -79,6 +79,8 @@ def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=True, ma
         export_path = find_export_root();
         itk = "latest";
         root = "jtrmodels";
+
+
     if (itr_override is not None):
         itk = itr_override;
 
@@ -88,53 +90,30 @@ def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=True, ma
         export_path,
         itk,
     )
+    if only_conf:
+        import yaml
+        name = root.split('/')[7]
+        new_name_dict = {
+            "DUAL_a_Odancukmk7hdtfnp_r45_C_trinorm_dsa3": "OSTR_C2J_DTAOnly",
+            "DUAL_a_Odancukmk7hnp_r45_C_trinorm_dsa3": "OSTR_C2J_BaseModel",
+            "DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "OSTR_C2J_Full",
+            "DUAL_a_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3": "OSTR_C2J_FullLarge",
+            "DUAL_b_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3": "CSTR_FullLarge",
+            "DUAL_ch_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "ZSCR_CTW_Full",
+            "DUAL_chhw_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "ZSCR_Handwritten_Full"
+        }
+        new_name = new_name_dict[name]
+        save_conf_path = f"{BASE_DIR}/exp/{new_name}.yaml"
+        print(f"dumpping file {save_conf_path}")
+        yaml.dump(modscc, open(save_conf_path, 'w+'))
+        return
 
-    import yaml
-    name = root.split('/')[7]
-    new_name_dict = {
-        "DUAL_a_Odancukmk7hdtfnp_r45_C_trinorm_dsa3": "OSTR_C2J_DTAOnly",
-        "DUAL_a_Odancukmk7hnp_r45_C_trinorm_dsa3": "OSTR_C2J_BaseModel",
-        "DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "OSTR_C2J_Full",
-        "DUAL_a_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3": "OSTR_C2J_FullLarge",
-        "DUAL_b_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3": "CSTR_FullLarge",
-        "DUAL_ch_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "ZSCR_CTW_Full",
-        "DUAL_chhw_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "ZSCR_Handwritten_Full"
-    }
-    new_name = new_name_dict[name]
-
-    yaml.dump(modcfg(
-        root,
-        find_data_root(),
-        export_path,
-        itk,
-    ), open(f"../../exp/{new_name}.yaml", 'w+'))
-
-    exit(0)
-
-    if (maxT_overrider is None):
-        trainer = neko_abstract_modular_joint_eval(
-            modcfg(
-                root,
-                find_data_root(),
-                export_path,
-                itk,
-            ), miter
-        );
-    else:
-        trainer = neko_abstract_modular_joint_eval(
-            modcfg(
-                root,
-                find_data_root(),
-                export_path,
-                itk,
-                maxT_overrider
-            ), miter
-        );
+    trainer = NekoAbstractModularJointEval(modscc, miter )
     if not auf:
         import torch
         trainer.modular_dict["pred"].model.UNK_SCR = torch.nn.Parameter(
             torch.ones_like(trainer.modular_dict["pred"].model.UNK_SCR) * -6000000)
-    trainer.val(9, 9, rot);
+    trainer.val(9, 9, rot)
 
 
 

@@ -11,7 +11,7 @@ def model_mod_cfg(tr_meta_path_chs,tr_meta_path_mjst,maxT_mjst,maxT_chs):
     feat_ch=512;
     mods={};
     # mods=arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7(mods,"base_mjst_",maxT_mjst,capacity,feat_ch,tr_meta_path_mjst,wemb=0);
-    mods=arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7("base_chs_",maxT_chs,capacity,feat_ch,tr_meta_path_chs,wemb=0);
+    mods=arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7("base_chs_", maxT_chs,capacity,feat_ch,tr_meta_path_chs,wemb=0);
     return mods;
 
 

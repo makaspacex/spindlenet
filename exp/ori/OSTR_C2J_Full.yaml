@@ -87,11 +87,11 @@ modules:
   prototyperglyph:
     args:
       backbone: feature_extractorglyph
-      cam: GA
+      cam: base_chs_GA
       capacity: 256
       drop: null
       force_proto_shape: null
-      sp_proto: sp_proto
+      sp_proto: base_chs_sp_proto
     bogo_mod: !!python/name:neko_2021_mjt.bogo_modules.prototype_gen3.PrototyperGen3 ''
   sampler:
     args:
@@ -120,7 +120,6 @@ modules:
       with_optim: false
     modular: !!python/name:neko_2021_mjt.configs.modules.config_vpystat.get_pystat ''
     save_each: 20000
-prefix: base_chs_
 root: /home/izhangxm/Desktop/work/main/models-release/DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3/jtrmodels/
 tasks:
   close_set_benchmarks:
@@ -161,18 +160,18 @@ tasks:
       maxT: 30
       measure_rej: false
       mod_cvt_dicts:
-        TA: TA
+        TA: base_chs_TA
         ctxmodule: NEPnoneNEP
         feature_extractor: feature_extractorsynthw
         losses:
-        - loss_cls_emb
+        - base_chs_loss_cls_emb
         preds:
-        - pred
+        - base_chs_pred
         prototyper: prototyperglyph
-        sampler: sampler
-        semantic_branch: semantic_branch
-        seq: DTD
-      name: close_set_benchmark
+        sampler: base_chs_sampler
+        semantic_branch: base_chs_semantic_branch
+        seq: base_chs_DTD
+      name: base_chs_close_set_benchmark
       routine: !!python/name:neko_2021_mjt.routines.ocr_routines.mk8.osdan_routine_mk8.NekoHdos2cEvalRoutineCfmk8 ''
     temeta:
       case_sensitive: false

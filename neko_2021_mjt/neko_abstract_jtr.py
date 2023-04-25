@@ -8,13 +8,15 @@ from torch.nn.parallel import parallel_apply
 from neko_2020nocr.dan.common.common import Updata_Parameters
 from neko_sdk.thirdparty.mmdetapply import multi_apply
 
+import copy
 
 class NekoModular(object):
-    def __init__(self, path, name, module, save_each=20000):
+    def __init__(self, path, name, module, save_each=20000, prefix=""):
         self.path = path
         self.model = module
         self.name = name
         self.save_each = save_each
+        self.prefix = prefix
 
     def get_torch_module_dict(self):
         if (isinstance(self.model, nn.Module)):
@@ -40,8 +42,8 @@ class NekoModular(object):
             for param in self.model.parameters():
                 param.grad = None
 
-    def load(self, itrkey):
-        p = self.path + itrkey + ".pth"
+    def load(self, w_full_path):
+        p = w_full_path
         try:
             self.model.load_state_dict(torch.load(p).state_dict())
         except Exception as e:
@@ -105,7 +107,7 @@ class NekoBogoModular:
 
 
 class NekoModuleSet(object):
-    def arm_modules(self, root, modcfgs, itrkey):
+    def arm_modules(self, root, modcfgs, itrkey, prefix=""):
         self.optimizers = []
         self.optnames = []
         self.optimizer_schedulers = []
@@ -119,17 +121,21 @@ class NekoModuleSet(object):
             else:
                 mod, opt, opts = cfg["modular"](cfg["args"], modp, modp)
                 self.modular_dict[name] = NekoModular(modp, name, mod, cfg["save_each"])
-                self.modular_dict[name].load(itrkey)
+                w_full_path = os.path.join(root, f"{prefix}{name}{itrkey}.pth")
+                self.modular_dict[name].load(w_full_path)
                 if (opt is not None):
                     self.optimizers.append(opt)
                     self.optnames.append(name)
                     self.optimizer_schedulers.append(opts)
         # make sure we have collected real modules.
         for name in self.bogo_modular_list:
-            cfg = modcfgs[name]
-            # bogo modules are re-combination of parts of existing modules.
-            mod = cfg["bogo_mod"](cfg["args"], self.modular_dict)
-            self.modular_dict[name] = NekoBogoModular(mod)
+            try:
+                cfg = modcfgs[name]
+                # bogo modules are re-combination of parts of existing modules.
+                mod = cfg["bogo_mod"](cfg["args"], self.modular_dict)
+                self.modular_dict[name] = NekoBogoModular(mod)
+            except Exception as e:
+                print(e)
 
     def eval_mode(self):
         for modk in self.modular_dict:
@@ -315,9 +321,12 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
 
 class NekoAbstractModularJointEval(NekoModuleSet):
     def __init__(self, cfgs, miter):
+
+        self.ori_cfgs = copy.deepcopy(cfgs)
+
         root = cfgs["root"]
         # set to "latest" for resuming, whatever does not make sense to start fresh.
-        self.arm_modules(root, cfgs["modules"], cfgs["iterkey"])
+        self.arm_modules(root, cfgs["modules"], cfgs["iterkey"], prefix=cfgs["prefix"])
         for mk in self.modular_dict:
             self.modular_dict[mk].model.cuda()
         if "export_path" in cfgs and cfgs["export_path"] is not None:

@@ -1,18 +1,18 @@
 export_path: null
 iterkey: _E3
 modules:
-  base_mjst_DTD:
+  DTD:
     args:
       with_optim: false
     modular: !!python/name:neko_2021_mjt.configs.modules.config_dtd_xos_mk5.get_dtdmk5_xos ''
     save_each: 20000
-  base_mjst_GA:
+  GA:
     args:
       num_channels: 96
       with_optim: true
     modular: !!python/name:neko_2021_mjt.configs.modules.config_sa.get_sa_mk3 ''
     save_each: 20000
-  base_mjst_TA:
+  TA:
     args:
       cam_ch: 64
       maxT: 25
@@ -30,14 +30,14 @@ modules:
       with_optim: true
     modular: !!python/name:neko_2021_mjt.configs.modules.config_cam_stop.get_cam_stop ''
     save_each: 20000
-  base_mjst_ctxloss:
+  ctxloss:
     args:
       reduction: true
       wcls: 1
       wemb: 0.3
     modular: &id003 !!python/name:neko_2021_mjt.configs.modules.config_cls_emb_loss.get_loss_cls_emb2 ''
     save_each: 0
-  base_mjst_ctxmodule:
+  ctxmodule:
     args:
       feat_ch: 512
       nhead: 8
@@ -45,7 +45,7 @@ modules:
       with_optim: true
     modular: !!python/name:neko_2021_mjt.configs.modules.config_ctx_module.get_ctxmodule ''
     save_each: 20000
-  base_mjst_feature_extractor_container:
+  feature_extractor_container:
     args:
       bn_names:
       - bn1
@@ -62,38 +62,38 @@ modules:
     modular: !!python/name:neko_2021_mjt.configs.modules.config_fe_db.get_dan_r45_binorm_ptpt ''
     provides_bogo_modules: *id001
     save_each: 20000
-  base_mjst_feature_extractorglyph:
+  feature_extractorglyph:
     args:
-      container: base_mjst_feature_extractor_container
+      container: feature_extractor_container
       name: res2
     bogo_mod: &id002 !!python/name:neko_2021_mjt.bogo_modules.res45_binorm_bogomod.neko_res45_binorm_bogo ''
-  base_mjst_feature_extractorsynthw:
+  feature_extractorsynthw:
     args:
-      container: base_mjst_feature_extractor_container
+      container: feature_extractor_container
       name: res1
     bogo_mod: *id002
-  base_mjst_loss_cls_emb:
+  loss_cls_emb:
     args:
       reduction: true
       wcls: 1
       wemb: 0
     modular: *id003
     save_each: 0
-  base_mjst_pred:
+  pred:
     args:
       with_optim: true
     modular: !!python/name:neko_2021_mjt.configs.modules.config_ospred.get_link_xos ''
     save_each: 20000
-  base_mjst_prototyperglyph:
+  prototyperglyph:
     args:
-      backbone: base_mjst_feature_extractorglyph
-      cam: base_mjst_GA
+      backbone: feature_extractorglyph
+      cam: GA
       capacity: 256
       drop: null
       force_proto_shape: null
-      sp_proto: base_mjst_sp_proto
+      sp_proto: sp_proto
     bogo_mod: !!python/name:neko_2021_mjt.bogo_modules.prototype_gen3.PrototyperGen3 ''
-  base_mjst_sampler:
+  sampler:
     args:
       meta_args:
         case_sensitive: false
@@ -105,7 +105,7 @@ modules:
       with_optim: false
     modular: !!python/name:neko_2021_mjt.configs.modules.config_ocr_sampler_gl.get_meta_holder ''
     save_each: 0
-  base_mjst_semantic_branch:
+  semantic_branch:
     args:
       capacity: 38
       feat_ch: 512
@@ -115,14 +115,15 @@ modules:
       with_optim: true
     modular: !!python/name:neko_2021_mjt.configs.modules.config_semantic_branches.get_sampled_semantic_branch ''
     save_each: 20000
-  base_mjst_vpystat:
+  vpystat:
     args:
       with_optim: false
     modular: !!python/name:neko_2021_mjt.configs.modules.config_vpystat.get_pystat ''
     save_each: 20000
+prefix: base_mjst_
 root: /home/izhangxm/Desktop/work/main/models-release/DUAL_b_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3/jtrmodels
 tasks:
-  base_mjst_close_set_benchmarks:
+  close_set_benchmarks:
     datasets:
       case_sensitive: false
       datasets:
@@ -208,7 +209,7 @@ tasks:
           type: *id004
       dict_dir: null
       te_case_sensitive: false
-    protoname: base_mjst_prototyperglyph
+    protoname: prototyperglyph
     routine_cfgs:
       inp_cvt_dicts:
         csp: csp
@@ -224,18 +225,18 @@ tasks:
       maxT: 25
       measure_rej: false
       mod_cvt_dicts:
-        TA: base_mjst_TA
-        ctxmodule: base_mjst_ctxmodule
-        feature_extractor: base_mjst_feature_extractorsynthw
+        TA: TA
+        ctxmodule: ctxmodule
+        feature_extractor: feature_extractorsynthw
         losses:
-        - base_mjst_loss_cls_emb
+        - loss_cls_emb
         preds:
-        - base_mjst_pred
-        prototyper: base_mjst_prototyperglyph
-        sampler: base_mjst_sampler
-        semantic_branch: base_mjst_semantic_branch
-        seq: base_mjst_DTD
-      name: base_mjst_close_set_benchmark
+        - pred
+        prototyper: prototyperglyph
+        sampler: sampler
+        semantic_branch: semantic_branch
+        seq: DTD
+      name: close_set_benchmark
       routine: !!python/name:neko_2021_mjt.routines.ocr_routines.mk8.osdan_routine_mk8.NekoHdos2cEvalRoutineCfmk8 ''
     temeta:
       case_sensitive: false

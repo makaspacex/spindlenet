@@ -24,25 +24,25 @@ from neko_2021_mjt.eval_tasks.dan_eval_tasks import NekoOdanEvalTasksMk8
 
 def arm_trinorm_mk8_common_noa(srcdst, prefix, capacity, feat_ch, tr_meta_path, expf=1, views=["synthw", "glyph"],
                                ccnt=3900, camch=64):
-    srcdst["feature_extractor_container"] = config_fe_r45_binorm_orig(3, feat_ch, cnt=len(views), expf=expf)
+    srcdst[prefix + "feature_extractor_container"] = config_fe_r45_binorm_orig(3, feat_ch, cnt=len(views), expf=expf)
     for i in range(len(views)):
-        srcdst["feature_extractor" + views[i]] = config_bogo_resbinorm("feature_extractor_container",
-                                                                       "res" + str(i + 1))
-    srcdst["sampler"] = config_gocr_sampler(tr_meta_path, capacity)
-    srcdst["semantic_branch"] = config_sampled_semantic_branch(ccnt, feat_ch)
-    srcdst["vpystat"] = config_vpystat()
+        srcdst[prefix + "feature_extractor" + views[i]] = config_bogo_resbinorm(prefix + "feature_extractor_container",
+                                                                                "res" + str(i + 1))
+    srcdst[prefix + "sampler"] = config_gocr_sampler(tr_meta_path, capacity)
+    srcdst[prefix + "semantic_branch"] = config_sampled_semantic_branch(ccnt, feat_ch)
+    srcdst[prefix + "vpystat"] = config_vpystat()
     return srcdst
 
 
 def arm_trinorm_mk8_ptpt_common_noa(srcdst, prefix, capacity, feat_ch, tr_meta_path, expf=1, views=["synthw", "glyph"],
                                     ccnt=3900, camch=64):
-    srcdst["feature_extractor_container"] = config_fe_r45_binorm_ptpt(3, feat_ch, cnt=len(views), expf=expf)
+    srcdst[prefix + "feature_extractor_container"] = config_fe_r45_binorm_ptpt(3, feat_ch, cnt=len(views), expf=expf)
     for i in range(len(views)):
-        srcdst["feature_extractor" + views[i]] = config_bogo_resbinorm("feature_extractor_container",
-                                                                       "res" + str(i + 1))
-    srcdst["sampler"] = config_gocr_sampler(tr_meta_path, capacity)
-    srcdst["semantic_branch"] = config_sampled_semantic_branch(ccnt, feat_ch)
-    srcdst["vpystat"] = config_vpystat()
+        srcdst[prefix + "feature_extractor" + views[i]] = config_bogo_resbinorm(prefix + "feature_extractor_container",
+                                                                                "res" + str(i + 1))
+    srcdst[prefix + "sampler"] = config_gocr_sampler(tr_meta_path, capacity)
+    srcdst[prefix + "semantic_branch"] = config_sampled_semantic_branch(ccnt, feat_ch)
+    srcdst[prefix + "vpystat"] = config_vpystat()
     return srcdst
 
 
@@ -50,7 +50,7 @@ def arm_trinorm_mk8_common_nota(srcdst, prefix, capacity, feat_ch, tr_meta_path,
                                 ccnt=3900, camch=64):
     srcdst = arm_trinorm_mk8_common_noa(srcdst, prefix, capacity, feat_ch, tr_meta_path, expf=expf, views=views,
                                         ccnt=ccnt, camch=camch)
-    srcdst["GA"] = config_sa_mk2(feat_ch=128)
+    srcdst[prefix + "GA"] = config_sa_mk2(feat_ch=128)
     return srcdst
 
 
@@ -58,7 +58,7 @@ def arm_trinorm_mk8h_common_nota(srcdst, prefix, capacity, feat_ch, tr_meta_path
                                  ccnt=3900, camch=64):
     srcdst = arm_trinorm_mk8_common_noa(srcdst, prefix, capacity, feat_ch, tr_meta_path, expf=expf, views=views,
                                         ccnt=ccnt, camch=camch)
-    srcdst["GA"] = config_sa_mk3(feat_ch=int(32 * expf))
+    srcdst[prefix + "GA"] = config_sa_mk3(feat_ch=int(32 * expf))
     return srcdst
 
 
@@ -66,7 +66,7 @@ def arm_trinorm_mk8h_common_ptpt_nota(srcdst, prefix, capacity, feat_ch, tr_meta
                                       views=["synthw", "glyph"], ccnt=3900, camch=64):
     srcdst = arm_trinorm_mk8_ptpt_common_noa(srcdst, prefix, capacity, feat_ch, tr_meta_path, expf=expf, views=views,
                                              ccnt=ccnt, camch=camch)
-    srcdst["GA"] = config_sa_mk3(feat_ch=int(64 * expf))
+    srcdst[prefix + "GA"] = config_sa_mk3(feat_ch=int(64 * expf))
     return srcdst
 
 
@@ -74,7 +74,7 @@ def arm_trinorm_mk8_common(srcdst, prefix, maxT, capacity, feat_ch, tr_meta_path
                            ccnt=3900, camch=64):
     srcdst = arm_trinorm_mk8_common_nota(srcdst, prefix, capacity, feat_ch, tr_meta_path, expf=expf, views=views,
                                          ccnt=ccnt, camch=camch)
-    srcdst["TA"] = config_cam_stop(maxT, feat_ch=feat_ch, scales=[
+    srcdst[prefix + "TA"] = config_cam_stop(maxT, feat_ch=feat_ch, scales=[
         [int(32), 16, 64],
         [int(128), 8, 32],
         [int(feat_ch), 8, 32]
@@ -88,7 +88,7 @@ def arm_trinorm_mk8h_common(srcdst, prefix, maxT, capacity, feat_ch, tr_meta_pat
                                           ccnt=ccnt, camch=camch)
     if (maxT == 1):
         maxT = 2
-    srcdst["TA"] = config_cam_stop(maxT, feat_ch=feat_ch, scales=[
+    srcdst[prefix + "TA"] = config_cam_stop(maxT, feat_ch=feat_ch, scales=[
         [int(32 * expf), 16, 64],
         [int(128 * expf), 8, 32],
         [int(feat_ch), 8, 32]
@@ -102,7 +102,7 @@ def arm_trinorm_mk8h_ptpt_common(srcdst, prefix, maxT, capacity, feat_ch, tr_met
                                                ccnt=ccnt, camch=camch)
     if (maxT == 1):
         maxT = 2
-    srcdst["TA"] = config_cam_stop(maxT, feat_ch=feat_ch, scales=[
+    srcdst[prefix + "TA"] = config_cam_stop(maxT, feat_ch=feat_ch, scales=[
         [int(64 * expf), 16, 64],
         [int(256 * expf), 8, 32],
         [int(feat_ch), 8, 32]
@@ -113,10 +113,10 @@ def arm_trinorm_mk8h_ptpt_common(srcdst, prefix, maxT, capacity, feat_ch, tr_met
 def arm_mk8_proto_sga(srcdst, prefix, capacity, feat_ch):
     srcdst = arm_shared_prototyper(
         srcdst, prefix, capacity, feat_ch,
-        "feature_extractor" + "glyph",
-        "GA",
+        prefix + "feature_extractor" + "glyph",
+        prefix + "GA",
         use_sp=False,
-        nameoverride="prototyper" + "glyph",
+        nameoverride=prefix + "prototyper" + "glyph",
     )
     return srcdst
 
@@ -125,17 +125,17 @@ def arm_mk8_proto_sga(srcdst, prefix, capacity, feat_ch):
 def arm_mk8_proto_sganp(srcdst, prefix, capacity, feat_ch):
     srcdst = arm_shared_prototyper_np(
         srcdst, prefix, capacity, feat_ch,
-        "feature_extractor" + "glyph",
-        "GA",
+        prefix + "feature_extractor" + "glyph",
+        prefix + "GA",
         use_sp=False,
-        nameoverride="prototyper" + "glyph",
+        nameoverride=prefix + "prototyper" + "glyph",
     )
     return srcdst
 
 
 def arm_mk8_ctx(srcdst, prefix, feat_ch, nhead=8, nlay=4):
-    srcdst["ctxloss"] = config_cls_emb_loss2()
-    srcdst["ctxmodule"] = config_ctxmodule(feat_ch, nhead, nlay)
+    srcdst[prefix + "ctxloss"] = config_cls_emb_loss2()
+    srcdst[prefix + "ctxmodule"] = config_ctxmodule(feat_ch, nhead, nlay)
     return srcdst
 
 
@@ -161,52 +161,52 @@ def arm_trinorm_mk8hnp_module_set_dan_r45(srcdst, prefix, maxT, capacity, feat_c
 
 
 def arm_GTA_mk8_routine(srcdst, prefix, routine_type, maxT, log_path, log_each, dsprefix, view_name, proto_viewname):
-    srcdst["mjst"] = routine_type(
-        prototyper_name="prototyper" + proto_viewname,
-        sampler_name="sampler",
-        vpystat_name="vpystat",
-        semantic_branch_name="semantic_branch",
-        feature_extractor_name="feature_extractor" + view_name,
-        GA_name="GA",
-        TA_name="TA",
-        seq_name="DTD",
-        pred_name=["pred"],
-        ctxmodule_name="ctxmodule",
-        ctxloss_name="ctxloss",
-        loss_name=["loss_cls_emb"],
+    srcdst[prefix + "mjst"] = routine_type(
+        prototyper_name=prefix + "prototyper" + proto_viewname,
+        sampler_name=prefix + "sampler",
+        vpystat_name=prefix + "vpystat",
+        semantic_branch_name=prefix + "semantic_branch",
+        feature_extractor_name=prefix + "feature_extractor" + view_name,
+        GA_name=prefix + "GA",
+        TA_name=prefix + "TA",
+        seq_name=prefix + "DTD",
+        pred_name=[prefix + "pred"],
+        ctxmodule_name=prefix + "ctxmodule",
+        ctxloss_name=prefix + "ctxloss",
+        loss_name=[prefix + "loss_cls_emb"],
         image_name=dsprefix + "image",
         label_name=dsprefix + "label",
         mask_name=dsprefix + "bmask",
         log_path=log_path,
         log_each=log_each,
-        name="mjst",
+        name=prefix + "mjst",
         maxT=maxT,
     )
-    srcdst["mjst"]["stream"] = prefix
+    srcdst[prefix + "mjst"]["stream"] = prefix
     return srcdst
 
 
 def arm_base_mk8_routine(srcdst, prefix, routine_type, maxT, log_path, log_each, dsprefix, view_name, proto_viewname):
-    srcdst["mjst"] = routine_type(
-        prototyper_name="prototyper" + proto_viewname,
-        sampler_name="sampler",
-        semantic_branch_name="semantic_branch",
-        feature_extractor_name="feature_extractor" + view_name,
-        TA_name="TA",
-        seq_name="DTD",
-        pred_name=["pred"],
-        ctxmodule_name="ctxmodule",
-        loss_name=["loss_cls_emb"],
-        ctxloss_name="ctxloss",
+    srcdst[prefix + "mjst"] = routine_type(
+        prototyper_name=prefix + "prototyper" + proto_viewname,
+        sampler_name=prefix + "sampler",
+        semantic_branch_name=prefix + "semantic_branch",
+        feature_extractor_name=prefix + "feature_extractor" + view_name,
+        TA_name=prefix + "TA",
+        seq_name=prefix + "DTD",
+        pred_name=[prefix + "pred"],
+        ctxmodule_name=prefix + "ctxmodule",
+        loss_name=[prefix + "loss_cls_emb"],
+        ctxloss_name=prefix + "ctxloss",
         image_name=dsprefix + "image",
         mask_name=dsprefix + "bmask",
         label_name=dsprefix + "label",
         log_path=log_path,
         log_each=log_each,
-        name="mjst",
+        name=prefix + "mjst",
         maxT=maxT,
     )
-    srcdst["mjst"]["stream"] = prefix
+    srcdst[prefix + "mjst"]["stream"] = prefix
     return srcdst
 
 
@@ -217,22 +217,22 @@ def arm_base_mk8_eval_routine(srcdst, tname, prefix, routine_type, log_path, max
         # This also helps us locate corresponding code faster
         ctx_name = "NEPnoneNEP"
     else:
-        ctx_name = "ctxmodule"
+        ctx_name = prefix + "ctxmodule"
     return routine_type(
-        prototyper_name="prototyper" + proto_viewname,
-        sampler_name="sampler",
-        semantic_branch_name="semantic_branch",
-        feature_extractor_name="feature_extractor" + view_name,
-        TA_name="TA",
-        seq_name="DTD",
-        pred_name=["pred"],
+        prototyper_name=prefix + "prototyper" + proto_viewname,
+        sampler_name=prefix + "sampler",
+        semantic_branch_name=prefix + "semantic_branch",
+        feature_extractor_name=prefix + "feature_extractor" + view_name,
+        TA_name=prefix + "TA",
+        seq_name=prefix + "DTD",
+        pred_name=[prefix + "pred"],
         ctxmodule_name=ctx_name,
-        loss_name=["loss_cls_emb"],
+        loss_name=[prefix + "loss_cls_emb"],
         image_name="image",
         mask_name="bmask",
         label_name="label",
         log_path=log_path,
-        name=tname,
+        name=prefix + tname,
         maxT=maxT,
         measure_rej=measure_rej,
     )
@@ -245,9 +245,9 @@ def arm_base_mk8_task_default(srcdst, prefix, routine_type, maxT, te_meta_path, 
     te_routine = arm_base_mk8_eval_routine(te_routine, "close_set_benchmark", prefix, routine_type, log_path, maxT,
                                            view_name=view_name, proto_viewname=proto_viewname,
                                            force_skip_ctx=force_skip_ctx, measure_rej=measure_rej)
-    srcdst[name] = {
+    srcdst[prefix + name] = {
         "type": NekoOdanEvalTasksMk8,
-        "protoname": "prototyper" + "glyph",
+        "protoname": prefix + "prototyper" + "glyph",
         "temeta":
             {
                 "meta_path": te_meta_path,

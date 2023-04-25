@@ -1,18 +1,18 @@
 export_path: /home/izhangxm/Desktop/work/main/results/DUAL_a_Odancukmk7hnp_r45_C_trinorm_dsa3/jtrmodels/closeset_benchmarks
 iterkey: _E0
 modules:
-  base_chs_DTD:
+  DTD:
     args:
       with_optim: false
     modular: !!python/name:neko_2021_mjt.configs.modules.config_dtd_xos_mk5.get_dtdmk5_xos ''
     save_each: 20000
-  base_chs_GA:
+  GA:
     args:
       num_channels: 32
       with_optim: true
     modular: !!python/name:neko_2021_mjt.configs.modules.config_sa.get_sa_mk3 ''
     save_each: 20000
-  base_chs_Latin_62_sampler:
+  Latin_62_sampler:
     args:
       meta_args:
         case_sensitive: false
@@ -24,7 +24,7 @@ modules:
       with_optim: false
     modular: !!python/name:neko_2021_mjt.configs.modules.config_ocr_sampler.get_meta_holder ''
     save_each: 0
-  base_chs_TA:
+  TA:
     args:
       cam_ch: 64
       maxT: 30
@@ -42,12 +42,12 @@ modules:
       with_optim: true
     modular: !!python/name:neko_2021_mjt.configs.modules.config_cam_stop.get_cam_stop ''
     save_each: 20000
-  base_chs_feature_extractor_cco:
+  feature_extractor_cco:
     args:
       container: base_chs_feature_extractor_container
       name: res1
     bogo_mod: &id002 !!python/name:neko_2021_mjt.bogo_modules.res45_binorm_bogomod.neko_res45_binorm_bogo ''
-  base_chs_feature_extractor_container:
+  feature_extractor_container:
     args:
       bn_names:
       - bn1
@@ -66,35 +66,36 @@ modules:
     modular: !!python/name:neko_2021_mjt.configs.modules.config_fe_db.get_dan_r45_binorm_orig ''
     provides_bogo_modules: *id001
     save_each: 20000
-  base_chs_feature_extractor_proto:
+  feature_extractor_proto:
     args:
       container: base_chs_feature_extractor_container
       name: res2
     bogo_mod: *id002
-  base_chs_loss_cls_emb:
+  loss_cls_emb:
     args:
       reduction: true
       wcls: 1
       wemb: 0
     modular: !!python/name:neko_2021_mjt.configs.modules.config_cls_emb_loss.get_loss_cls_emb2 ''
     save_each: 0
-  base_chs_pred:
+  pred:
     args:
       with_optim: true
     modular: !!python/name:neko_2021_mjt.configs.modules.config_ospred.get_link_xos ''
     save_each: 20000
-  base_chs_prototyper:
+  prototyper:
     args:
-      backbone: base_chs_feature_extractor_proto
-      cam: base_chs_GA
+      backbone: feature_extractor_proto
+      cam: GA
       capacity: 256
       drop: null
       force_proto_shape: null
-      sp_proto: base_chs_sp_proto
+      sp_proto: sp_proto
     bogo_mod: !!python/name:neko_2021_mjt.bogo_modules.prototype_gen3.PrototyperGen3 ''
+prefix: base_chs_
 root: /home/izhangxm/Desktop/work/main/models-release/DUAL_a_Odancukmk7hnp_r45_C_trinorm_dsa3/jtrmodels/
 tasks:
-  base_chs_close_set_benchmarks:
+  close_set_benchmarks:
     datasets:
       case_sensitive: false
       datasets:
@@ -116,7 +117,7 @@ tasks:
           type: !!python/name:neko_2020nocr.dan.dataloaders.dataset_scene.ColoredLmdbDataset ''
       dict_dir: null
       te_case_sensitive: false
-    protoname: base_chs_prototyper
+    protoname: prototyper
     routine_cfgs:
       inp_cvt_dicts:
         image: image
@@ -128,16 +129,16 @@ tasks:
       maxT: 30
       measure_rej: false
       mod_cvt_dicts:
-        CAM: base_chs_TA
-        feature_extractor: base_chs_feature_extractor_cco
+        CAM: TA
+        feature_extractor: feature_extractor_cco
         losses:
-        - base_chs_loss_cls_emb
+        - loss_cls_emb
         preds:
-        - base_chs_pred
-        prototyper: base_chs_prototyper
-        sampler: base_chs_Latin_62_sampler
-        seq: base_chs_DTD
-      name: base_chs_close_set_benchmark
+        - pred
+        prototyper: prototyper
+        sampler: Latin_62_sampler
+        seq: DTD
+      name: close_set_benchmark
       routine: !!python/name:neko_2021_mjt.routines.ocr_routines.mk7.osdan_routine_mk7.NekoHDOS2cEvalRoutineCfmk7 ''
     temeta:
       case_sensitive: false

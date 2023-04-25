@@ -132,16 +132,19 @@ class NekoAbstractEvalRoutine(object):
     def interpret_mods(self, modular_dict):
         mdict = {}
         for k in self.mod_cvt_dict:
-            if (type(self.mod_cvt_dict[k]) is list):
-                mdict[k] = []
-                for n in self.mod_cvt_dict[k]:
-                    # a weird string to ensure missing model is intentional
-                    mdict[k].append(modular_dict[n])
-            else:
-                if (self.mod_cvt_dict[k] == "NEPnoneNEP"):
-                    mdict[k] = None
+            try:
+                if (type(self.mod_cvt_dict[k]) is list):
+                    mdict[k] = []
+                    for n in self.mod_cvt_dict[k]:
+                        # a weird string to ensure missing model is intentional
+                        mdict[k].append(modular_dict[n])
                 else:
-                    mdict[k] = modular_dict[self.mod_cvt_dict[k]]
+                    if (self.mod_cvt_dict[k] == "NEPnoneNEP"):
+                        mdict[k] = None
+                    else:
+                        mdict[k] = modular_dict[self.mod_cvt_dict[k]]
+            except Exception as e:
+                print(e)
         return mdict
 
     def grab_modules(self, input_dict, modular_dict):

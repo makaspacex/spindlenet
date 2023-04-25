@@ -1,0 +1,243 @@
+export_path: null
+iterkey: _E3
+modules:
+  base_mjst_DTD:
+    args:
+      with_optim: false
+    modular: !!python/name:neko_2021_mjt.configs.modules.config_dtd_xos_mk5.get_dtdmk5_xos ''
+    save_each: 20000
+  base_mjst_GA:
+    args:
+      num_channels: 96
+      with_optim: true
+    modular: !!python/name:neko_2021_mjt.configs.modules.config_sa.get_sa_mk3 ''
+    save_each: 20000
+  base_mjst_TA:
+    args:
+      cam_ch: 64
+      maxT: 25
+      num_channels: 512
+      scales:
+      - - 96
+        - 16
+        - 64
+      - - 384
+        - 8
+        - 32
+      - - 512
+        - 8
+        - 32
+      with_optim: true
+    modular: !!python/name:neko_2021_mjt.configs.modules.config_cam_stop.get_cam_stop ''
+    save_each: 20000
+  base_mjst_ctxloss:
+    args:
+      reduction: true
+      wcls: 1
+      wemb: 0.3
+    modular: &id003 !!python/name:neko_2021_mjt.configs.modules.config_cls_emb_loss.get_loss_cls_emb2 ''
+    save_each: 0
+  base_mjst_ctxmodule:
+    args:
+      feat_ch: 512
+      nhead: 8
+      nlay: 4
+      with_optim: true
+    modular: !!python/name:neko_2021_mjt.configs.modules.config_ctx_module.get_ctxmodule ''
+    save_each: 20000
+  base_mjst_feature_extractor_container:
+    args:
+      bn_names:
+      - bn1
+      - bn2
+      bogo_names: &id001
+      - res1
+      - res2
+      expf: 1.5
+      ich: 3
+      input_shape: null
+      ouch: 512
+      strides: null
+      with_optim: true
+    modular: !!python/name:neko_2021_mjt.configs.modules.config_fe_db.get_dan_r45_binorm_ptpt ''
+    provides_bogo_modules: *id001
+    save_each: 20000
+  base_mjst_feature_extractorglyph:
+    args:
+      container: base_mjst_feature_extractor_container
+      name: res2
+    bogo_mod: &id002 !!python/name:neko_2021_mjt.bogo_modules.res45_binorm_bogomod.neko_res45_binorm_bogo ''
+  base_mjst_feature_extractorsynthw:
+    args:
+      container: base_mjst_feature_extractor_container
+      name: res1
+    bogo_mod: *id002
+  base_mjst_loss_cls_emb:
+    args:
+      reduction: true
+      wcls: 1
+      wemb: 0
+    modular: *id003
+    save_each: 0
+  base_mjst_pred:
+    args:
+      with_optim: true
+    modular: !!python/name:neko_2021_mjt.configs.modules.config_ospred.get_link_xos ''
+    save_each: 20000
+  base_mjst_prototyperglyph:
+    args:
+      backbone: base_mjst_feature_extractorglyph
+      cam: base_mjst_GA
+      capacity: 256
+      drop: null
+      force_proto_shape: null
+      sp_proto: base_mjst_sp_proto
+    bogo_mod: !!python/name:neko_2021_mjt.bogo_modules.prototype_gen3.PrototyperGen3 ''
+  base_mjst_sampler:
+    args:
+      meta_args:
+        case_sensitive: false
+        meta_path: null
+      sampler_args:
+        max_batch_size: 256
+        neg_servant: true
+        val_frac: 0.8
+      with_optim: false
+    modular: !!python/name:neko_2021_mjt.configs.modules.config_ocr_sampler_gl.get_meta_holder ''
+    save_each: 0
+  base_mjst_semantic_branch:
+    args:
+      capacity: 38
+      feat_ch: 512
+      spks:
+      - '[s]'
+      - '[UNK]'
+      with_optim: true
+    modular: !!python/name:neko_2021_mjt.configs.modules.config_semantic_branches.get_sampled_semantic_branch ''
+    save_each: 20000
+  base_mjst_vpystat:
+    args:
+      with_optim: false
+    modular: !!python/name:neko_2021_mjt.configs.modules.config_vpystat.get_pystat ''
+    save_each: 20000
+root: /home/izhangxm/Desktop/work/main/models-release/DUAL_b_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3/jtrmodels
+tasks:
+  base_mjst_close_set_benchmarks:
+    datasets:
+      case_sensitive: false
+      datasets:
+        CUTE:
+          dl_args:
+            batch_size: 16
+            num_workers: 8
+            shuffle: false
+          ds_args:
+            global_state: Test
+            img_height: 32
+            img_width: 128
+            maxT: 25
+            roots:
+            - /home/izhangxm/Desktop/work/main/recdatassd/CUTE80
+            transform: !!python/object:torchvision.transforms.transforms.Compose
+              transforms:
+              - !!python/object:torchvision.transforms.transforms.ToTensor {}
+          type: &id004 !!python/name:neko_2020nocr.dan.dataloaders.dataset_scene.ColoredLmdbDatasetT ''
+        IC03:
+          dl_args:
+            batch_size: 16
+            num_workers: 8
+            shuffle: false
+          ds_args:
+            global_state: Test
+            img_height: 32
+            img_width: 128
+            maxT: 25
+            roots:
+            - /home/izhangxm/Desktop/work/main/recdatassd/IC03_867
+            transform: !!python/object:torchvision.transforms.transforms.Compose
+              transforms:
+              - !!python/object:torchvision.transforms.transforms.ToTensor {}
+          type: *id004
+        IC13:
+          dl_args:
+            batch_size: 16
+            num_workers: 8
+            shuffle: false
+          ds_args:
+            global_state: Test
+            img_height: 32
+            img_width: 128
+            maxT: 25
+            roots:
+            - /home/izhangxm/Desktop/work/main/recdatassd/IC13_1015
+            transform: !!python/object:torchvision.transforms.transforms.Compose
+              transforms:
+              - !!python/object:torchvision.transforms.transforms.ToTensor {}
+          type: *id004
+        IIIT5k:
+          dl_args:
+            batch_size: 16
+            num_workers: 8
+            shuffle: false
+          ds_args:
+            global_state: Test
+            img_height: 32
+            img_width: 128
+            maxT: 25
+            roots:
+            - /home/izhangxm/Desktop/work/main/recdatassd/IIIT5k_3000
+            transform: !!python/object:torchvision.transforms.transforms.Compose
+              transforms:
+              - !!python/object:torchvision.transforms.transforms.ToTensor {}
+          type: *id004
+        SVT:
+          dl_args:
+            batch_size: 16
+            num_workers: 8
+            shuffle: false
+          ds_args:
+            global_state: Test
+            img_height: 32
+            img_width: 128
+            maxT: 25
+            roots:
+            - /home/izhangxm/Desktop/work/main/recdatassd/SVT
+            transform: !!python/object:torchvision.transforms.transforms.Compose
+              transforms:
+              - !!python/object:torchvision.transforms.transforms.ToTensor {}
+          type: *id004
+      dict_dir: null
+      te_case_sensitive: false
+    protoname: base_mjst_prototyperglyph
+    routine_cfgs:
+      inp_cvt_dicts:
+        csp: csp
+        fsp: fsp
+        gtdict: gtdict
+        image: image
+        label: label
+        mask: bmask
+        plabel: plabel
+        proto: proto
+        tdict: tdict
+      log_path: null
+      maxT: 25
+      measure_rej: false
+      mod_cvt_dicts:
+        TA: base_mjst_TA
+        ctxmodule: base_mjst_ctxmodule
+        feature_extractor: base_mjst_feature_extractorsynthw
+        losses:
+        - base_mjst_loss_cls_emb
+        preds:
+        - base_mjst_pred
+        prototyper: base_mjst_prototyperglyph
+        sampler: base_mjst_sampler
+        semantic_branch: base_mjst_semantic_branch
+        seq: base_mjst_DTD
+      name: base_mjst_close_set_benchmark
+      routine: !!python/name:neko_2021_mjt.routines.ocr_routines.mk8.osdan_routine_mk8.NekoHdos2cEvalRoutineCfmk8 ''
+    temeta:
+      case_sensitive: false
+      meta_path: /home/izhangxm/Desktop/work/main/recdatassd/dicts/dab62cased.pt
+    type: !!python/name:neko_2021_mjt.eval_tasks.dan_eval_tasks.NekoOdanEvalTasksMk8 ''

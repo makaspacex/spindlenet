@@ -6,8 +6,11 @@ from neko_2021_mjt.configs.modules.config_fe_db import config_fe_r45_binorm_orig
 from neko_2021_mjt.configs.modules.config_sa import config_sa_mk3
 
 
-def arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7(srcdst, prefix, maxT, capacity, feat_ch, tr_meta_path, expf=1,
+def arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7(prefix, maxT, capacity, feat_ch, tr_meta_path, srcdst=None, expf=1,
                                                   fecnt=3, wemb=0.3):
+
+    srcdst = {} if srcdst is None else srcdst
+
     srcdst[prefix + "feature_extractor_container"] = config_fe_r45_binorm_orig(3, feat_ch, cnt=fecnt)
     srcdst[prefix + "feature_extractor_cco"] = config_bogo_resbinorm(prefix + "feature_extractor_container", "res1")
     srcdst[prefix + "feature_extractor_proto"] = config_bogo_resbinorm(prefix + "feature_extractor_container", "res2")

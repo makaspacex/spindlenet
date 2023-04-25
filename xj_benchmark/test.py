@@ -27,6 +27,8 @@ if __name__ == '__main__':
     opt = get_opts()
     name = opt.taskname
     # name = "OSTR_C2J_DTAOnly"
-    modcfg_dict = get_profile(name)
+    # modcfg_dict = get_profile(name)
+    import yaml
+    modcfg_dict = yaml.unsafe_load(open(f"exp/{name}.yaml", "r"))
 
     launchtest(modcfg_dict, itr_override=None, miter=10000, rot=0, auf=True, maxT_overrider=None)

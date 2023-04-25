@@ -1,4 +1,4 @@
-from neko_2021_mjt.modulars.dan.neko_sementic_prototyper import NekoSampledSementicBranch
+from neko_2021_mjt.modulars.dan.neko_sementic_prototyper import neko_sampled_sementic_branch
 from neko_2021_mjt.modulars.default_config import get_default_model
 
 
@@ -8,7 +8,7 @@ def get_sampled_semantic_branch(arg_dict, path, optim_path=None):
         "feat_ch": arg_dict["feat_ch"],
         "capacity": arg_dict["capacity"],
     }
-    return get_default_model(NekoSampledSementicBranch, adict, path, arg_dict["with_optim"], optim_path)
+    return get_default_model(neko_sampled_sementic_branch, adict, path, arg_dict["with_optim"], optim_path)
 
 
 def config_sampled_semantic_branch(capacity, feat_ch):

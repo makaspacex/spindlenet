@@ -3,7 +3,7 @@ import os
 from neko_2021_mjt.configs.loadouts.mk8.base_mk8_module_set import arm_base_mk8_task_default
 from neko_2021_mjt.configs.routines.ocr_routines.mk8.osdanmk8_routine_cfg import osdanmk8_eval_routine_cfg
 from neko_2021_mjt.dss_presets.dual_no_lsct_32 import get_eval_dss
-from .configs import model_mod_cfg as modcfg
+from configs import model_mod_cfg as modcfg
 
 
 def dan_mjst_eval_cfg(save_root, dsroot, log_path, iterkey, maxT=30):

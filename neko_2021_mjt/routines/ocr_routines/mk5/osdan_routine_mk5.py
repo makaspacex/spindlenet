@@ -4,7 +4,7 @@ import numpy as np
 
 from neko_2020nocr.dan.common.common import flatten_label
 from neko_2020nocr.dan.utils import LossCounter, NekoOsAttentionArCounter
-from neko_2021_mjt.modulars.neko_inflater import NekoInflater
+from neko_2021_mjt.modulars.neko_inflater import neko_inflater
 from neko_2021_mjt.routines.neko_abstract_routines import NekoAbstractRoutine, NekoAbstractEvalRoutine
 
 
@@ -24,7 +24,7 @@ class NekoHdos2cRoutineCfmk5(NekoAbstractRoutine):
 
     def set_etc(self, args):
         self.maxT = args["maxT"]
-        self.inflater = NekoInflater()
+        self.inflater = neko_inflater()
 
     def set_loggers(self, log_path, log_each, name):
         self.logger_dict = {
@@ -87,7 +87,7 @@ class NekoHdos2cRoutineCfmk5(NekoAbstractRoutine):
 class NekoHdos2cEvalRoutineCfmk5(NekoAbstractEvalRoutine):
     def set_etc(self, args):
         self.maxT = args["maxT"]
-        self.inflater = NekoInflater()
+        self.inflater = neko_inflater()
 
     def set_loggers(self, log_path, name, args):
         self.logger_dict = {

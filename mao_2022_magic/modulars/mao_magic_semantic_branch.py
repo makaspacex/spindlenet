@@ -4,7 +4,7 @@ import torch
 import torch.nn
 from torch.nn import functional as trnf
 
-from neko_2021_mjt.modulars.neko_inflater import NekoInflater
+from neko_2021_mjt.modulars.neko_inflater import neko_inflater
 from neko_sdk.torchtools.seqkit import length_to_mask
 
 
@@ -87,7 +87,7 @@ class mao_magic_semantic_module(torch.nn.Module):
         super(mao_magic_semantic_module, self).__init__()
         self.indexmod = neko_v2s_basic()
         self.ctxmod = neko_ctx_basic(feat_ch, nhead, nlay)
-        self.inflator = NekoInflater()
+        self.inflator = neko_inflater()
 
     def forward(self, logits_raw, lengths, compact_sembs, semb, maxT):
         sbatch, masks, tlen = self.indexmod(logits_raw, lengths, compact_sembs, maxT)

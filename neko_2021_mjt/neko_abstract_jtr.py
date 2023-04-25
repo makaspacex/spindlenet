@@ -44,8 +44,8 @@ class NekoModular(object):
         p = self.path + itrkey + ".pth"
         try:
             self.model.load_state_dict(torch.load(p).state_dict())
-        except:
-            print(self.name, "cannot load", "itr", p, ", starting fresh")
+        except Exception as e:
+            print(self.name, "cannot load", "itr", p, f", starting fresh. {e}")
 
     def save(self, nEpoch):
         if (self.save_each > 0):

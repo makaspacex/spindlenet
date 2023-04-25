@@ -7,8 +7,6 @@ ICML, 2019
 import numpy as np
 import torch
 from scipy.linalg import logm
-from torch.autograd.gradcheck import zero_gradients
-
 
 def exact_matrix_logarithm_trace(Fx, x):
     """
@@ -24,7 +22,8 @@ def exact_matrix_logarithm_trace(Fx, x):
     jac = torch.empty([bs, outdim, indim[1]], dtype=torch.float)
     # for each output Fx[i] compute d(Fx[i])/d(x)
     for i in range(outdim):
-        zero_gradients(x)
+        # zero_gradients(x)
+        x.grad.zero_()
         jac[:, i, :] = torch.autograd.grad(outVector[i], x,
                                            retain_graph=True)[0].view(bs, outdim)
     jac = jac.cpu().numpy()

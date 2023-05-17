@@ -162,6 +162,8 @@ def normgrad(mod):
 
 class NekoAbstractModularJointTraining(NekoModuleSet):
     def __init__(self, cfgs):
+        
+        
         self.setup(cfgs)
 
     def set_routines(self, routine_cfgs):

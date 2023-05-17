@@ -12,15 +12,14 @@ class lmdb_wrapper:
     def __init__(self, lmdb_dir):
         self.root = lmdb_dir
         os.makedirs(lmdb_dir, exist_ok=True)
-
         self.db = lmdb.open(lmdb_dir, map_size=1e11)
         self.load = 0
-        self.txn = self.db.begin(write=True)
 
     def adddata_kv(self, ikvdict, tkvdict, rkvdict):
         iks = []
         rks = []
         tks = []
+        self.txn = self.db.begin(write=True)
         for ik in ikvdict:
             imageKey = (ik + '-%09d' % self.load).encode()
             iks.append(imageKey)
@@ -33,22 +32,16 @@ class lmdb_wrapper:
             tKey = (tk + '-%09d' % self.load).encode()
             tks.append(tKey)
             self.txn.put(tKey, tkvdict[tk].encode())
-        if (self.load % 500 == 0):
-            self.txn.replace('num-samples'.encode(), str(self.load).encode())
-            print("load:", self.load)
-            self.txn.commit()
-            del self.txn
-            self.txn = self.db.begin(write=True)
         self.load += 1
+        self.txn.replace('num-samples'.encode(), str(self.load).encode())
+        self.txn.commit()
         return iks, rks, tks
 
     def end_this(self):
-        self.txn.replace('num-samples'.encode(), str(self.load).encode())
         try:
+            self.txn = self.db.begin(write=True)
+            self.txn.replace('num-samples'.encode(), str(self.load).encode())
             self.txn.commit()
             self.db.close()
-        except:
-            pass
-
-    def __del__(self):
-        self.end_this()
+        except Exception as e:
+            raise e

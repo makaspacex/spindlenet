@@ -15,13 +15,6 @@ if __name__ == '__main__':
     # main()
     # test1.main(only_conf=False)
     # test2.main(only_conf=False)
-    # test3.main(only_conf=False)
+    test3.main(only_conf=False)
     # test4.main(only_conf=False)
     test5.main(only_conf=False)
-
-
-
-
-
-
-

@@ -6,12 +6,12 @@ if __name__ == '__main__':
 
     if (len(sys.argv) < 2):
         argv = ["Meeeeooooowwww",
-                find_export_root() + "/OSTR_C2J_Full/jtrmodels/",
-                "_E0",
-                find_model_root() + "/OSTR_C2J_Full/jtrmodels/",
+                "runtime/OSTR_C2J_DTA_Only_MTH/mth_1200/logs/",
+                "_E0_I20000",
+                "runtime/OSTR_C2J_DTA_Only_MTH/mth_1200/jtrmodels/",
                 ]
     else:
         argv = sys.argv
     from neko_2021_mjt.lanuch_std_test import launchtest
 
-    launchtest(argv, dan_mjst_eval_cfg)
+    launchtest(argv, dan_mjst_eval_cfg, only_conf=False)

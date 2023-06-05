@@ -17,6 +17,9 @@ class NekoModular(object):
         self.name = name
         self.save_each = save_each
         self.prefix = prefix
+        
+        if not os.path.exists(os.path.dirname(self.path)):
+            os.makedirs(os.path.dirname(self.path))
 
     def get_torch_module_dict(self):
         if (isinstance(self.model, nn.Module)):
@@ -312,8 +315,12 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
                 itr_time = time.time() - itr_start
 
                 # print(torch.backends.cudnn.benchmark)
+                
                 if (batch_idx % 100 == 9):
                     print("datatime", data_time, "itrtime", itr_time, "all", time.time() - data_start)
+                
+                print(f"Epoch:{nEpoch+1}/{self.vepoch} Iter:{batch_idx+1}/{self.vitr} datatime {data_time} itrtime{itr_time} all {time.time() - data_start}")
+                
             Updata_Parameters(self.optimizer_schedulers, frozen=[])
             self.val(nEpoch, "Final")
             # torch.backends.cudnn.benchmark = False
@@ -328,7 +335,11 @@ class NekoAbstractModularJointEval(NekoModuleSet):
 
         root = cfgs["root"]
         # set to "latest" for resuming, whatever does not make sense to start fresh.
-        self.arm_modules(root, cfgs["modules"], cfgs["iterkey"], prefix=cfgs["prefix"])
+        if "prefix" not in cfgs:
+            print(f"cfgs does not contain prefix key.")
+            cfgs['prefix'] = ""
+        
+        self.arm_modules(root, cfgs["modules"], cfgs["iterkey"], prefix=cfgs['prefix'])
         for mk in self.modular_dict:
             self.modular_dict[mk].model.cuda()
         if "export_path" in cfgs and cfgs["export_path"] is not None:

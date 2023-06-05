@@ -1,4 +1,4 @@
-from neko_sdk.ocr_modules.renderlite.lib_render import render_lite
+from neko_sdk.ocr_modules.renderlite.lib_render import RenderLite
 from neko_sdk.ocr_modules.renderlite.addfffh import refactor_meta,add_masters,finalize
 import torch;
 #
@@ -27,7 +27,7 @@ def make_enchba_sc_dict(font,protodst):
     #         masterschs.append(i)
     #         servants_cpx.append(j);
 
-    engine = render_lite(os=84,fos=32);
+    engine = RenderLite(os=84,fos=32);
     font_ids=[0 for c in chrset]+[1 for c in bangchset];
     chrset+=bangchset;
     meta=engine.render_core_scabl(chrset,['[s]'],font,font_ids,False);

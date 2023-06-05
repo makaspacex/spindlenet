@@ -1,9 +1,9 @@
-from neko_sdk.ocr_modules.renderlite.lib_render import render_lite;
+from neko_sdk.ocr_modules.renderlite.lib_render import RenderLite;
 import torch;
 import random;
 class metafier:
     def __init__(this,tr=0,te=0,val=1):
-        this.render=render_lite(os=84,fos=32);
+        this.render=RenderLite(os=84,fos=32);
         this.tr=tr;
         this.te=te;
         this.val=val;

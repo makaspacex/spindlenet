@@ -1,5 +1,6 @@
 from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import neko_ocr_lmdb_mgmt;
-from neko_sdk.ocr_modules.renderlite.lib_render import render_lite
+from neko_sdk.ocr_modules.renderlite.lib_render import RenderLite
+from neko_sdk.ocr_modules.renderlite.lib_render import RenderEngineForMTH
 from neko_sdk.ocr_modules.renderlite.addfffh import refactor_meta,add_masters,finalize
 
 import torch;
@@ -36,9 +37,30 @@ def makept(dataset, font, protodst, xdst, blacklist, servants="QWERTYUIOPASDFGHJ
             chrset=list(set(xdst.union(get_ds(dataset,False))).difference(blacklist));
     else:
         chrset=list(set(xdst).difference(blacklist));
-    engine = render_lite(os=84,fos=32);
+    engine = RenderLite(os=84,fos=32);
     font_ids=[0 for c in chrset];
     meta=engine.render_core(chrset,['[s]'],font,font_ids,False);
+    meta=refactor_meta(meta,unk=len(chrset)+len(['[s]']));
+    # inject a shapeless UNK.
+    meta["protos"].append(None)
+    meta["achars"].append("[UNK]")
+    if(len(masters)):
+        add_masters(meta,servants,masters);
+    # add_masters(meta,servants,masters);
+    meta=finalize(meta);
+    torch.save(meta,protodst);
+    return chrset
+
+def makept_for_MTH(dataset, font_paths, protodst, xdst, blacklist, servants="QWERTYUIOPASDFGHJKLZXCVBNM", masters="qwertyuiopasdfghjklzxcvbnm", space=None):
+    if(dataset is not None):
+        if(space is not None):
+            chrset=list(set(xdst.union(get_ds(dataset,False))).difference(blacklist).intersection(space));
+        else:
+            chrset=list(set(xdst.union(get_ds(dataset,False))).difference(blacklist));
+    else:
+        chrset=list(set(xdst).difference(blacklist))
+    engine = RenderEngineForMTH(os=84,fos=32);
+    meta=engine.render_core(chrset,['[s]'],font_paths,save_clip=False);
     meta=refactor_meta(meta,unk=len(chrset)+len(['[s]']));
     # inject a shapeless UNK.
     meta["protos"].append(None)

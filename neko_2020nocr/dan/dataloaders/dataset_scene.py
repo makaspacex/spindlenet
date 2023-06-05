@@ -146,7 +146,8 @@ class LmdbDataset(Dataset):
                 return self[index + 1]
             try:
                 img, bmask = self.keepratio_resize(img.convert('RGB'))
-            except:
+            except Exception as e:
+                raise e
                 print('Size error for %d' % index)
                 return self[index + 1]
             if (len(img.shape) == 2):
@@ -157,7 +158,6 @@ class LmdbDataset(Dataset):
 
             sample = {'image': img, 'label': label, "bmask": bmask}
             return sample
-
 
 class ColoredLmdbDatasetT(LmdbDataset):
     def clahe(self, bgr):
@@ -210,9 +210,61 @@ class ColoredLmdbDatasetT(LmdbDataset):
         bmask = np.zeros([mask_height, mask_width]).astype(np.float32)
         bmask[start_x: start_x + img.shape[0], start_y: start_y + img.shape[1]] = 1
         return img, bmask
+    
+class ColoredLmdbDatasetTV(LmdbDataset):
+    def clahe(self, bgr):
+        lab = cv2.cvtColor(bgr, cv2.COLOR_RGB2LAB)
+
+        lab_planes = cv2.split(lab)
+
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(15, 15))
+
+        lab_planes[0] = clahe.apply(lab_planes[0])
+
+        lab = cv2.merge(lab_planes)
+
+        bgr = cv2.cvtColor(lab, cv2.COLOR_LAB2RGB)
+        return bgr
+
+    def keepratio_resize(self, img):
+
+        mask_height = self.img_height
+        mask_width = self.img_width
+        img = np.array(img)
+        # img=self.clahe(img)
+        #
+        # if(img.shape[0]>img.shape[1]*2):
+        #     img=np.transpose(img,[1,0,2])
+        cur_ratio = img.shape[1] / float(img.shape[0])
+
+        if (len(img.shape) == 2):
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+        if (self.qhb_aug):
+            try:
+                img = qhbwarp(img, 10)
+            except:
+                pass
+
+        cur_target_height,cur_target_width=resize_v_align(
+            cur_ratio,self.target_ratio,self.img_height,self.img_width
+        )
+ 
+
+            # print("else",cur_ratio,self.target_ratio)
+            
+        img = cv2.resize(img, (cur_target_width, cur_target_height))
+        start_x = int((mask_height - img.shape[0]) / 2)
+        start_y = int((mask_width - img.shape[1]) / 2)
+        mask = np.zeros([mask_height, mask_width, 3]).astype(np.uint8)
+        mask[start_x: start_x + img.shape[0], start_y: start_y + img.shape[1]] = img
+        img = mask
+        bmask = np.zeros([mask_height, mask_width]).astype(np.float32)
+        bmask[start_x: start_x + img.shape[0], start_y: start_y + img.shape[1]] = 1
+        return img, bmask
 
 
 class ColoredLmdbDataset(LmdbDataset):
+    #TODO 针对横向和
     def keepratio_resize(self, img):
         cur_ratio = img.size[0] / float(img.size[1])
 
@@ -236,6 +288,46 @@ class ColoredLmdbDataset(LmdbDataset):
             cur_target_height = self.img_height
             # print("else",cur_ratio,self.target_ratio)
             cur_target_width = int(self.img_height * cur_ratio)
+        img = cv2.resize(img, (cur_target_width, cur_target_height))
+        start_x = int((mask_height - img.shape[0]) / 2)
+        start_y = int((mask_width - img.shape[1]) / 2)
+        mask = np.zeros([mask_height, mask_width, 3]).astype(np.uint8)
+        mask[start_x: start_x + img.shape[0], start_y: start_y + img.shape[1]] = img
+        bmask = np.zeros([mask_height, mask_width]).astype(np.float32)
+        bmask[start_x: start_x + img.shape[0], start_y: start_y + img.shape[1]] = 1
+        img = mask
+        return img, bmask
+def resize_v_align(cur_ratio,target_ratio,img_height,img_width):
+    if cur_ratio < target_ratio:
+        cur_target_height=img_height;
+        # print("if", cur_ratio, self.target_ratio)
+        cur_target_width = int(img_height * cur_ratio);
+    else:
+        cur_target_width = img_width
+        cur_target_height = int(img_width/cur_ratio);
+    return cur_target_height,cur_target_width;
+        
+class ColoredLmdbDatasetV(LmdbDataset):
+    #TODO 针对横向和
+    def keepratio_resize(self, img):
+        cur_ratio = img.size[0] / float(img.size[1])
+
+        mask_height = self.img_height
+        mask_width = self.img_width
+        img = np.array(img)
+
+        if (len(img.shape) == 2):
+            img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+        if (self.qhb_aug):
+            try:
+                img = qhbwarp(img, 10)
+            except:
+                pass
+        cur_target_height,cur_target_width=resize_v_align(
+            cur_ratio,self.target_ratio,self.img_height,self.img_width
+        )
+        
+            # print("else",cur_ratio,self.target_ratio)
         img = cv2.resize(img, (cur_target_width, cur_target_height))
         start_x = int((mask_height - img.shape[0]) / 2)
         start_y = int((mask_width - img.shape[1]) / 2)

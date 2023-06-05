@@ -82,6 +82,9 @@ def dye(ids, srcdst, color):
 
 def get_unpadded(im, length, kar=False):
     try:
+        H,W, _ = im.shape
+        if H/W > 2:
+            im = np.transpose(im, (1,0,2))[::-1,:,:]
         h = 64
         pad = np.min(np.nonzero(np.hstack(im.sum(0).sum(1))))
         if (pad == 0):

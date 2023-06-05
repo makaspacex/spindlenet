@@ -190,8 +190,8 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
 
         fwdstart = time.time()
         idi = 0
-        all = 0
-        for sample_batched in test_loader:
+        sum_labels = 0
+        for ii, sample_batched in enumerate(test_loader):
             if idi > miter:
                 break
             idi += 1
@@ -201,16 +201,18 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
             if (self.export_path is not None):
                 export_path = os.path.join(self.export_path, dsname)
                 os.makedirs(export_path, exist_ok=True)
-                self.export(sample_batched["image"], sample_batched["label"], [texts, etc, beams], all, export_path,
+                self.export(sample_batched["image"], sample_batched["label"], [texts, etc, beams], sum_labels, export_path,
                             mdict)
             if ("label" in sample_batched):
-                all += len(sample_batched["label"])
+                sum_labels += len(sample_batched["label"])
             else:
-                all += len(sample_batched["labels"])
-
+                sum_labels += len(sample_batched["labels"])
+            fwdend = time.time()
+            print(f"{ii+1}/{len(test_loader)} {(fwdend - fwdstart) / sum_labels} {sum_labels} FPS:{1 / ((fwdend - fwdstart) / sum_labels)}")
+        
         fwdend = time.time()
-        print((fwdend - fwdstart) / all, all, "FPS:", 1 / ((fwdend - fwdstart) / all))
-        print((fwdend - tmetastart) / all, all)
+        print((fwdend - fwdstart) / sum_labels, sum_labels, "FPS:", 1 / ((fwdend - fwdstart) / sum_labels))
+        print((fwdend - tmetastart) / sum_labels, sum_labels)
 
         return self.eval_routine.ret_log()
 

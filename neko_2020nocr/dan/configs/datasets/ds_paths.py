@@ -5,6 +5,31 @@ def get_nips14(root="/home/lasercat/ssddata/"):
     return os.path.join(root, 'NIPS2014')
 
 
+def get_mth1200_train(root):
+    return os.path.join(root, 'MTH1200_train')
+
+def get_mth1200_test_all(root):
+    return os.path.join(root, 'MTH1200_test_all')
+
+def get_mth1000_train(root):
+    return os.path.join(root, 'MTH1000_train')
+
+def get_mth1000_test_all(root):
+    return os.path.join(root, 'MTH1000_test_all')
+
+def get_tkh_train(root):
+    return os.path.join(root, 'TKH_train')
+
+def get_tkh_test_all(root):
+    return os.path.join(root, 'TKH_test_all')
+
+def get_tkhmth2200_train(root):
+    return os.path.join(root, 'TKHMTH2200_train')
+
+def get_tkhmth2200_test_all(root):
+    return os.path.join(root, 'TKHMTH2200_test_all')
+
+
 def get_cvpr16(root="/home/lasercat/ssddata/"):
     return os.path.join(root, 'CVPR2016')
 

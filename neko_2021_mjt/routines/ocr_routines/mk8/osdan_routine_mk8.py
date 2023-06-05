@@ -141,8 +141,7 @@ class NekoHdos2cRoutineCfmk8adt(NekoHdos2cRoutineCfmk8a):
 class NekoHdos2cEvalRoutineCfmk8(NekoAbstractEvalRoutine):
     def pretest_impl(self, modular_dict, metaargs, **kwargs):
         rot = kwargs["rot"]
-        normproto, plabels, gplabels, tdict, gbidict = modular_dict["sampler"].model.dump_allg(metaargs=metaargs,
-                                                                                               use_sp=False)
+        normproto, plabels, gplabels, tdict, gbidict = modular_dict["sampler"].model.dump_allg(metaargs=metaargs, use_sp=False)
         fsp = modular_dict["semantic_branch"]()[:gbidict["[UNK]"] + 1]
         if (self.has_ctx):
             csp = modular_dict["semantic_branch"](gplabels)

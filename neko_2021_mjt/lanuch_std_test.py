@@ -65,7 +65,7 @@ def testready(argv, modcfg, temeta, itr_override=None, miter=10000, rot=0, auf=T
 #     trainer.val(9, 9, rot)
 
 
-def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=True, maxT_overrider=None, only_conf=True):
+def launchtest(argv, modcfg_func, itr_override=None, miter=10000, rot=0, auf=True, maxT_overrider=None, only_conf=False, batchsize=32):
     # from neko_2021_mjt.neko_abstract_jtr import neko_abstract_modular_joint_eval
     from neko_2021_mjt.neko_abstract_jtr import NekoAbstractModularJointEval
     from data_root import find_data_root;
@@ -84,7 +84,7 @@ def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=True, ma
     if (itr_override is not None):
         itk = itr_override;
 
-    modscc = modcfg(
+    modscc = modcfg_func(
         root,
         find_data_root(),
         export_path,
@@ -114,9 +114,6 @@ def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=True, ma
         trainer.modular_dict["pred"].model.UNK_SCR = torch.nn.Parameter(
             torch.ones_like(trainer.modular_dict["pred"].model.UNK_SCR) * -6000000)
     trainer.val(9, 9, rot)
-
-
-
 
 
 def launchtest_image(src_path, export_path, itk, root, tskcfg, miter=10000, rot=0, auf=True):

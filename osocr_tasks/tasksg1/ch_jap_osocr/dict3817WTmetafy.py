@@ -1,4 +1,4 @@
-from neko_sdk.ocr_modules.renderlite.lib_render import render_lite
+from neko_sdk.ocr_modules.renderlite.lib_render import RenderLite
 from neko_sdk.ocr_modules.renderlite.addfffh import refactor_meta,add_masters,finalize
 import torch;
 #
@@ -24,7 +24,7 @@ def make_chlat_wt_dict(font,protodst):
             masterschs.append(i)
             servants_cpx.append(j);
 
-    engine = render_lite(os=84,fos=32);
+    engine = RenderLite(os=84,fos=32);
     font_ids=[0 for c in chrset];
     meta=engine.render_core(chrset,['[s]'],font,font_ids,False);
     meta=refactor_meta(meta,unk=len(chrset)+len(['[s]']));
@@ -52,7 +52,7 @@ def make_chlat_wt_dict64(font,protodst):
             masterschs.append(i)
             servants_cpx.append(j);
 
-    engine = render_lite(fos=64);
+    engine = RenderLite(fos=64);
     font_ids=[0 for c in chrset];
     meta=engine.render_core(chrset,['[s]'],font,font_ids,False);
     meta=refactor_meta(meta,unk=len(chrset)+len(['[s]']));

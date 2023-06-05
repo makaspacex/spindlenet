@@ -93,7 +93,13 @@ class neko_prototype_sampler_static:
                 self.reduced_bidict[kset[drk]] = k
 
         self.set_gbidict(oks)
-
+        for k in self.reduced_bidict:
+            if(self.reduced_bidict[k] not in self.reduced_bidict):
+                print(k);
+            else:
+                kk=self.reduced_bidict[k];
+                if(kk not in self.reduced_bidict):
+                    print(k,kk)
         # Foes includes the characters looks like each other
         # but never share labels (They may actually have linguistic relationships...
         # Like yanderes in a broken relationship[x]).
@@ -304,7 +310,6 @@ class neko_prototype_sampler_static:
         plabels = []
         labmap = {}
         bidict = {}
-        gbidict = {}
         for i in all_ids:
             cha = self.aligned_characters[i]
             if (masters_share):
@@ -339,7 +344,6 @@ class neko_prototype_sampler_static:
         labmap = {}
         bidict = {}
         gplabels = []
-        gmapping = []
         for i in all_ids:
             cha = self.aligned_characters[i]
             if (masters_share):

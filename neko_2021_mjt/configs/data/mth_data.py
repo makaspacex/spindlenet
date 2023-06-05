@@ -1,10 +1,8 @@
 from torchvision import transforms
 import os
-from neko_2020nocr.dan.configs.datasets.ds_paths import get_mth1200_train
-from neko_2020nocr.dan.configs.datasets.ds_paths import get_mth1200_test_all
-from neko_2020nocr.dan.configs.datasets.ds_paths import *
+from neko_2020nocr.dan.configs.datasets import ds_paths 
 from neko_2020nocr.dan.dataloaders.dataset_scene import ColoredLmdbDatasetV, ColoredLmdbDatasetTV
-
+from dataloaders import NekoJointLoader
 
 # ------------------ meta ---------------------------------------
 def get_mth1000_test_all_meta(root):
@@ -40,11 +38,11 @@ def get_tkhmth2200_train_meta(root):
     return temeta
 
 # ------------------ train_cfg ---------------------------------------
-def _get_base_train_cfg(root, maxT, bs=48, hw=(128, 32), random_aug=False):
+def _get_base_train_cfg(dsroots:list, maxT, bsize=48, hw=(128, 32), random_aug=False):
     rdic = {
         "type": ColoredLmdbDatasetV,
         'ds_args': {
-            'roots': [get_mth1200_train(root)],
+            "roots": dsroots,
             'img_height': hw[0],
             'img_width': hw[1],
             'transform': transforms.Compose([transforms.ToTensor()]),
@@ -54,29 +52,21 @@ def _get_base_train_cfg(root, maxT, bs=48, hw=(128, 32), random_aug=False):
         },
         "dl_args":
             {
-                'batch_size': bs,
+                'batch_size': bsize,
                 'shuffle': False,
                 'num_workers': 8,
             }
     }
     return rdic
 
-def get_mth1000_train_cfg(root, maxT, bs=48, hw=(128, 32), random_aug=False):
-    base_cfg = _get_base_train_cfg(root, maxT, bs=bs, hw=hw, random_aug=random_aug)
-    base_cfg["ds_args"]["roots"] = [get_mth1000_train(root)]
-    return base_cfg
-def get_mth1200_train_cfg(root, maxT, bs=48, hw=(128, 32), random_aug=False):
-    base_cfg = _get_base_train_cfg(root, maxT, bs=bs, hw=hw, random_aug=random_aug)
-    base_cfg["ds_args"]["roots"] = [get_mth1200_train(root)]
-    return base_cfg
-def get_tkh_train_cfg(root, maxT, bs=48, hw=(128, 32), random_aug=False):
-    base_cfg = _get_base_train_cfg(root, maxT, bs=bs, hw=hw, random_aug=random_aug)
-    base_cfg["ds_args"]["roots"] = [get_tkh_train(root)]
-    return base_cfg
-def get_tkhmth2200_train_cfg(root, maxT, bs=48, hw=(128, 32), random_aug=False):
-    base_cfg = _get_base_train_cfg(root, maxT, bs=bs, hw=hw, random_aug=random_aug)
-    base_cfg["ds_args"]["roots"] = [get_tkhmth2200_train(root)]
-    return base_cfg
+def get_train_dataloader_cfgs(train_name, dsroots, maxT, bsize=48, hw=(128, 32), random_aug=False):
+    train_cfg = _get_base_train_cfg(dsroots, maxT, bsize=bsize, hw=hw, random_aug=random_aug)
+    return {
+        "loadertype": NekoJointLoader,
+        "subsets": {
+            train_name: train_cfg,
+        },
+    }
 
 # ------------------ test_cfg ---------------------------------------
 def get_dataset_testC(maxT, root, dict_dir, batch_size=128, hw=(32, 128)):
@@ -108,26 +98,26 @@ def _get_base_test_cfg(maxT=25, dict_dir=None, batchsize=128, hw=(128, 32), ds_n
         }
     }
 
-def get_test_mth1000_dsrgb(maxT=25, root=None, dict_dir=None, batchsize=128, hw=(128, 32)):
-    ds_root = get_mth1000_test_all(root)
+def get_test_mth1000_dsrgb(maxT=25, dsroot=None, dict_dir=None, batchsize=128, hw=(128, 32)):
+    ds_root = ds_paths.get_mth1000_test_all(dsroot)
     ds_name = "MTH1000"
     res_dict = _get_base_test_cfg(maxT=maxT, dict_dir=dict_dir, batchsize=batchsize, hw=hw, ds_name=ds_name, ds_root=ds_root)
     return res_dict
 
-def get_test_mth1200_dsrgb(maxT=25, root=None, dict_dir=None, batchsize=128, hw=(128, 32)):
-    ds_root = get_mth1200_test_all(root)
+def get_test_mth1200_dsrgb(maxT=25, dsroot=None, dict_dir=None, batchsize=128, hw=(128, 32)):
+    ds_root = ds_paths.get_mth1200_test_all(dsroot)
     ds_name = "MTH1200"
     res_dict = _get_base_test_cfg(maxT=maxT, dict_dir=dict_dir, batchsize=batchsize, hw=hw, ds_name=ds_name, ds_root=ds_root)
     return res_dict
 
-def get_test_tkh_dsrgb(maxT=25, root=None, dict_dir=None, batchsize=128, hw=(128, 32)):
-    ds_root = get_tkh_test_all(root)
+def get_test_tkh_dsrgb(maxT=25, dsroot=None, dict_dir=None, batchsize=128, hw=(128, 32)):
+    ds_root = ds_paths.get_tkh_test_all(dsroot)
     ds_name = "TKH1200"
     res_dict = _get_base_test_cfg(maxT=maxT, dict_dir=dict_dir, batchsize=batchsize, hw=hw, ds_name=ds_name, ds_root=ds_root)
     return res_dict
 
-def get_test_tkhmth2200_dsrgb(maxT=25, root=None, dict_dir=None, batchsize=128, hw=(128, 32)):
-    ds_root = get_tkhmth2200_test_all(root)
+def get_test_tkhmth2200_dsrgb(maxT=25, dsroot=None, dict_dir=None, batchsize=128, hw=(128, 32)):
+    ds_root = ds_paths.get_tkhmth2200_test_all(dsroot)
     ds_name = "TKHMTH1200"
     res_dict = _get_base_test_cfg(maxT=maxT, dict_dir=dict_dir, batchsize=batchsize, hw=hw, ds_name=ds_name, ds_root=ds_root)
     return res_dict

@@ -1,4 +1,4 @@
-class neko_stand_basic:
+class NekoStandBasic:
     def __init__(self, module):
         self.model = module
 

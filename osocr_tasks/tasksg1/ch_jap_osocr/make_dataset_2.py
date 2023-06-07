@@ -27,7 +27,7 @@ from osocr_tasks.tasksg1.dscs import get_ds;
 
 import os
 
-class neko_osocr_datamaker:
+class NekoOsocrDatamaker:
     def __init__(this,sroot,croot,droot):
         this.paths={
             "artroot":sroot+"/art",
@@ -206,4 +206,4 @@ if __name__ == '__main__':
         SROOT = "/run/media/lasercat/writebuffer/deploy/"
         CROOT = "/run/media/lasercat/cache2/"
         DROOT="/run/media/lasercat/writebuffer/cachededlmdbs/"
-    neko_osocr_datamaker(SROOT,CROOT,DROOT).make_all();
+    NekoOsocrDatamaker(SROOT, CROOT, DROOT).make_all();

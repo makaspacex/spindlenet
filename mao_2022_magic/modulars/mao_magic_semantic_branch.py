@@ -54,13 +54,13 @@ class NekoV2sBasic(torch.nn.Module):
 
 
 from torch.nn import TransformerEncoder, Transformer
-from neko_sdk.seq2seq.neko_fixed_torch_transformer import neko_TransformerEncoderLayer, neko_TransformerDecoderLayer
+from neko_sdk.seq2seq.neko_fixed_torch_transformer import NekoTransformerencoderlayer, NekoTransformerdecoderlayer
 
 
 class NekoCtxBasic(torch.nn.Module):
     def __init__(self, feat_ch, numh=8, num_l=4):
         super(NekoCtxBasic, self).__init__()
-        encoder_layer = neko_TransformerEncoderLayer(d_model=feat_ch, nhead=numh)
+        encoder_layer = NekoTransformerencoderlayer(d_model=feat_ch, nhead=numh)
         # welp let's abuse the setup here.
         self.core = TransformerEncoder(encoder_layer, num_layers=num_l)
         pass
@@ -73,8 +73,8 @@ class NekoCtxBasic(torch.nn.Module):
 class NekoCtxEncdec(torch.nn.Module):
     def __init__(self, feat_ch, numh=8, num_l=4):
         super(NekoCtxEncdec, self).__init__()
-        self.core = Transformer(d_model=feat_ch, nhead=numh, custom_encoder=neko_TransformerEncoderLayer,
-                                custom_decoder=neko_TransformerDecoderLayer)
+        self.core = Transformer(d_model=feat_ch, nhead=numh, custom_encoder=NekoTransformerencoderlayer,
+                                custom_decoder=NekoTransformerdecoderlayer)
         pass
 
     def forward(self, sbatch, smask):

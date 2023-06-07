@@ -2,7 +2,7 @@ import torch
 import torch.nn.parallel
 
 
-class neko_abstract_routine:
+class NekoAbstractRoutine:
 
     def set_loggers(self, log_path, log_each, name):
         self.logger_dict = {}
@@ -95,7 +95,7 @@ class neko_abstract_routine:
 
 
 # you may or may not sharing configs with training.
-class neko_abstract_eval_routine:
+class NekoAbstractEvalRoutine:
     def clear_loggers(self):
         for l in self.logger_dict:
             self.logger_dict[l].clear()

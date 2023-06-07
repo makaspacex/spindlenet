@@ -2,8 +2,8 @@ import torch
 from torch import nn
 
 from neko_2021_mjt.modulars.dan.chunked_resnet.neko_block_fe import \
-    make_init_layer_wo_bn, make_init_layer_bn, init_layer, \
-    make_body_layer_wo_bn, make_body_layer_bn, dan_reslayer
+    make_init_layer_wo_bn, make_init_layer_bn, InitLayer, \
+    make_body_layer_wo_bn, make_body_layer_bn, DanReslayer
 from neko_sdk.AOF.neko_lens import NekoLens
 
 
@@ -94,14 +94,14 @@ def res45p_bn(inpch, oupch, strides, frac=1, ochs=None):
     return retlayers
 
 
-class res45_net:
+class Res45Net:
     def __init__(self, layer_dict, bn_dict):
-        self.init_layer = init_layer(layer_dict["0"], bn_dict["0"])
-        self.res_layer1 = dan_reslayer(layer_dict["1"], bn_dict["1"])
-        self.res_layer2 = dan_reslayer(layer_dict["2"], bn_dict["2"])
-        self.res_layer3 = dan_reslayer(layer_dict["3"], bn_dict["3"])
-        self.res_layer4 = dan_reslayer(layer_dict["4"], bn_dict["4"])
-        self.res_layer5 = dan_reslayer(layer_dict["5"], bn_dict["5"])
+        self.init_layer = InitLayer(layer_dict["0"], bn_dict["0"])
+        self.res_layer1 = DanReslayer(layer_dict["1"], bn_dict["1"])
+        self.res_layer2 = DanReslayer(layer_dict["2"], bn_dict["2"])
+        self.res_layer3 = DanReslayer(layer_dict["3"], bn_dict["3"])
+        self.res_layer4 = DanReslayer(layer_dict["4"], bn_dict["4"])
+        self.res_layer5 = DanReslayer(layer_dict["5"], bn_dict["5"])
 
     def __call__(self, x):
         ret = []
@@ -117,17 +117,17 @@ class res45_net:
         return ret
 
 
-class res45_net_orig:
+class Res45NetOrig:
     def cuda(self):
         pass
 
     def __init__(self, layer_dict, bn_dict):
-        self.init_layer = init_layer(layer_dict["0"], bn_dict["0"])
-        self.res_layer1 = dan_reslayer(layer_dict["1"], bn_dict["1"])
-        self.res_layer2 = dan_reslayer(layer_dict["2"], bn_dict["2"])
-        self.res_layer3 = dan_reslayer(layer_dict["3"], bn_dict["3"])
-        self.res_layer4 = dan_reslayer(layer_dict["4"], bn_dict["4"])
-        self.res_layer5 = dan_reslayer(layer_dict["5"], bn_dict["5"])
+        self.init_layer = InitLayer(layer_dict["0"], bn_dict["0"])
+        self.res_layer1 = DanReslayer(layer_dict["1"], bn_dict["1"])
+        self.res_layer2 = DanReslayer(layer_dict["2"], bn_dict["2"])
+        self.res_layer3 = DanReslayer(layer_dict["3"], bn_dict["3"])
+        self.res_layer4 = DanReslayer(layer_dict["4"], bn_dict["4"])
+        self.res_layer5 = DanReslayer(layer_dict["5"], bn_dict["5"])
 
     def __call__(self, x):
         ret = []
@@ -154,18 +154,18 @@ class res45_net_orig:
         return ret
 
 
-class res45_net_tpt:
+class Res45NetTpt:
     def cuda(self):
         pass
 
     def __init__(self, layer_dict, bn_dict, lens):
-        self.init_layer = init_layer(layer_dict["0"], bn_dict["0"])
+        self.init_layer = InitLayer(layer_dict["0"], bn_dict["0"])
         self.lens = lens
-        self.res_layer1 = dan_reslayer(layer_dict["1"], bn_dict["1"])
-        self.res_layer2 = dan_reslayer(layer_dict["2"], bn_dict["2"])
-        self.res_layer3 = dan_reslayer(layer_dict["3"], bn_dict["3"])
-        self.res_layer4 = dan_reslayer(layer_dict["4"], bn_dict["4"])
-        self.res_layer5 = dan_reslayer(layer_dict["5"], bn_dict["5"])
+        self.res_layer1 = DanReslayer(layer_dict["1"], bn_dict["1"])
+        self.res_layer2 = DanReslayer(layer_dict["2"], bn_dict["2"])
+        self.res_layer3 = DanReslayer(layer_dict["3"], bn_dict["3"])
+        self.res_layer4 = DanReslayer(layer_dict["4"], bn_dict["4"])
+        self.res_layer5 = DanReslayer(layer_dict["5"], bn_dict["5"])
 
     def __call__(self, x):
         ret = []
@@ -193,18 +193,18 @@ class res45_net_tpt:
         return ret
 
 
-class res45_net_ptpt:
+class Res45NetPtpt:
     def cuda(self):
         pass
 
     def __init__(self, layer_dict, bn_dict, lens):
-        self.init_layer = init_layer(layer_dict["0"], bn_dict["0"])
+        self.init_layer = InitLayer(layer_dict["0"], bn_dict["0"])
         self.lens = lens
-        self.res_layer1 = dan_reslayer(layer_dict["1"], bn_dict["1"])
-        self.res_layer2 = dan_reslayer(layer_dict["2"], bn_dict["2"])
-        self.res_layer3 = dan_reslayer(layer_dict["3"], bn_dict["3"])
-        self.res_layer4 = dan_reslayer(layer_dict["4"], bn_dict["4"])
-        self.res_layer5 = dan_reslayer(layer_dict["5"], bn_dict["5"])
+        self.res_layer1 = DanReslayer(layer_dict["1"], bn_dict["1"])
+        self.res_layer2 = DanReslayer(layer_dict["2"], bn_dict["2"])
+        self.res_layer3 = DanReslayer(layer_dict["3"], bn_dict["3"])
+        self.res_layer4 = DanReslayer(layer_dict["4"], bn_dict["4"])
+        self.res_layer5 = DanReslayer(layer_dict["5"], bn_dict["5"])
 
     def __call__(self, x):
         ret = []
@@ -280,7 +280,7 @@ class NekoR45Binorm(nn.Module):
             name = bogo_names[i]
             bn_name = bn_names[i]
             bns = res45_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1)
-            self.bogo_modules[name] = res45_net(layers, bns)
+            self.bogo_modules[name] = Res45Net(layers, bns)
             self.setup_bn_modules(bns, bn_name)
 
     def forward(self, input, debug=False):
@@ -340,7 +340,7 @@ class NekoR45BinormOrig(nn.Module):
             name = bogo_names[i]
             bn_name = bn_names[i]
             bns = res45_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
-            self.bogo_modules[name] = res45_net_orig(layers, bns)
+            self.bogo_modules[name] = Res45NetOrig(layers, bns)
             self.setup_bn_modules(bns, bn_name, bn_name)
 
 
@@ -392,7 +392,7 @@ class NekoR45BinormTpt(nn.Module):
             name = bogo_names[i]
             bn_name = bn_names[i]
             bns = res45_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
-            self.bogo_modules[name] = res45_net_orig(layers, bns)
+            self.bogo_modules[name] = Res45NetOrig(layers, bns)
             self.setup_bn_modules(bns, bn_name, bn_name)
 
     def forward(self, input, debug=False):
@@ -453,7 +453,7 @@ class NekoR45BinormPtpt(nn.Module):
             name = bogo_names[i]
             bn_name = bn_names[i]
             bns = res45p_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
-            self.bogo_modules[name] = res45_net_orig(layers, bns)
+            self.bogo_modules[name] = Res45NetOrig(layers, bns)
             self.setup_bn_modules(bns, bn_name, bn_name)
 
     def forward(self, input, debug=False):
@@ -485,7 +485,7 @@ class NekoR45BinormHeavyHead(nn.Module):
             name = bogo_names[i]
             bn_name = bn_names[i]
             bns = res45_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1)
-            self.bogo_modules[name] = res45_net_orig(layers, bns)
+            self.bogo_modules[name] = Res45NetOrig(layers, bns)
             self.setup_modules(bns, bn_name)
 
     def forward(self, input, debug=False):
@@ -501,7 +501,7 @@ class NekoR45BinormHeavyHead(nn.Module):
 if __name__ == '__main__':
     layers = res45_wo_bn(3, 512, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1)
     bns = res45_bn(3, 512, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1)
-    a = res45_net(layers, bns)
+    a = Res45Net(layers, bns)
     t = torch.rand([1, 3, 32, 128])
     r = a(t)
     pass

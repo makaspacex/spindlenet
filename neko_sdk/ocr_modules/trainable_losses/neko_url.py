@@ -2,7 +2,7 @@ import torch
 
 
 # unknown ranking loss
-class neko_unknown_ranking_loss:
+class NekoUnknownRankingLoss:
     def onehot(self):
         pass
 

@@ -1,5 +1,5 @@
-from neko_sdk.lmdb_wrappers.im_lmdb_wrapper import im_lmdb_wrapper
-from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import neko_ocr_lmdb_mgmt
+from neko_sdk.lmdb_wrappers.im_lmdb_wrapper import ImLmdbWrapper
+from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import NekoOcrLmdbMgmt
 import os
 
 
@@ -31,12 +31,12 @@ def build_testing_dataset_by_label(srcdbtes,dstroot,val_list,
                                    evalname="eval",valname="val"):
     evaldst = os.path.join(dstroot, evalname);
     valdst = os.path.join(dstroot, valname);
-    evaldb = im_lmdb_wrapper(evaldst);
+    evaldb = ImLmdbWrapper(evaldst);
     if (len(val_list)):
-        valdb= im_lmdb_wrapper(valdst);
+        valdb= ImLmdbWrapper(valdst);
 
     for srcdbte in srcdbtes:
-        srctedb = neko_ocr_lmdb_mgmt(srcdbte, False, 1000);
+        srctedb = NekoOcrLmdbMgmt(srcdbte, False, 1000);
         for i in range(len(srctedb)):
             im, t = srctedb.getitem_encoded_kv(i, imkeys, annks);
             td = srctedb.parse_to_dict(annks, t);
@@ -52,9 +52,9 @@ def build_testing_dataset_by_label(srcdbtes,dstroot,val_list,
 def build_training_dataset_by_label(srcdbtrs,dstroot,train_list,imkeys,annks,labkey="label",name="train"):
 
     traindst = os.path.join(dstroot, name);
-    traindb = im_lmdb_wrapper(traindst);
+    traindb = ImLmdbWrapper(traindst);
     for srcdbtr in srcdbtrs:
-        srctrdb=neko_ocr_lmdb_mgmt(srcdbtr,True,1000);
+        srctrdb=NekoOcrLmdbMgmt(srcdbtr, True, 1000);
         for i in range(len(srctrdb)):
             im,t=srctrdb.getitem_encoded_kv(i,imkeys,annks);
             td=srctrdb.parse_to_dict(annks,t);

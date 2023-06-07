@@ -1,14 +1,14 @@
 import regex
 import torch
 
-from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import neko_ocr_lmdb_mgmt
+from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import NekoOcrLmdbMgmt
 from neko_sdk.renderlite.addfffh import refactor_meta, add_masters, finalize
-from neko_sdk.renderlite.lib_render import render_lite
+from neko_sdk.renderlite.lib_render import RenderLite
 
 
 def get_ds(root, filter=True):
     charset = {}
-    db = neko_ocr_lmdb_mgmt(root, not filter, 1000)
+    db = NekoOcrLmdbMgmt(root, not filter, 1000)
     for i in range(len(db)):
         _, t = db.getitem_encoded_im(i)
         try:
@@ -37,7 +37,7 @@ def makept(dataset, font, protodst, xdst, blacklist, servants="QWERTYUIOPASDFGHJ
             chrset = list(set(xdst.union(get_ds(dataset, False))).difference(blacklist))
     else:
         chrset = list(set(xdst).difference(blacklist))
-    engine = render_lite(os=84, fos=32)
+    engine = RenderLite(os=84, fos=32)
     font_ids = [0 for c in chrset]
     meta = engine.render_core(chrset, ['[s]'], font, font_ids, False)
     meta = refactor_meta(meta, unk=len(chrset) + len(['[s]']))

@@ -4,15 +4,15 @@ import torch
 from torch.utils.data import Dataset
 
 from neko_2020nocr.dan.dataloaders.dataset_common import keepratio_resize
-from neko_sdk.ocr_modules.trdg_driver.corpus_data_generator_driver import neko_random_string_generator
-from neko_sdk.ocr_modules.trdg_driver.corpus_data_generator_driver import neko_skip_missing_string_generator
+from neko_sdk.ocr_modules.trdg_driver.corpus_data_generator_driver import NekoRandomStringGenerator
+from neko_sdk.ocr_modules.trdg_driver.corpus_data_generator_driver import NekoSkipMissingStringGenerator
 
 
 class Nekoolsdataset(Dataset):
 
     def load_random_generator(self, root, maxT):
         meta = torch.load(root)
-        g = neko_random_string_generator(meta, meta["bgims"], max_len=maxT)
+        g = NekoRandomStringGenerator(meta, meta["bgims"], max_len=maxT)
         self.nSamples = 19999999
 
         return g
@@ -50,6 +50,6 @@ class Nekoolsdataset(Dataset):
 class NekoOLSCDataset(Nekoolsdataset):
     def load_random_generator(self, root):
         meta = torch.load(root)
-        g = neko_skip_missing_string_generator(meta, meta["bgims"])
+        g = NekoSkipMissingStringGenerator(meta, meta["bgims"])
         self.nSamples = g.nSamples
         return g

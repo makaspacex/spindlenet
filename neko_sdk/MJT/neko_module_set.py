@@ -2,14 +2,14 @@ import copy
 import os
 import queue
 
-from neko_sdk.MJT.bogo_module.bogo_modular import neko_bogo_modular
+from neko_sdk.MJT.bogo_module.bogo_modular import NekoBogoModular
 from neko_sdk.MJT.common import Updata_Parameters
-from neko_sdk.MJT.neko_modular import neko_modular
+from neko_sdk.MJT.neko_modular import NekoModular
 from neko_sdk.MJT.utils import update
 from neko_sdk.thirdparty.mmdetapply import multi_apply
 
 
-class neko_module_set:
+class NekoModuleSet:
     # if ("provides_bogo_modules" in cfg):
     #     self.bogo_modular_dict[name] = {}
     #     for k in cfg["provides_bogo_modules"]:
@@ -48,7 +48,7 @@ class neko_module_set:
             # bogo modules are re-combination of parts of existing modules.
             try:
                 mod = cfg["bogo_mod"](cfg["args"], self.modular_dict)
-                self.modular_dict[name] = neko_bogo_modular(mod)
+                self.modular_dict[name] = NekoBogoModular(mod)
             except:
                 fail_list.append(name)
         return fail_list
@@ -72,7 +72,7 @@ class neko_module_set:
                 self.bogo_modular_list.append(name)
             else:
                 mod, opt, opts = cfg["modular"](cfg["args"], modp, modp)
-                self.modular_dict[name] = neko_modular(modp, name, mod, cfg["save_each"])
+                self.modular_dict[name] = NekoModular(modp, name, mod, cfg["save_each"])
                 self.modular_dict[name].load(itrkey)
                 if (opt is not None):
                     self.optimizers.append(opt)

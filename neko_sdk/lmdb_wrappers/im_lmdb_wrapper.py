@@ -1,9 +1,9 @@
 import cv2
-from neko_sdk.lmdb_wrappers.lmdb_wrapper import lmdb_wrapper
+from neko_sdk.lmdb_wrappers.lmdb_wrapper import LmdbWrapper
 import torch
 
 
-class im_lmdb_wrapper(lmdb_wrapper):
+class ImLmdbWrapper(LmdbWrapper):
 
     def add_data_utf_masked(this, image, gt, lang,gmask,lmask,maskedKey):
 

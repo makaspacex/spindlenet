@@ -7,7 +7,7 @@ import lmdb
 from neko_sdk.thirdparty.trdg.data_generator import FakeTextDataGenerator
 
 
-class neko_abstract_string_generator:
+class NekoAbstractStringGenerator:
     def mount_meta(self, meta):
         self.fnt_charset = meta["fnt_charset"]
         self.fnt_grp = meta["fnt_grp"]
@@ -123,9 +123,9 @@ class neko_abstract_string_generator:
         return final_image, content
 
 
-class neko_random_string_generator(neko_abstract_string_generator):
+class NekoRandomStringGenerator(NekoAbstractStringGenerator):
     def __init__(self, meta, bgims, max_len):
-        super(neko_random_string_generator, self).__init__(meta, bgims, max_len)
+        super(NekoRandomStringGenerator, self).__init__(meta, bgims, max_len)
         self.max_len = max_len
         pass
 
@@ -156,9 +156,9 @@ class neko_random_string_generator(neko_abstract_string_generator):
         return fnt, content
 
 
-class neko_skip_missing_string_generator(neko_abstract_string_generator):
+class NekoSkipMissingStringGenerator(NekoAbstractStringGenerator):
     def __init__(self, meta, bgims, max_len):
-        super(neko_skip_missing_string_generator, self).__init__(meta, bgims, max_len)
+        super(NekoSkipMissingStringGenerator, self).__init__(meta, bgims, max_len)
         self.max_len = max_len
         pass
 
@@ -197,7 +197,7 @@ class neko_skip_missing_string_generator(neko_abstract_string_generator):
         return fnt, content
 
 
-class neko_random_corpus_generator(neko_abstract_string_generator):
+class NekoRandomCorpusGenerator(NekoAbstractStringGenerator):
     def mount_meta(self, meta, corpusdb):
         self.fonts = meta["fonts"]
         self.env = lmdb.open(corpusdb, readonly=True, lock=False, readahead=False, meminit=False)

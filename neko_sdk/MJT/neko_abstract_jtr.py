@@ -7,12 +7,12 @@ import torch
 from torch.nn.parallel import parallel_apply
 
 from neko_sdk.MJT.common import Updata_Parameters
-from neko_sdk.MJT.neko_module_set import neko_module_set
+from neko_sdk.MJT.neko_module_set import NekoModuleSet
 from neko_sdk.MJT.utils import update
 from neko_sdk.thirdparty.mmdetapply import multi_apply
 
 
-class NekoAbstractModularJointTraining(neko_module_set):
+class NekoAbstractModularJointTraining(NekoModuleSet):
 
     def set_routines(self, routine_cfgs):
         self.routines = []
@@ -199,7 +199,7 @@ class NekoAbstractModularJointTraining(neko_module_set):
                 self.modular_dict[modk].save(nEpoch)
 
 
-class NekoAbstractModularJointEval(neko_module_set):
+class NekoAbstractModularJointEval(NekoModuleSet):
 
     def set_val_tasks(self, val_cfgs, mitr):
         self.val_tasks = []

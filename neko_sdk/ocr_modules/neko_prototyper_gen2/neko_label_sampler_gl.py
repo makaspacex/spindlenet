@@ -3,10 +3,10 @@ import random
 import numpy as np
 import torch
 
-from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_abstractract_sampler import neko_prototype_sampler_static
+from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_abstractract_sampler import NekoPrototypeSamplerStatic
 
 
-class neko_prototype_sampler_gl(neko_prototype_sampler_static):
+class NekoPrototypeSamplerGl(NekoPrototypeSamplerStatic):
     def train(self, training=True):
         pass
 

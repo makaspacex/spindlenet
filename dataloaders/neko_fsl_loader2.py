@@ -8,7 +8,7 @@ from torch.utils.data import Dataset
 
 # returns raw image,rectified_image and so on.
 # let's make this a small 2-phasemodel
-from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import neko_ocr_lmdb_mgmt
+from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import NekoOcrLmdbMgmt
 
 
 # we have a few anchors. The model selects on aspect ratios, and the model selects for sort edge size.
@@ -24,7 +24,7 @@ class NekoFslTaskLoaderNoProtoGen2(object):
         self.waycnt = waycnt
         self.ucnt = ucnt
         # some "characters" can be stupidly loong.
-        self.db = neko_ocr_lmdb_mgmt(db_root, True, 20)
+        self.db = NekoOcrLmdbMgmt(db_root, True, 20)
         glcnt = 0
         for c in meta:
             if (labelset is not None):

@@ -194,9 +194,9 @@ def resnet152(**kwargs):
     return model
 
 
-class neko_Res18_wrapper(nn.Module):
+class NekoRes18Wrapper(nn.Module):
     def __init__(self, emb_size, keep_prob):
-        super(neko_Res18_wrapper, self).__init__()
+        super(NekoRes18Wrapper, self).__init__()
         self.score = torch.nn.Sequential(
             torch.nn.Conv2d(640, 1, 1),
             torch.nn.Sigmoid(),  # pesudo salience
@@ -218,7 +218,7 @@ class neko_Res18_wrapper(nn.Module):
         return self.FC(torch.sum(sal * ffeat, dim=-1) / (torch.sum(sal, dim=-1)))
 
 
-class neko_pretrained_feat_Res18_wrapper(nn.Module):
+class NekoPretrainedFeatRes18Wrapper(nn.Module):
     def trim_dict(self, dic):
         d = OrderedDict()
         for k in dic["params"]:
@@ -227,7 +227,7 @@ class neko_pretrained_feat_Res18_wrapper(nn.Module):
         return d
 
     def __init__(self, emb_size, keep_prob, path):
-        super(neko_pretrained_feat_Res18_wrapper, self).__init__()
+        super(NekoPretrainedFeatRes18Wrapper, self).__init__()
         self.backboneptr = [
             resnet18().cuda()
         ]
@@ -246,13 +246,13 @@ class neko_pretrained_feat_Res18_wrapper(nn.Module):
 
 
 def neko_feat_Res18_pretrained(emb_size, keep_prob, path="/home/lasercat/ssddata/pretrained/feat/mini/Res18-pre.pth"):
-    model = neko_pretrained_feat_Res18_wrapper(emb_size, keep_prob, path)
+    model = NekoPretrainedFeatRes18Wrapper(emb_size, keep_prob, path)
     return model
 
 
 def neko_Res18(emb_size, keep_prob=0.5, avg_pool=True, **kwargs):
     """Constructs a ResNet-12 model.
     """
-    model = neko_Res18_wrapper(emb_size, keep_prob)
+    model = NekoRes18Wrapper(emb_size, keep_prob)
 
     return model

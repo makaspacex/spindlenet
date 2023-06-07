@@ -1,10 +1,10 @@
-from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import neko_ocr_lmdb_mgmt
-from neko_sdk.lmdb_wrappers.im_lmdb_wrapper import im_lmdb_wrapper
+from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import NekoOcrLmdbMgmt
+from neko_sdk.lmdb_wrappers.im_lmdb_wrapper import ImLmdbWrapper
 import numpy
 import cv2
 
 def view_db(root,each=20):
-    db = neko_ocr_lmdb_mgmt(root, False, 1000);
+    db = NekoOcrLmdbMgmt(root, False, 1000);
     cv2.namedWindow("show",0);
     for i in range(len(db)):
         im, t,_ = db.getitem_kv(i, ["image"], ["label"],[]);

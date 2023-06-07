@@ -5,7 +5,7 @@ import torch
 from fontTools.ttLib import TTFont
 
 
-class fntmgmt:
+class Fntmgmt:
     NORMAL_CHARACTER = ["Lo", "Lu", "Ll", "So", "Sm", "Nd", "Nl", "No", ]
 
     @classmethod
@@ -114,7 +114,7 @@ class fntmgmt:
         pass
 
 
-class make_meta:
+class MakeMeta:
     def __init__(self, all_chars, blacklisted_chars):
         self.meta = {}
         self.meta["fnt_charset"] = {}
@@ -131,6 +131,6 @@ class make_meta:
         self.meta["spaces"][name] = space
 
     def add_fnt(self, fnt, grp_name):
-        fnt_cs = fntmgmt.get_charset(fnt)
+        fnt_cs = Fntmgmt.get_charset(fnt)
         self.meta["fnt_grp"][grp_name].append(fnt)
         self.meta["fnt_charset"][fnt] = list(fnt_cs.intersection(self.valid))

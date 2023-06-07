@@ -5,7 +5,7 @@ import six
 from PIL import Image
 
 
-class neko_ocr_lmdb_mgmt:
+class NekoOcrLmdbMgmt:
     def __init__(self, root, data_filtering_off, batch_max_length):
         self.env = lmdb.open(root, readonly=True, lock=False, readahead=False, meminit=False)
         if not self.env:

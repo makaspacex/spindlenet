@@ -6,7 +6,7 @@ import torch
 from torch.nn import functional as trnf
 
 
-class neko_prototype_sampler_static:
+class NekoPrototypeSamplerStatic:
 
     def set_gbidict(self, oks):
         self.gbidict = {}

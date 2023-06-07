@@ -3,7 +3,7 @@ import torch_scatter
 from torch import nn
 from torch.nn import functional as trnf
 
-from neko_sdk.ocr_modules.trainable_losses.cosloss import neko_cos_loss2
+from neko_sdk.ocr_modules.trainable_losses.cosloss import NekoCosLoss2
 
 try:
     import pylcs
@@ -26,7 +26,7 @@ class OsdanLoss(nn.Module):
 
     def setuploss(self, cfgs):
         # self.aceloss=
-        self.cosloss = neko_cos_loss2().cuda()
+        self.cosloss = NekoCosLoss2().cuda()
         self.wcls = cfgs["wcls"]
         self.wsim = cfgs["wsim"]
         self.wemb = cfgs["wemb"]

@@ -154,9 +154,9 @@ def Res12fbn(avg_pool=False, drop_rate=0.1, **kwargs):
     return model
 
 
-class neko_Res12_wrapper(nn.Module):
+class NekoRes12Wrapper(nn.Module):
     def __init__(self, emb_size, keep_prob):
-        super(neko_Res12_wrapper, self).__init__()
+        super(NekoRes12Wrapper, self).__init__()
         self.score = torch.nn.Sequential(
             torch.nn.Conv2d(640, 1, 1),
             torch.nn.Sigmoid(),  # pesudo salience
@@ -178,7 +178,7 @@ class neko_Res12_wrapper(nn.Module):
         return self.FC(torch.sum(sal * ffeat, dim=-1) / (torch.sum(sal, dim=-1)))
 
 
-class neko_pretrained_feat_Res12_wrapper(nn.Module):
+class NekoPretrainedFeatRes12Wrapper(nn.Module):
     def trim_dict(self, dic):
         d = OrderedDict()
         for k in dic["params"]:
@@ -187,7 +187,7 @@ class neko_pretrained_feat_Res12_wrapper(nn.Module):
         return d
 
     def __init__(self, emb_size, keep_prob, path):
-        super(neko_pretrained_feat_Res12_wrapper, self).__init__()
+        super(NekoPretrainedFeatRes12Wrapper, self).__init__()
         self.backboneptr = [
             Res12(True, 0.1).cuda()
         ]
@@ -205,7 +205,7 @@ class neko_pretrained_feat_Res12_wrapper(nn.Module):
         return self.FC(feature)
 
 
-class neko_pretrained_feat_Res12_wrapperPFT(nn.Module):
+class NekoPretrainedFeatRes12WrapperPFT(nn.Module):
     def trim_dict(self, dic):
         d = OrderedDict()
         for k in dic["params"]:
@@ -214,7 +214,7 @@ class neko_pretrained_feat_Res12_wrapperPFT(nn.Module):
         return d
 
     def __init__(self, emb_size, keep_prob, path):
-        super(neko_pretrained_feat_Res12_wrapperPFT, self).__init__()
+        super(NekoPretrainedFeatRes12WrapperPFT, self).__init__()
         self.backboneptr = Res12(True, 0.1)
         d = self.trim_dict(torch.load(path))
         self.backboneptr.load_state_dict(d)
@@ -233,7 +233,7 @@ class neko_pretrained_feat_Res12_wrapperPFT(nn.Module):
         return self.FC(feature)
 
 
-class neko_pretrained_feat_Res12_wrapperII(nn.Module):
+class NekoPretrainedFeatRes12WrapperII(nn.Module):
     def trim_dict(self, dic):
         d = OrderedDict()
         for k in dic["params"]:
@@ -242,7 +242,7 @@ class neko_pretrained_feat_Res12_wrapperII(nn.Module):
         return d
 
     def __init__(self, emb_size, keep_prob, path):
-        super(neko_pretrained_feat_Res12_wrapperII, self).__init__()
+        super(NekoPretrainedFeatRes12WrapperII, self).__init__()
         self.backboneptr = [
             Res12(True, 0.1).cuda()
         ]
@@ -265,7 +265,7 @@ class neko_pretrained_feat_Res12_wrapperII(nn.Module):
         return self.FC(feature)
 
 
-class neko_pretrainedft_feat_Res12_wrapper(nn.Module):
+class NekoPretrainedftFeatRes12Wrapper(nn.Module):
     def trim_dict(self, dic):
         d = OrderedDict()
         for k in dic["params"]:
@@ -274,7 +274,7 @@ class neko_pretrainedft_feat_Res12_wrapper(nn.Module):
         return d
 
     def __init__(self, emb_size, keep_prob, path):
-        super(neko_pretrainedft_feat_Res12_wrapper, self).__init__()
+        super(NekoPretrainedftFeatRes12Wrapper, self).__init__()
         self.backbone = Res12(True, 0.1)
         d = self.trim_dict(torch.load(path))
         self.backbone.load_state_dict(d)
@@ -290,7 +290,7 @@ class neko_pretrainedft_feat_Res12_wrapper(nn.Module):
         return self.FC(feature)
 
 
-class neko_pretrained_feat_Res12_sap(nn.Module):
+class NekoPretrainedFeatRes12Sap(nn.Module):
     def trim_dict(self, dic):
         d = OrderedDict()
         for k in dic["params"]:
@@ -299,7 +299,7 @@ class neko_pretrained_feat_Res12_sap(nn.Module):
         return d
 
     def __init__(self, emb_size, keep_prob, path):
-        super(neko_pretrained_feat_Res12_sap, self).__init__()
+        super(NekoPretrainedFeatRes12Sap, self).__init__()
         self.backboneptr = [
             Res12(False, 0.1).cuda()
         ]
@@ -325,7 +325,7 @@ class neko_pretrained_feat_Res12_sap(nn.Module):
         return self.FC(torch.sum(sal * ffeat, dim=-1) / (torch.sum(sal, dim=-1)))
 
 
-class neko_pretrained_feat_Res12_GFC(nn.Module):
+class NekoPretrainedFeatRes12GFC(nn.Module):
     def trim_dict(self, dic):
         d = OrderedDict()
         for k in dic["params"]:
@@ -334,7 +334,7 @@ class neko_pretrained_feat_Res12_GFC(nn.Module):
         return d
 
     def __init__(self, emb_size, keep_prob, path):
-        super(neko_pretrained_feat_Res12_GFC, self).__init__()
+        super(NekoPretrainedFeatRes12GFC, self).__init__()
         self.backboneptr = [
             Res12(False, 0.1).cuda()
         ]
@@ -363,42 +363,42 @@ class neko_pretrained_feat_Res12_GFC(nn.Module):
 
 
 def neko_feat_Res12_pretrained(emb_size, keep_prob, path="/home/lasercat/ssddata/pretrained/feat/mini/Res12-pre.pth"):
-    model = neko_pretrained_feat_Res12_wrapper(emb_size, keep_prob, path)
+    model = NekoPretrainedFeatRes12Wrapper(emb_size, keep_prob, path)
     return model
 
 
 def neko_feat_Res12_pretrainedPFT(emb_size, keep_prob,
                                   path="/home/lasercat/ssddata/pretrained/feat/mini/Res12-pre.pth"):
-    model = neko_pretrained_feat_Res12_wrapperPFT(emb_size, keep_prob, path)
+    model = NekoPretrainedFeatRes12WrapperPFT(emb_size, keep_prob, path)
     return model
 
 
 def neko_feat_Res12_pretrainedII(emb_size, keep_prob, path="/home/lasercat/ssddata/pretrained/feat/mini/Res12-pre.pth"):
-    model = neko_pretrained_feat_Res12_wrapperII(emb_size, keep_prob, path)
+    model = NekoPretrainedFeatRes12WrapperII(emb_size, keep_prob, path)
     return model
 
 
 def neko_feat_Res12_pretrained_ft(emb_size, keep_prob,
                                   path="/home/lasercat/ssddata/pretrained/feat/mini/Res12-pre.pth"):
-    model = neko_pretrainedft_feat_Res12_wrapper(emb_size, keep_prob, path)
+    model = NekoPretrainedftFeatRes12Wrapper(emb_size, keep_prob, path)
     return model
 
 
 def neko_feat_Res12_pretrained_sap(emb_size, keep_prob,
                                    path="/home/lasercat/ssddata/pretrained/feat/mini/Res12-pre.pth"):
-    model = neko_pretrained_feat_Res12_sap(emb_size, keep_prob, path)
+    model = NekoPretrainedFeatRes12Sap(emb_size, keep_prob, path)
     return model
 
 
 def neko_feat_Res12_pretrained_GFC(emb_size, keep_prob,
                                    path="/home/lasercat/ssddata/pretrained/feat/mini/Res12-pre.pth"):
-    model = neko_pretrained_feat_Res12_GFC(emb_size, keep_prob, path)
+    model = NekoPretrainedFeatRes12GFC(emb_size, keep_prob, path)
     return model
 
 
 def neko_Res12(emb_size, keep_prob=0.5, avg_pool=True, **kwargs):
     """Constructs a ResNet-12 model.
     """
-    model = neko_Res12_wrapper(emb_size, keep_prob)
+    model = NekoRes12Wrapper(emb_size, keep_prob)
 
     return model

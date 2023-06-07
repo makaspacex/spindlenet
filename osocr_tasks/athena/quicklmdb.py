@@ -4,12 +4,12 @@ import shutil
 
 import cv2
 
-from neko_sdk.lmdb_wrappers.im_lmdb_wrapper import im_lmdb_wrapper
+from neko_sdk.lmdb_wrappers.im_lmdb_wrapper import ImLmdbWrapper
 
 def quick_lmdb(srcpath,dst,lang="None",imgpfix="png"):
     samples_gt=glob.glob(os.path.join(srcpath,"*.txt"));
     shutil.rmtree(dst,True);
-    db=im_lmdb_wrapper(dst);
+    db=ImLmdbWrapper(dst);
     for gname in samples_gt:
         iname=gname.replace("txt",imgpfix);
         img=cv2.imread(iname);

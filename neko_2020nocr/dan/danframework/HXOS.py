@@ -6,10 +6,10 @@ from neko_2020nocr.dan.common.common_xos import load_network
 from neko_2020nocr.dan.danframework.neko_abstract_dan import NekoAbstractDan
 from neko_2020nocr.dan.utils import *
 from neko_2020nocr.dan.visdan import Visdan
-from neko_sdk.ocr_modules.neko_confusion_matrix import neko_confusion_matrix
+from neko_sdk.ocr_modules.neko_confusion_matrix import NekoConfusionMatrix
 # from torch_scatter import scatter_mean
-from neko_sdk.ocr_modules.trainable_losses.cosloss import neko_cos_loss
-from neko_sdk.ocr_modules.trainable_losses.neko_url import neko_unknown_ranking_loss
+from neko_sdk.ocr_modules.trainable_losses.cosloss import NekoCosLoss
+from neko_sdk.ocr_modules.trainable_losses.neko_url import NekoUnknownRankingLoss
 from torch import nn
 
 
@@ -61,7 +61,7 @@ class HXOS(NekoAbstractDan):
         visualizer = None
         if dbgpath is not None:
             visualizer = Visdan(dbgpath)
-        cfm = neko_confusion_matrix()
+        cfm = NekoConfusionMatrix()
 
         for sample_batched in test_loader:
             if i > miter:
@@ -144,7 +144,7 @@ class HDOS(HXOS):
 class HXOSC(HXOS):
     def setuploss(self):
         self.criterion_CE = nn.CrossEntropyLoss().cuda()
-        self.cosloss = neko_cos_loss().cuda()
+        self.cosloss = NekoCosLoss().cuda()
 
     def fpbp(self, data, label, cased=None):
         proto, semb, plabel, tdict = self.mk_proto(label)
@@ -181,8 +181,8 @@ class HDOSC(HXOSC):
 class HXOSCR(HXOSC):
     def setuploss(self):
         self.criterion_CE = nn.CrossEntropyLoss().cuda()
-        self.url = neko_unknown_ranking_loss()
-        self.cosloss = neko_cos_loss().cuda()
+        self.url = NekoUnknownRankingLoss()
+        self.cosloss = NekoCosLoss().cuda()
         self.wcls = 1
         self.wsim = 1
         self.wmar = 0
@@ -230,8 +230,8 @@ class HDOSCR(HXOSCR):
 class HXOSCRR(HXOSC):
     def setuploss(self):
         self.criterion_CE = nn.CrossEntropyLoss().cuda()
-        self.url = neko_unknown_ranking_loss()
-        self.cosloss = neko_cos_loss().cuda()
+        self.url = NekoUnknownRankingLoss()
+        self.cosloss = NekoCosLoss().cuda()
         self.wcls = 1
         self.wsim = 1
         self.wmar = 0.3
@@ -279,8 +279,8 @@ class HDOSCRR(HXOSCRR):
 class HXOSCO(HXOSC):
     def setuploss(self):
         self.criterion_CE = nn.CrossEntropyLoss().cuda()
-        self.url = neko_unknown_ranking_loss()
-        self.cosloss = neko_cos_loss().cuda()
+        self.url = NekoUnknownRankingLoss()
+        self.cosloss = NekoCosLoss().cuda()
         self.wcls = 0
         self.wsim = 1
         self.wmar = 0
@@ -328,8 +328,8 @@ class HDOSCO(HXOSCRR):
 class HXOSCB(HXOSC):
     def setuploss(self):
         self.criterion_CE = nn.CrossEntropyLoss().cuda()
-        self.url = neko_unknown_ranking_loss()
-        self.cosloss = neko_cos_loss().cuda()
+        self.url = NekoUnknownRankingLoss()
+        self.cosloss = NekoCosLoss().cuda()
         self.wcls = 1
         self.wsim = 0
         self.wmar = 0

@@ -1,7 +1,7 @@
-from neko_sdk.MJT.bogo_module.servant_module import neko_stand_basic
+from neko_sdk.MJT.bogo_module.servant_module import NekoStandBasic
 
 
-class neko_bogo_modular:
+class NekoBogoModular:
     def __init__(self, forwardable):
         # you should never have a
         self.model = forwardable
@@ -29,7 +29,7 @@ class neko_bogo_modular:
 
     def replicate(self, devices):
         stands = self.model.replicate(devices)
-        self.stands = [neko_stand_basic(stand) for stand in stands]
+        self.stands = [NekoStandBasic(stand) for stand in stands]
         return self.stands
 
     def get_torch_modular_dict(self):

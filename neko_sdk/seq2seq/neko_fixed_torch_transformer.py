@@ -415,7 +415,7 @@ def _get_activation_fn(activation):
     raise RuntimeError("activation should be relu/gelu, not {}".format(activation))
 
 
-class neko_MultiheadAttention(torch.nn.Module):
+class NekoMultiheadattention(torch.nn.Module):
     r"""Allows the model to jointly attend to information
     from different representation subspaces.
     See `Attention Is All You Need <https://arxiv.org/abs/1706.03762>`_
@@ -455,7 +455,7 @@ class neko_MultiheadAttention(torch.nn.Module):
                  kdim=None, vdim=None, batch_first=False, device=None, dtype=None) -> None:
         # factory_kwargs = {'device': device, 'dtype': dtype}
         factory_kwargs = {}
-        super(neko_MultiheadAttention, self).__init__()
+        super(NekoMultiheadattention, self).__init__()
         self.embed_dim = embed_dim
         self.kdim = kdim if kdim is not None else embed_dim
         self.vdim = vdim if vdim is not None else embed_dim
@@ -515,7 +515,7 @@ class neko_MultiheadAttention(torch.nn.Module):
         if '_qkv_same_embed_dim' not in state:
             state['_qkv_same_embed_dim'] = True
 
-        super(neko_MultiheadAttention, self).__setstate__(state)
+        super(NekoMultiheadattention, self).__setstate__(state)
 
     def forward(self, query: torch.Tensor, key: torch.Tensor, value: torch.Tensor,
                 key_padding_mask: Optional[torch.Tensor] = None,
@@ -590,7 +590,7 @@ class neko_MultiheadAttention(torch.nn.Module):
             return attn_output, attn_output_weights
 
 
-class neko_TransformerEncoderLayer(torch.nn.Module):
+class NekoTransformerencoderlayer(torch.nn.Module):
     r"""TransformerEncoderLayer is made up of self-attn and feedforward network.
     This standard encoder layer is based on the paper "Attention Is All You Need".
     Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez,
@@ -626,9 +626,9 @@ class neko_TransformerEncoderLayer(torch.nn.Module):
         # factory_kwargs = {'device': device, 'dtype': dtype}
         factory_kwargs = {}
 
-        super(neko_TransformerEncoderLayer, self).__init__()
-        self.self_attn = neko_MultiheadAttention(d_model, nhead, dropout=dropout, batch_first=batch_first,
-                                                 **factory_kwargs)
+        super(NekoTransformerencoderlayer, self).__init__()
+        self.self_attn = NekoMultiheadattention(d_model, nhead, dropout=dropout, batch_first=batch_first,
+                                                **factory_kwargs)
         # Implementation of Feedforward model
         self.linear1 = torch.nn.Linear(d_model, dim_feedforward, **factory_kwargs)
         self.dropout = torch.nn.Dropout(dropout)
@@ -644,7 +644,7 @@ class neko_TransformerEncoderLayer(torch.nn.Module):
     def __setstate__(self, state):
         if 'activation' not in state:
             state['activation'] = F.relu
-        super(neko_TransformerEncoderLayer, self).__setstate__(state)
+        super(NekoTransformerencoderlayer, self).__setstate__(state)
 
     def forward(self, src: torch.Tensor, src_mask: Optional[torch.Tensor] = None,
                 src_key_padding_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
@@ -668,7 +668,7 @@ class neko_TransformerEncoderLayer(torch.nn.Module):
         return src
 
 
-class neko_TransformerDecoderLayer(torch.nn.Module):
+class NekoTransformerdecoderlayer(torch.nn.Module):
     r"""TransformerDecoderLayer is made up of self-attn, multi-head-attn and feedforward network.
     This standard decoder layer is based on the paper "Attention Is All You Need".
     Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez,
@@ -703,11 +703,11 @@ class neko_TransformerDecoderLayer(torch.nn.Module):
     def __init__(self, d_model, nhead, dim_feedforward=2048, dropout=0.1, activation="relu",
                  layer_norm_eps=1e-5, batch_first=False, device=None, dtype=None) -> None:
         factory_kwargs = {'device': device, 'dtype': dtype}
-        super(neko_TransformerDecoderLayer, self).__init__()
-        self.self_attn = neko_MultiheadAttention(d_model, nhead, dropout=dropout, batch_first=batch_first,
-                                                 **factory_kwargs)
-        self.multihead_attn = neko_MultiheadAttention(d_model, nhead, dropout=dropout, batch_first=batch_first,
-                                                      **factory_kwargs)
+        super(NekoTransformerdecoderlayer, self).__init__()
+        self.self_attn = NekoMultiheadattention(d_model, nhead, dropout=dropout, batch_first=batch_first,
+                                                **factory_kwargs)
+        self.multihead_attn = NekoMultiheadattention(d_model, nhead, dropout=dropout, batch_first=batch_first,
+                                                     **factory_kwargs)
         # Implementation of Feedforward model
         self.linear1 = torch.nn.Linear(d_model, dim_feedforward, **factory_kwargs)
         self.dropout = torch.nn.Dropout(dropout)
@@ -725,7 +725,7 @@ class neko_TransformerDecoderLayer(torch.nn.Module):
     def __setstate__(self, state):
         if 'activation' not in state:
             state['activation'] = F.relu
-        super(neko_TransformerDecoderLayer, self).__setstate__(state)
+        super(NekoTransformerdecoderlayer, self).__setstate__(state)
 
     def forward(self, tgt: torch.Tensor, memory: torch.Tensor, tgt_mask: Optional[torch.Tensor] = None,
                 memory_mask: Optional[torch.Tensor] = None,

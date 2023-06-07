@@ -193,7 +193,7 @@ def make_dict(aplphabets_file_path, font_paths, dst_path, force_rebuild=False):
     makept_for_MTH(None,font_paths,dst_path,allch, {}, masters=masters, servants=servants);
     return dst_path
 
-from neko_sdk.lmdb_wrappers.im_lmdb_wrapper import im_lmdb_wrapper
+from neko_sdk.lmdb_wrappers.im_lmdb_wrapper import ImLmdbWrapper
 import glob
 import os.path
 import cv2
@@ -213,7 +213,7 @@ def quick_lmdb_for_mth(gt_file_path_list, dst, lang="None"):
         os.remove(f"{dst}/data.mdb")
     if os.path.exists(f"{dst}/lock.mdb"):
         os.remove(f"{dst}/lock.mdb")
-    db=im_lmdb_wrapper(dst)
+    db=ImLmdbWrapper(dst)
     for ii, char_file in enumerate(gt_file_path_list):
         char_file = Path(char_file)
         if ii % 500 == 0:

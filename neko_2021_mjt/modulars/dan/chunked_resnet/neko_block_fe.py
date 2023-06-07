@@ -22,7 +22,7 @@ def make_init_layer_bn(outplanes):
     return {"bn": bn}
 
 
-class init_layer:
+class InitLayer:
     def __init__(self, layer_dict, bn_dict):
         self.conv = layer_dict["conv"]
         self.bn = bn_dict["bn"]
@@ -112,7 +112,7 @@ def make_body_layer_bn(inplanes, blocks, planes, expansion, stride=1):
     return ret_weight
 
 
-class dan_reslayer:
+class DanReslayer:
     def __init__(self, layer_dict, bn_dict):
         self.blocks = []
         for k in layer_dict["blocks"]:

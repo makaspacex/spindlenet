@@ -9,7 +9,7 @@ from torch.nn import functional as trnf
 # say u have module a b c d.
 # A uses [ac] B uses [ab] C uses [ad]...
 # There is no better way than simply put a,b,c,d in a big basket.
-class gen3_object_to_feat_abstract:
+class Gen3ObjectToFeatAbstract:
     def proto_engine(self, clips):
         features = self.backbone(clips)
         if (self.detached_ga):
@@ -47,7 +47,7 @@ class gen3_object_to_feat_abstract:
 
 # stand can only call the modules.
 # only (bogo)modules can change their statues like training, evaluation, accpetance of gradient.
-class PrototyperGen3Stand(gen3_object_to_feat_abstract):
+class PrototyperGen3Stand(Gen3ObjectToFeatAbstract):
     def __init__(self, args, moddict):
         super(PrototyperGen3Stand, self).__init__(args, moddict)
         self.detached_ga = args["detached_ga"]

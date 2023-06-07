@@ -7,15 +7,15 @@ import torch
 from torch.utils.data import DataLoader
 
 from neko_2021_mjt.neko_laser import NekoLaser
-from neko_sdk.MJT.neko_abstract_jtr import neko_module_set
+from neko_sdk.MJT.neko_abstract_jtr import NekoModuleSet
 from neko_sdk.ocr_modules.charset.chs_cset import t1_3755
 from neko_sdk.ocr_modules.charset.etc_cset import latin62
 from neko_sdk.ocr_modules.io.data_tiding import keepratio_resize
-from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_label_sampler import neko_prototype_sampler_static
+from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_label_sampler import NekoPrototypeSamplerStatic
 from neko_sdk.ocr_modules.result_renderer import render_words
 
 
-class NekoAbstractEvalTasks(neko_module_set):
+class NekoAbstractEvalTasks(NekoModuleSet):
     def setupthis(self, cfgs):
         pass
 
@@ -135,7 +135,7 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
         pass
 
     def get_proto_and_handle(self, rot):
-        sampler = neko_prototype_sampler_static(self.temeta_args, None)
+        sampler = NekoPrototypeSamplerStatic(self.temeta_args, None)
         normims, plabel, tdict = sampler.dump_all()
         proto = self.modulars[self.protoname](normims, rot)
         return proto, plabel, tdict, self

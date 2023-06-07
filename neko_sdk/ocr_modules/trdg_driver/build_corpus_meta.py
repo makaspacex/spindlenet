@@ -3,11 +3,11 @@ import os
 
 import torch
 
-from neko_sdk.lmdb_wrappers.corpus_lmdb_wrapper import corpus_lmdb_wrapper
-from neko_sdk.ocr_modules.fontkit.fntmgmt import fntmgmt
+from neko_sdk.lmdb_wrappers.corpus_lmdb_wrapper import CorpusLmdbWrapper
+from neko_sdk.ocr_modules.fontkit.fntmgmt import Fntmgmt
 
 
-class neko_meta_builder_type1:
+class NekoMetaBuilderType1:
 
     def index_fonts(self, font_folder, langs):
         self.lang_dict = {}
@@ -20,7 +20,7 @@ class neko_meta_builder_type1:
             for f in fnts:
                 self.lang_dict[l].append(len(self.fnts))
                 self.fnts.append(f)
-                self.fnt_cs.append(fntmgmt.get_charset(f))
+                self.fnt_cs.append(Fntmgmt.get_charset(f))
 
     def scan_content(self, content):
         if (len(content) == 0):
@@ -54,7 +54,7 @@ class neko_meta_builder_type1:
         self.db.end_this()
 
     def get_meta(self, corpus_folder, font_folder, langs):
-        self.db = corpus_lmdb_wrapper("corpusdb")
+        self.db = CorpusLmdbWrapper("corpusdb")
         self.langs = []
         self.index_fonts(font_folder, langs)
         self.scan_corpus(corpus_folder)
@@ -63,5 +63,5 @@ class neko_meta_builder_type1:
         torch.save(meta, "fonts.pt")
 
 
-engine = neko_meta_builder_type1()
+engine = NekoMetaBuilderType1()
 engine.get_meta("/home/lasercat/netdata/corpus/", "/home/lasercat/ssddata/mltnocr/fonts/", ["ch", "jp"])

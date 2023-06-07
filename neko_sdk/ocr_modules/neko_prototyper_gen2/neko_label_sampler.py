@@ -6,14 +6,14 @@ from torch import nn
 from torch.nn import functional as trnf
 
 from neko_sdk.ocr_modules.neko_interprinter import NekoVisualOnlyInterprinter, NekoVisualOnlyInterprinterR34
-from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_abstractract_sampler import neko_prototype_sampler_static
+from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_abstractract_sampler import NekoPrototypeSamplerStatic
 
 
-class neko_prototyper(nn.Module):
+class NekoPrototyper(nn.Module):
     PROTOENGINE = NekoVisualOnlyInterprinter
 
     def __init__(self, output_channel, spks, dropout=None, capacity=512):
-        super(neko_prototyper, self).__init__()
+        super(NekoPrototyper, self).__init__()
         self.output_channel = output_channel
         self.sp_cnt = len(spks)
         self.proto_engine = self.PROTOENGINE(self.output_channel)
@@ -81,11 +81,11 @@ class neko_prototyper(nn.Module):
         return allproto.contiguous()
 
 
-class neko_prototyperR34(neko_prototyper):
+class NekoPrototyperR34(NekoPrototyper):
     PROTOENGINE = NekoVisualOnlyInterprinterR34
 
 
-class neko_prototype_sampler_basic(neko_prototype_sampler_static):
+class NekoPrototypeSamplerBasic(NekoPrototypeSamplerStatic):
     def train(self, training=True):
         pass
 
@@ -220,7 +220,7 @@ class neko_prototype_sampler_basic(neko_prototype_sampler_static):
         return normprotos, [plabels_uncased, plabels_cased], [tdicts_uncased, tdicts_cased]
 
 
-class neko_prototype_sampler_fsl(neko_prototype_sampler_basic):
+class NekoPrototypeSamplerFsl(NekoPrototypeSamplerBasic):
     def split(self, s):
         # not hurt if we have one more meme. In fact we need a random two-character non-sense
         return s.split("⑤⑨")

@@ -1,7 +1,7 @@
 import torch
 
 
-class neko_confusion_matrix:
+class NekoConfusionMatrix:
     def __init__(self, charset=None):
         if (charset is not None):
             self.charset = charset

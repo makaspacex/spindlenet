@@ -72,7 +72,7 @@ def reverse(img):
     return 255 - img
 
 
-class neko_qhbwrapR_executer:
+class NekoQhbWraprExecuter:
     def __init__(self):
         self.actions = {
             "tia": apply_tia,

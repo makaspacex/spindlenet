@@ -1,4 +1,4 @@
-class neko_vlwrapper:
+class NekoVlwrapper:
     def __init__(self, dataset):
         self.dataset = dataset
         self.it = iter(dataset)

@@ -1,6 +1,6 @@
 from torch.utils.data import DataLoader
 
-from neko_sdk.dataloaders.neko_vlwrapper import neko_vlwrapper
+from neko_sdk.dataloaders.neko_vlwrapper import NekoVlwrapper
 
 
 # dataloader like, but capable for multitasking.
@@ -13,7 +13,7 @@ class NekoJointDataLoader:
             dataset = subsets[subset_name]["dstype"](**dscfg)
             ldrcfg = subsets[subset_name]["loadercfg"]
             l = DataLoader(dataset, **ldrcfg)
-            self.loaders.append(neko_vlwrapper(l))
+            self.loaders.append(NekoVlwrapper(l))
             length = len(l)
             if (length > self.maxlen):
                 self.maxlen = length

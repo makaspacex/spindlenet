@@ -3,9 +3,9 @@ from torch import nn
 from torch.nn import functional as trnf
 
 
-class neko_cos_loss(nn.Module):
+class NekoCosLoss(nn.Module):
     def __init__(self):
-        super(neko_cos_loss, self).__init__()
+        super(NekoCosLoss, self).__init__()
         pass
 
     def forward(self, pred, gt):
@@ -18,9 +18,9 @@ class neko_cos_loss(nn.Module):
         return (nl + pl) / 2
 
 
-class neko_cos_lossx(nn.Module):
+class NekoCosLossx(nn.Module):
     def __init__(self):
-        super(neko_cos_lossx, self).__init__()
+        super(NekoCosLossx, self).__init__()
         pass
 
     def forward(self, pred, gt):
@@ -32,9 +32,9 @@ class neko_cos_lossx(nn.Module):
         return (nl + pl) / 2
 
 
-class neko_cos_loss2ar(nn.Module):
+class NekoCosLoss2ar(nn.Module):
     def __init__(self):
-        super(neko_cos_loss2ar, self).__init__()
+        super(NekoCosLoss2ar, self).__init__()
         pass
 
     def forward(self, pred, gt):
@@ -51,9 +51,9 @@ class neko_cos_loss2ar(nn.Module):
         return (nl + pl) / 2
 
 
-class neko_cos_loss2a(nn.Module):
+class NekoCosLoss2a(nn.Module):
     def __init__(self):
-        super(neko_cos_loss2a, self).__init__()
+        super(NekoCosLoss2a, self).__init__()
         pass
 
     def forward(self, pred, gt):
@@ -70,9 +70,9 @@ class neko_cos_loss2a(nn.Module):
         return (nl + pl) / 2
 
 
-class neko_cos_loss2f(nn.Module):
+class NekoCosLoss2f(nn.Module):
     def __init__(self):
-        super(neko_cos_loss2f, self).__init__()
+        super(NekoCosLoss2f, self).__init__()
         pass
 
     def forward(self, pred, gt):
@@ -84,9 +84,9 @@ class neko_cos_loss2f(nn.Module):
         return clsloss
 
 
-class neko_cos_loss2(nn.Module):
+class NekoCosLoss2(nn.Module):
     def __init__(self):
-        super(neko_cos_loss2, self).__init__()
+        super(NekoCosLoss2, self).__init__()
         pass
 
     def forward(self, pred, gt):

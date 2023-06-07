@@ -6,7 +6,7 @@ from PIL import ImageDraw
 from PIL import ImageFont
 
 
-class render_lite:
+class RenderLite:
     def __init__(self, cs=320, os=128, fos=32):
         self.CS = cs
         self.os = os
@@ -168,7 +168,7 @@ class render_lite:
 if __name__ == '__main__':
     # charset=u"QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm表1234567890"
     # sp_tokens=["[GO]","[s]"]
-    rlt = render_lite()
+    rlt = RenderLite()
     im = rlt.center_draw(64, "ন্ত্র", "/run/media/lasercat/ssddata/tmp/Mina-Regular.ttf")
     cv2.imshow("meow", im)
     cv2.waitKey(0)

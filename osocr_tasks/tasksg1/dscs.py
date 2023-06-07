@@ -1,4 +1,4 @@
-from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import neko_ocr_lmdb_mgmt;
+from neko_sdk.lmdb_wrappers.ocr_lmdb_reader import NekoOcrLmdbMgmt;
 from neko_sdk.ocr_modules.renderlite.lib_render import RenderLite
 from neko_sdk.ocr_modules.renderlite.lib_render import RenderEngineForMTH
 from neko_sdk.ocr_modules.renderlite.addfffh import refactor_meta,add_masters,finalize
@@ -7,7 +7,7 @@ import torch;
 import regex
 def get_ds(root,filter=True):
     charset = {};
-    db=neko_ocr_lmdb_mgmt(root,not filter,1000);
+    db=NekoOcrLmdbMgmt(root, not filter, 1000);
     for i in range(len(db)):
         _,t=db.getitem_encoded_im(i);
         try:

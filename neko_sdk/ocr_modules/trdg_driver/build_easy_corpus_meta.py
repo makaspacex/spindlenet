@@ -1,11 +1,11 @@
 import glob
 import os
 
-from neko_sdk.lmdb_wrappers.corpus_lmdb_wrapper import corpus_lmdb_wrapper
-from neko_sdk.ocr_modules.fontkit.fntmgmt import fntmgmt
+from neko_sdk.lmdb_wrappers.corpus_lmdb_wrapper import CorpusLmdbWrapper
+from neko_sdk.ocr_modules.fontkit.fntmgmt import Fntmgmt
 
 
-class neko_meta_builder_type1:
+class NekoMetaBuilderType1:
 
     def scan_content(self, content):
         self.db.add_data_utf(content, None)
@@ -31,9 +31,9 @@ class neko_meta_builder_type1:
         self.db.end_this()
 
     def setup(self, corpus_folder, dbpath):
-        self.all_valid = fntmgmt.get_charset('../../stdfnts/NotoSansCJK-Regular.ttc')
-        self.db = corpus_lmdb_wrapper(dbpath)
+        self.all_valid = Fntmgmt.get_charset('../../stdfnts/NotoSansCJK-Regular.ttc')
+        self.db = CorpusLmdbWrapper(dbpath)
         self.scan_corpus(corpus_folder)
 
 
-neko_meta_builder_type1().setup("/home/lasercat/corpus", "/home/lasercat/corpus/corpusdb")
+NekoMetaBuilderType1().setup("/home/lasercat/corpus", "/home/lasercat/corpus/corpusdb")

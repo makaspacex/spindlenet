@@ -3,7 +3,7 @@ import random
 import cv2
 import numpy as np
 
-from neko_sdk.ocr_modules.augmentation.qhbwrapR.execution import neko_qhbwrapR_executer
+from neko_sdk.ocr_modules.augmentation.qhbwrapR.execution import NekoQhbWraprExecuter
 
 
 # While this implements better fairness, but NOTHING is guaranteed...
@@ -131,7 +131,7 @@ def random_crop_para(h, w):
     return top_crop, ratio
 
 
-class neko_qhbwarp_composer:
+class NekoQhbwarpComposer:
     """
     Config
     """
@@ -209,7 +209,7 @@ class neko_qhbwarp_composer:
         self.perspective = use_tia
         self.use_tia = use_tia
 
-        self.executer = neko_qhbwrapR_executer()
+        self.executer = NekoQhbWraprExecuter()
 
         self.fov = 42
         self.r = 0
@@ -229,7 +229,7 @@ class neko_qhbwarp_composer:
 if __name__ == '__main__':
     image = cv2.imread('/run/media/lasercat/risky/sample.png')
     print(image.shape)
-    composer = neko_qhbwarp_composer(True)
+    composer = NekoQhbwarpComposer(True)
     aug, image = composer.random_config(image, 0.4)
     print(image.shape)
     print(aug)

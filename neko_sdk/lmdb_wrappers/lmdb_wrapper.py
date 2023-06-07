@@ -4,7 +4,7 @@ import cv2
 import lmdb
 
 
-class lmdb_wrapper:
+class LmdbWrapper:
     def set_meta(self):
         self.labels = {}
         self.writers = set()

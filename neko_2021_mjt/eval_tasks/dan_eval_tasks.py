@@ -12,7 +12,7 @@ from neko_2021_mjt.neko_laser import NekoLaser
 from neko_sdk.ocr_modules.charset.chs_cset import t1_3755
 from neko_sdk.ocr_modules.charset.etc_cset import latin62
 from neko_sdk.ocr_modules.img_eval import keepratio_resize
-from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_label_sampler import neko_prototype_sampler_static
+from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_label_sampler import NekoPrototypeSamplerStatic
 
 
 class NekoAbstractEvalTasks(NekoModuleSet):
@@ -115,7 +115,7 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
         pass
 
     def get_proto_and_handle(self, rot):
-        sampler = neko_prototype_sampler_static(self.temeta_args, None)
+        sampler = NekoPrototypeSamplerStatic(self.temeta_args, None)
         normims, plabel, tdict = sampler.dump_all()
         proto = self.modulars[self.protoname](normims, rot)
         return proto, plabel, tdict, self
@@ -220,7 +220,7 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
 class NekoOdanEvalTasksMk8(NekoOdanEvalTasks):
     # I think this changed....
     def get_proto_and_handle(self, rot):
-        sampler = neko_prototype_sampler_static(self.temeta_args, None)
+        sampler = NekoPrototypeSamplerStatic(self.temeta_args, None)
         normims, plabel, tdict = sampler.dump_all(use_sp=False)
         proto = self.modulars[self.protoname](normims, rot)
         return proto, plabel, tdict, self

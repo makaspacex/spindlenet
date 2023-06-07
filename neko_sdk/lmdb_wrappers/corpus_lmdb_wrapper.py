@@ -1,11 +1,11 @@
 import pickle
 
-from neko_sdk.lmdb_wrappers.lmdb_wrapper import lmdb_wrapper
+from neko_sdk.lmdb_wrappers.lmdb_wrapper import LmdbWrapper
 
 
-class corpus_lmdb_wrapper(lmdb_wrapper):
+class CorpusLmdbWrapper(LmdbWrapper):
     def __init__(self, dbpath):
-        super(corpus_lmdb_wrapper, self).__init__(dbpath)
+        super(CorpusLmdbWrapper, self).__init__(dbpath)
 
     def add_data_utf(self, content, compatible_list):
         contentKey = 'content-%09d'.encode() % self.load

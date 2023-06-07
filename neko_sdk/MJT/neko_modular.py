@@ -2,10 +2,10 @@ import torch
 from torch import nn
 from torch.nn import parallel as trnp
 
-from neko_sdk.MJT.bogo_module.servant_module import neko_stand_basic
+from neko_sdk.MJT.bogo_module.servant_module import NekoStandBasic
 
 
-class neko_modular:
+class NekoModular:
     def __init__(self, path, name, module, save_each=20000):
         self.path = path
         self.model = module
@@ -22,7 +22,7 @@ class neko_modular:
     def replicate(self, devices):
         self.model.to(devices[0])
         models = trnp.replicate(self.model, devices)
-        self.stands = [neko_stand_basic(model) for model in models]
+        self.stands = [NekoStandBasic(model) for model in models]
         return self.stands
 
     def detach(self):

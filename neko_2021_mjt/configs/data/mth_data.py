@@ -38,7 +38,7 @@ def get_tkhmth2200_train_meta(root):
     return temeta
 
 # ------------------ train_cfg ---------------------------------------
-def _get_base_train_cfg(dsroots:list, maxT, bsize=48, hw=(128, 32), random_aug=False):
+def _get_base_train_cfg(dsroots:list, maxT, bsize=48, hw=(128, 32), qhb_aug=False):
     rdic = {
         "type": ColoredLmdbDatasetV,
         'ds_args': {
@@ -48,19 +48,19 @@ def _get_base_train_cfg(dsroots:list, maxT, bsize=48, hw=(128, 32), random_aug=F
             'transform': transforms.Compose([transforms.ToTensor()]),
             'global_state': 'Train',
             "maxT": maxT,
-            'qhb_aug': random_aug
+            'qhb_aug': qhb_aug
         },
         "dl_args":
             {
                 'batch_size': bsize,
-                'shuffle': False,
+                'shuffle': True,
                 'num_workers': 8,
             }
     }
     return rdic
 
-def get_train_dataloader_cfgs(train_name, dsroots, maxT, bsize=48, hw=(128, 32), random_aug=False):
-    train_cfg = _get_base_train_cfg(dsroots, maxT, bsize=bsize, hw=hw, random_aug=random_aug)
+def get_train_dataloader_cfgs(train_name, dsroots, maxT, bsize=48, hw=(128, 32), qhb_aug=False):
+    train_cfg = _get_base_train_cfg(dsroots, maxT, bsize=bsize, hw=hw, qhb_aug=qhb_aug)
     return {
         "loadertype": NekoJointLoader,
         "subsets": {

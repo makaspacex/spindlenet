@@ -13,19 +13,21 @@
             "cwd": "${workspaceFolder}",
             "env": {
                 "PYTHONPATH":"${workspaceFolder}:$PYTHONPATH",
-                "CUDA_VISIBLE_DEVICES":"1"
+                "CUDA_VISIBLE_DEVICES":"0"
             },
             "justMyCode": true
         },
         {
-            "name": "XJ_TEST",
+            "name": "train: OSTR_C2J_DTA_Only_MTH",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/xj_benchmark/test.py",
+            "program": "${workspaceFolder}/benchmark/OSTR_C2J_DTA_Only_MTH/train.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
+            "args": ["--dataset_name", "mth1200", "--save_name", "debug_temp", "--bsize", "4", "--force"],
             "env": {
-                "PYTHONPATH":"${workspaceFolder}:$PYTHONPATH"
+                "PYTHONPATH":"${workspaceFolder}:$PYTHONPATH",
+                "CUDA_VISIBLE_DEVICES":"0"
             },
             "justMyCode": true
         }

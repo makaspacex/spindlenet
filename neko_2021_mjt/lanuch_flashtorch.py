@@ -4,7 +4,7 @@ import shutil
 from data_root import find_data_root
 
 def launchflashtorch(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=None, maxT_overrider=None):
-    from neko_sdk.MJT.neko_abstract_jtr import neko_abstract_modular_joint_eval
+    from neko_sdk.MJT.neko_abstract_jtr import NekoAbstractModularJointEval
     if (len(argv) > 2):
         export_path = argv[1]
         if (export_path == "None"):
@@ -18,7 +18,7 @@ def launchflashtorch(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=No
     if (itr_override is not None):
         itk = itr_override
     if (maxT_overrider is None):
-        trainer = neko_abstract_modular_joint_eval(
+        trainer = NekoAbstractModularJointEval(
             modcfg(
                 root,
                 find_data_root(),
@@ -27,7 +27,7 @@ def launchflashtorch(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=No
             ), miter
         )
     else:
-        trainer = neko_abstract_modular_joint_eval(
+        trainer = NekoAbstractModularJointEval(
             modcfg(
                 root,
                 find_data_root(),

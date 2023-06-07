@@ -47,9 +47,9 @@ class gen3_object_to_feat_abstract:
 
 # stand can only call the modules.
 # only (bogo)modules can change their statues like training, evaluation, accpetance of gradient.
-class prototyper_gen3_stand(gen3_object_to_feat_abstract):
+class PrototyperGen3Stand(gen3_object_to_feat_abstract):
     def __init__(self, args, moddict):
-        super(prototyper_gen3_stand, self).__init__(args, moddict)
+        super(PrototyperGen3Stand, self).__init__(args, moddict)
         self.detached_ga = args["detached_ga"]
         self.force_proto_shape = args["force_proto_shape"]
         self.capacity = args["capacity"]
@@ -168,9 +168,9 @@ class prototyper_gen3_stand(gen3_object_to_feat_abstract):
         return self.forward(*args, **kwargs)
 
 
-class prototyper_gen3:
+class PrototyperGen3:
     def get_stand(self, args, moddict):
-        return prototyper_gen3_stand(args, moddict)
+        return PrototyperGen3Stand(args, moddict)
 
     # The info are kept to later replicate stands.
     # The api is optimized to support multi-gpu training
@@ -257,7 +257,7 @@ class prototyper_gen3:
         self.device_indicator = "cuda"
 
 
-class prototyper_gen3_masked_stand(prototyper_gen3_stand):
+class PrototyperGen3MaskedStand(PrototyperGen3Stand):
     def proto_engine(self, clips):
         features, _ = self.backbone(clips)
         if (self.detached_ga):
@@ -278,13 +278,13 @@ class prototyper_gen3_masked_stand(prototyper_gen3_stand):
         return out_emb, A
 
 
-class prototyper_gen3_masked(prototyper_gen3):
+class PrototyperGen3Masked(PrototyperGen3):
 
     def get_stand(self, args, moddict):
-        return prototyper_gen3_masked_stand(args, moddict)
+        return PrototyperGen3MaskedStand(args, moddict)
 
 
-class prototyper_gen3p_stand(prototyper_gen3_stand):
+class PrototyperGen3pStand(PrototyperGen3Stand):
     def proto_engine(self, clips):
         features = self.backbone(clips)
         if (self.detached_ga):
@@ -345,12 +345,12 @@ class prototyper_gen3p_stand(prototyper_gen3_stand):
         return allproto.contiguous()
 
 
-class prototyper_gen3p(prototyper_gen3):
+class PrototyperGen3p(PrototyperGen3):
     def get_stand(self, args, moddict):
-        return prototyper_gen3p_stand(args, moddict)
+        return PrototyperGen3pStand(args, moddict)
 
 
-class prototyper_gen3pe_stand(prototyper_gen3p_stand):
+class PrototyperGen3peStand(PrototyperGen3pStand):
     def proto_engine(self, clips):
         features = self.backbone(clips)
         if (self.detached_ga):
@@ -376,12 +376,12 @@ class prototyper_gen3pe_stand(prototyper_gen3p_stand):
         return out_emb, A
 
 
-class prototyper_gen3pe(prototyper_gen3):
+class PrototyperGen3pe(PrototyperGen3):
     def get_stand(self, args, moddict):
-        return prototyper_gen3pe_stand(args, moddict)
+        return PrototyperGen3peStand(args, moddict)
 
 
-class prototyper_gen3peT_stand(prototyper_gen3pe_stand):
+class PrototyperGen3petStand(PrototyperGen3peStand):
     def proto_engine(self, clips):
         features_ffn, features_att = self.backbone(clips)
         # detaching is now up to the GA itself.
@@ -393,6 +393,6 @@ class prototyper_gen3peT_stand(prototyper_gen3pe_stand):
         return out_emb
 
 
-class prototyper_gen3peT(prototyper_gen3):
+class PrototyperGen3pet(PrototyperGen3):
     def get_stand(self, args, moddict):
-        return prototyper_gen3peT_stand(args, moddict)
+        return PrototyperGen3petStand(args, moddict)

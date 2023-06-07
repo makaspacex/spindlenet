@@ -3,10 +3,10 @@ import torch
 from neko_sdk.ocr_modules.neko_score_merging import scatter_cvt
 
 
-class neko_openset_linear_classifier(torch.nn.Module):
+class NekoOpensetLinearClassifier(torch.nn.Module):
     #    n=nB or n=nB*nT   nxnC       kxnC
     def __init__(self):
-        super(neko_openset_linear_classifier, self).__init__()
+        super(NekoOpensetLinearClassifier, self).__init__()
         self.UNK_SCR = torch.nn.Parameter(torch.zeros(1).float())
 
     def get_unk_scr(self, flat_emb):
@@ -24,6 +24,6 @@ class neko_openset_linear_classifier(torch.nn.Module):
         return scores
 
 
-class neko_openset_linear_classifierK(neko_openset_linear_classifier):
+class NekoOpensetLinearClassifierK(NekoOpensetLinearClassifier):
     def get_unk_scr(self, flat_emb):
         return self.UNK_SCR * flat_emb.norm(dim=-1, keepdim=True)

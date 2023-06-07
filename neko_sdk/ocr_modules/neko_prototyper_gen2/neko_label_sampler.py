@@ -5,12 +5,12 @@ import torch
 from torch import nn
 from torch.nn import functional as trnf
 
-from neko_sdk.ocr_modules.neko_interprinter import neko_visual_only_interprinter, neko_visual_only_interprinterR34
+from neko_sdk.ocr_modules.neko_interprinter import NekoVisualOnlyInterprinter, NekoVisualOnlyInterprinterR34
 from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_abstractract_sampler import neko_prototype_sampler_static
 
 
 class neko_prototyper(nn.Module):
-    PROTOENGINE = neko_visual_only_interprinter
+    PROTOENGINE = NekoVisualOnlyInterprinter
 
     def __init__(self, output_channel, spks, dropout=None, capacity=512):
         super(neko_prototyper, self).__init__()
@@ -82,7 +82,7 @@ class neko_prototyper(nn.Module):
 
 
 class neko_prototyperR34(neko_prototyper):
-    PROTOENGINE = neko_visual_only_interprinterR34
+    PROTOENGINE = NekoVisualOnlyInterprinterR34
 
 
 class neko_prototype_sampler_basic(neko_prototype_sampler_static):
@@ -111,7 +111,7 @@ class neko_prototype_sampler_basic(neko_prototype_sampler_static):
 
     def debug(self, normpids, labels):
         normprotos = [self.norm_protos[i - self.sp_cnt] for i in normpids]
-        protos = ((torch.cat(normprotos, dim=-1).squeeze(0).squeeze(0) + 1) * 127.5).detach().cpu().numpy().astype(
+        protos = ((torch.cat(normprotos, dim=-1).squeeze(0).NekoSqueeze(0) + 1) * 127.5).detach().cpu().numpy().astype(
             np.uint8)
         import cv2
         cv2.imshow(labels, protos[:, :32 * 32])

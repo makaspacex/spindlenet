@@ -27,7 +27,7 @@
             "args": ["--dataset_name", "mth1200", "--save_name", "debug_temp", "--bsize", "4", "--force"],
             "env": {
                 "PYTHONPATH":"${workspaceFolder}:$PYTHONPATH",
-                "CUDA_VISIBLE_DEVICES":"0"
+                "CUDA_VISIBLE_DEVICES":"1"
             },
             "justMyCode": true
         }

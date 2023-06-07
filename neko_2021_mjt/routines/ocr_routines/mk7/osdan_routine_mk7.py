@@ -4,7 +4,7 @@ import torch.nn.functional
 
 from neko_2020nocr.dan.common.common import flatten_label
 from neko_2020nocr.dan.utils import LossCounter, NekoOsAttentionArCounter, NekoOswrAttentionArCounter
-from neko_2021_mjt.modulars.neko_inflater import neko_inflater
+from neko_2021_mjt.modulars.neko_inflater import NekoInflater
 from neko_2021_mjt.routines.neko_abstract_routines import NekoAbstractEvalRoutine
 from neko_2021_mjt.routines.ocr_routines.mk5.osdan_routine_mk5 import NekoHdos2cRoutineCfmk5
 
@@ -98,7 +98,7 @@ class NekoHDOS2cEvalRoutineCfmk7(NekoAbstractEvalRoutine):
 
     def set_etc(self, args):
         self.maxT = args["maxT"]
-        self.inflater = neko_inflater()
+        self.inflater = NekoInflater()
 
     def set_loggers(self, log_path, name, args):
         try:

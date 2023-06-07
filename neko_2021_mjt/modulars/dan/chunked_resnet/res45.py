@@ -4,7 +4,7 @@ from torch import nn
 from neko_2021_mjt.modulars.dan.chunked_resnet.neko_block_fe import \
     make_init_layer_wo_bn, make_init_layer_bn, init_layer, \
     make_body_layer_wo_bn, make_body_layer_bn, dan_reslayer
-from neko_sdk.AOF.neko_lens import neko_lens
+from neko_sdk.AOF.neko_lens import NekoLens
 
 
 # Dan config.
@@ -233,7 +233,7 @@ class res45_net_ptpt:
 
 
 # so this thing keeps the modules and
-class neko_r45_binorm(nn.Module):
+class NekoR45Binorm(nn.Module):
     def setup_modules(self, mdict, prefix):
         for k in mdict:
             if (type(mdict[k]) is dict):
@@ -270,7 +270,7 @@ class neko_r45_binorm(nn.Module):
             i.train()
 
     def __init__(self, strides, compress_layer, input_shape, bogo_names, bn_names, hardness=2, oupch=512, expf=1):
-        super(neko_r45_binorm, self).__init__()
+        super(NekoR45Binorm, self).__init__()
         self.bogo_modules = {}
         self.bn_dict = {}
         layers = res45_wo_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1)
@@ -293,7 +293,7 @@ class neko_r45_binorm(nn.Module):
         return [feat.size()[1:] for feat in features]
 
 
-class neko_r45_binorm_orig(nn.Module):
+class NekoR45BinormOrig(nn.Module):
     def freezebnprefix(self, prefix):
         for i in self.named_bn_dicts[prefix]:
             self.bns[i].eval()
@@ -330,7 +330,7 @@ class neko_r45_binorm_orig(nn.Module):
                 self.add_module(prefix + "_" + k, mdict[k])
 
     def __init__(self, strides, compress_layer, input_shape, bogo_names, bn_names, hardness=2, oupch=512, expf=1):
-        super(neko_r45_binorm_orig, self).__init__()
+        super(NekoR45BinormOrig, self).__init__()
         self.bogo_modules = {}
         layers = res45_wo_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
         self.setup_modules(layers, "shared_fe")
@@ -344,7 +344,7 @@ class neko_r45_binorm_orig(nn.Module):
             self.setup_bn_modules(bns, bn_name, bn_name)
 
 
-class neko_r45_binorm_tpt(nn.Module):
+class NekoR45BinormTpt(nn.Module):
     def freezebnprefix(self, prefix):
         for i in self.named_bn_dicts[prefix]:
             self.bns[i].eval()
@@ -381,12 +381,12 @@ class neko_r45_binorm_tpt(nn.Module):
                 self.add_module(prefix + "_" + k, mdict[k])
 
     def __init__(self, strides, compress_layer, input_shape, bogo_names, bn_names, hardness=2, oupch=512, expf=1):
-        super(neko_r45_binorm_tpt, self).__init__()
+        super(NekoR45BinormTpt, self).__init__()
         self.bogo_modules = {}
         layers = res45_wo_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
         self.setup_modules(layers, "shared_fe")
         self.bns = []
-        self.tpt = neko_lens(int(32 * expf), 1, 1, hardness)
+        self.tpt = NekoLens(int(32 * expf), 1, 1, hardness)
         self.named_bn_dicts = {}
         for i in range(len(bogo_names)):
             name = bogo_names[i]
@@ -405,7 +405,7 @@ class neko_r45_binorm_tpt(nn.Module):
         return [feat.size()[1:] for feat in features]
 
 
-class neko_r45_binorm_ptpt(nn.Module):
+class NekoR45BinormPtpt(nn.Module):
     def freezebnprefix(self, prefix):
         for i in self.named_bn_dicts[prefix]:
             self.bns[i].eval()
@@ -442,12 +442,12 @@ class neko_r45_binorm_ptpt(nn.Module):
                 self.add_module(prefix + "_" + k, mdict[k])
 
     def __init__(self, strides, compress_layer, input_shape, bogo_names, bn_names, hardness=2, oupch=512, expf=1):
-        super(neko_r45_binorm_ptpt, self).__init__()
+        super(NekoR45BinormPtpt, self).__init__()
         self.bogo_modules = {}
         layers = res45p_wo_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
         self.setup_modules(layers, "shared_fe")
         self.bns = []
-        self.tpt = neko_lens(int(32 * expf), 1, 1, hardness)
+        self.tpt = NekoLens(int(32 * expf), 1, 1, hardness)
         self.named_bn_dicts = {}
         for i in range(len(bogo_names)):
             name = bogo_names[i]
@@ -466,7 +466,7 @@ class neko_r45_binorm_ptpt(nn.Module):
         return [feat.size()[1:] for feat in features]
 
 
-class neko_r45_binorm_heavy_head(nn.Module):
+class NekoR45BinormHeavyHead(nn.Module):
     def setup_modules(self, mdict, prefix):
         for k in mdict:
             if (type(mdict[k]) is dict):
@@ -475,7 +475,7 @@ class neko_r45_binorm_heavy_head(nn.Module):
                 self.add_module(prefix + "_" + k, mdict[k])
 
     def __init__(self, strides, compress_layer, input_shape, bogo_names, bn_names, hardness=2, oupch=512, expf=1):
-        super(neko_r45_binorm_heavy_head, self).__init__()
+        super(NekoR45BinormHeavyHead, self).__init__()
         self.bogo_modules = {}
         ochs = [int(64 * expf), int(64 * expf), int(64 * expf), int(128 * expf), int(256 * expf), oupch]
 

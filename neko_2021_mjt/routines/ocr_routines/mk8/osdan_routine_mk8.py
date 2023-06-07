@@ -4,7 +4,7 @@ import copy
 import torch.nn.functional
 
 from neko_2020nocr.dan.utils import LossCounter, NekoOsAttentionArCounter, NekoOswrAttentionArCounter
-from neko_2021_mjt.modulars.neko_inflater import neko_inflater
+from neko_2021_mjt.modulars.neko_inflater import NekoInflater
 from neko_2021_mjt.routines.neko_abstract_routines import NekoAbstractEvalRoutine
 from neko_2021_mjt.routines.ocr_routines.mk5.osdan_routine_mk5 import NekoHdos2cRoutineCfmk5
 from neko_2021_mjt.routines.subroutines.context_subroutines.neko_ctx_subroutine import NekoCtxSubroutineV1
@@ -35,7 +35,7 @@ def debug_mk8(chouts, ctxouts, gt):
 class Nekohdos2croutinecfmk8(NekoHdos2cRoutineCfmk5):
     def set_etc(self, args):
         self.maxT = args["maxT"]
-        self.inflater = neko_inflater()
+        self.inflater = NekoInflater()
         self.PROTO_FN = mk_proto_contextual_v1
         self.context_mod = NekoCtxSubroutineV1()
         self.attf = temporal_attention_v2
@@ -132,7 +132,7 @@ class NekoHdos2cRoutineCfmk8a(Nekohdos2croutinecfmk8):
 class NekoHdos2cRoutineCfmk8adt(NekoHdos2cRoutineCfmk8a):
     def set_etc(self, args):
         self.maxT = args["maxT"]
-        self.inflater = neko_inflater()
+        self.inflater = NekoInflater()
         self.PROTO_FN = mk_proto_contextual_v1
         self.context_mod = NekoCtxSubroutineV1()
         self.attf = temporal_attention_v2dt
@@ -164,7 +164,7 @@ class NekoHdos2cEvalRoutineCfmk8(NekoAbstractEvalRoutine):
             self.has_ctx = True
         else:
             self.has_ctx = False
-        self.inflater = neko_inflater()
+        self.inflater = NekoInflater()
 
     # Hard coded case_insensitive logger.
     def set_loggers(self, log_path, name, args):

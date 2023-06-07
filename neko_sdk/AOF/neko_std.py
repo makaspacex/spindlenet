@@ -5,9 +5,9 @@ from torch.nn import functional as trnf
 from torchvision import ops as tvop
 
 
-class neko_spatial_transform_deform_conv_3x3(nn.Module):
+class NekoSpatialTransformDeformConv3x3(nn.Module):
     def __init__(self, ifc, ofc, t_hardness=3.14 / 6, s_hardness=2):
-        super(neko_spatial_transform_deform_conv_3x3, self).__init__()
+        super(NekoSpatialTransformDeformConv3x3, self).__init__()
         self.offsets = nn.Parameter(torch.tensor([
             [-1, -1], [-1, 0], [-1, -1],
             [0, -1], [0, 0], [0, 1],
@@ -47,7 +47,7 @@ class neko_spatial_transform_deform_conv_3x3(nn.Module):
 # Low res: scale and orientation is unlikely to change frequently in a image.
 # if they ever change, they change in a contigous way.
 
-class neko_spatial_transform_deform_conv_3x3_lr(neko_spatial_transform_deform_conv_3x3):
+class NekoSpatialTransformDeformConv3x3Lr(NekoSpatialTransformDeformConv3x3):
     def forward(self, input_feat):
         N, C, H, W = input_feat.shape
         H_ = max(H // 4, 1)
@@ -58,7 +58,7 @@ class neko_spatial_transform_deform_conv_3x3_lr(neko_spatial_transform_deform_co
 
 
 if __name__ == '__main__':
-    magic = neko_spatial_transform_deform_conv_3x3(256, 256)
+    magic = NekoSpatialTransformDeformConv3x3(256, 256)
     a = torch.rand([64, 256, 16, 32])
     b = magic(a)
     pass

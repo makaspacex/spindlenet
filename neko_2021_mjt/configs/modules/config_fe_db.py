@@ -1,5 +1,5 @@
 from neko_2020nocr.dan.configs.pipelines_pami import get_bl_fe_args
-from neko_2021_mjt.modulars.dan.chunked_resnet.res45 import neko_r45_binorm, neko_r45_binorm_orig, neko_r45_binorm_ptpt
+from neko_2021_mjt.modulars.dan.chunked_resnet.res45 import NekoR45Binorm, NekoR45BinormOrig, NekoR45BinormPtpt
 from neko_2021_mjt.modulars.default_config import get_default_model
 
 
@@ -8,7 +8,7 @@ def get_dan_r45_binorm(arg_dict, path, optim_path=None):
     args["bogo_names"] = arg_dict["bogo_names"]
     args["bn_names"] = arg_dict["bn_names"]
 
-    return get_default_model(neko_r45_binorm, args, path, arg_dict["with_optim"], optim_path)
+    return get_default_model(NekoR45Binorm, args, path, arg_dict["with_optim"], optim_path)
 
 
 def config_fe_r45_binorm(ich, feat_ch, input_shape=None, cnt=2):
@@ -41,7 +41,7 @@ def get_dan_r45_binorm_orig(arg_dict, path, optim_path=None):
     args["bogo_names"] = arg_dict["bogo_names"]
     args["bn_names"] = arg_dict["bn_names"]
     args["expf"] = arg_dict["expf"]
-    return get_default_model(neko_r45_binorm_orig, args, path, arg_dict["with_optim"], optim_path)
+    return get_default_model(NekoR45BinormOrig, args, path, arg_dict["with_optim"], optim_path)
 
 
 def get_dan_r45_binorm_ptpt(arg_dict, path, optim_path=None):
@@ -49,7 +49,7 @@ def get_dan_r45_binorm_ptpt(arg_dict, path, optim_path=None):
     args["bogo_names"] = arg_dict["bogo_names"]
     args["bn_names"] = arg_dict["bn_names"]
     args["expf"] = arg_dict["expf"]
-    return get_default_model(neko_r45_binorm_ptpt, args, path, arg_dict["with_optim"], optim_path)
+    return get_default_model(NekoR45BinormPtpt, args, path, arg_dict["with_optim"], optim_path)
 
 
 def config_fe_r45_binorm_ptpt(ich, feat_ch, input_shape=None, cnt=2, expf=1):

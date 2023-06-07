@@ -187,6 +187,7 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
             cfgs["root"], cfgs["val_each"], cfgs["vitr"], cfgs["vepoch"]
         # set to "latest" for resuming, whatever does not make sense to start fresh.
         self.set_dataloader(cfgs["dataloader_cfg"], vitr=cfgs["vitr"])
+        self.vitr = len(self.joint_dataloader)
         self.arm_modules(root, cfgs["modules"], cfgs["iterkey"])
         self.set_routines(cfgs["routine_cfgs"])
         self.set_val_tasks(cfgs["tasks"])
@@ -245,6 +246,13 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
         for modk in self.modular_dict:
             self.modular_dict[modk].save_if_needed(nEpoch, batch_idx)
 
+    def optimizer_zero_grad(self):
+        for modk in self.modular_dict:
+            self.modular_dict[modk].zero_grad()
+    
+    def optimizer_step(self):
+        pass
+
     def tr_iter(self, nEpoch, batch_idx, sample_batched):
         # torch.autograd.set_detect_anomaly(True)
         # data prepare
@@ -291,21 +299,24 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
             self.modular_dict[modk].cuda()
         for modk in self.modular_dict:
             self.modular_dict[modk].train()
+        
         for nEpoch in range(0, self.vepoch):
+            # for batch_idx, sample_batched in enumerate(self.joint_dataloader):
             for batch_idx in range(self.vitr):
-                if (flag is None or flag == False):
-                    flag = (batch_idx > 0) or (dbgpath is not None)
-                if (flag and batch_idx % self.val_each == 0):
-                    self.val(nEpoch, batch_idx, vdbg=vdbg)
+                # if (flag is None or flag == False):
+                #     flag = (batch_idx > 0) or (dbgpath is not None)
+                # if (flag and batch_idx % self.val_each == 0):
+                #     self.val(nEpoch, batch_idx, vdbg=vdbg)
                 data_start = time.time()
-                sample_batched = self.joint_dataloader.next()
                 data_time = time.time() - data_start
                 itr_start = time.time()
-                if (dbgpath is not None):
-                    sample_batched["debug_path"] = dbgpath
-                if (vdbg is not None):
-                    sample_batched["vdbg"] = vdbg
-
+                sample_batched = self.joint_dataloader.next()
+                
+                # if (dbgpath is not None):
+                #     sample_batched["debug_path"] = dbgpath
+                # if (vdbg is not None):
+                #     sample_batched["vdbg"] = vdbg
+                    
                 # for d in sample_batched:
                 #     if(type(sample_batched[d])==torch.tensor):
                 #         sample_batched[d]=sample_batched[d].cuda()
@@ -313,9 +324,8 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
                 itr_time = time.time() - itr_start
 
                 # print(torch.backends.cudnn.benchmark)
-                
-                if (batch_idx % 100 == 9):
-                    print("datatime", data_time, "itrtime", itr_time, "all", time.time() - data_start)
+                # if (batch_idx % 100 == 9):
+                #     print("datatime", data_time, "itrtime", itr_time, "all", time.time() - data_start)
                 
                 print(f"Epoch:{nEpoch+1}/{self.vepoch} Iter:{batch_idx+1}/{self.vitr} datatime {data_time} itrtime{itr_time} all {time.time() - data_start}")
                 

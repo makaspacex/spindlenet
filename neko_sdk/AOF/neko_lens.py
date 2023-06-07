@@ -3,9 +3,9 @@ import torch.nn.functional as trnf
 from torch import nn
 
 
-class neko_dense_calc(nn.Module):
+class NekoDenseCalc(nn.Module):
     def __init__(self, channel):
-        super(neko_dense_calc, self).__init__()
+        super(NekoDenseCalc, self).__init__()
         ## 996-251. I am not on purpose.
         ## The sigmoid perserves topology.
         self.dkern = torch.nn.Sequential(
@@ -25,9 +25,9 @@ class neko_dense_calc(nn.Module):
         return ndmap
 
 
-class neko_dense_calcnn(nn.Module):
+class NekoDenseCalcnn(nn.Module):
     def __init__(self, channel):
-        super(neko_dense_calcnn, self).__init__()
+        super(NekoDenseCalcnn, self).__init__()
         ## 996-251. I am not on purpose.
         ## The sigmoid perserves topology.
         self.dkern = torch.nn.Sequential(
@@ -110,11 +110,11 @@ def vis_lenses(img, lenses):
     return oups
 
 
-class neko_lens(nn.Module):
-    DENSE = neko_dense_calc
+class NekoLens(nn.Module):
+    DENSE = NekoDenseCalc
 
     def __init__(self, channel, pw, ph, hardness=2, dbg=False):
-        super(neko_lens, self).__init__()
+        super(NekoLens, self).__init__()
 
         self.pw = pw
         self.ph = ph
@@ -136,19 +136,19 @@ class neko_lens(nn.Module):
             return dst, dmap.detach()
 
 
-class neko_lensnn(neko_lens):
-    DENSE = neko_dense_calcnn
+class NekoLensnn(NekoLens):
+    DENSE = NekoDenseCalcnn
 
 
-class neko_lens_w_mask(nn.Module):
+class NekoLensWMask(nn.Module):
     def __init__(self, channel, pw, ph, hardness=2, dbg=False):
-        super(neko_lens_w_mask, self).__init__()
+        super(NekoLensWMask, self).__init__()
 
         self.pw = pw
         self.ph = ph
         self.dbg = dbg
         self.hardness = hardness
-        self.dkern = neko_dense_calc(channel)
+        self.dkern = NekoDenseCalc(channel)
 
     def forward(self, feat, mask):
         dw = feat.shape[3] // self.pw
@@ -167,9 +167,9 @@ class neko_lens_w_mask(nn.Module):
             return dst, dmsk, dmap.detach()
 
 
-class neko_lens_self(nn.Module):
+class NekoLensSelf(nn.Module):
     def __init__(self, ich, channel, pw, ph, hardness=2, dbg=False, scale=None):
-        super(neko_lens_self, self).__init__()
+        super(NekoLensSelf, self).__init__()
         self.scale = scale
         self.pw = pw
         self.ph = ph
@@ -183,7 +183,7 @@ class neko_lens_self(nn.Module):
             nn.BatchNorm2d(channel),
             nn.ReLU6()
         )
-        self.dkern = neko_dense_calc(channel)
+        self.dkern = NekoDenseCalc(channel)
 
     def forward_dsz(self, feat, dsz):
         dw = feat.shape[3] // self.pw
@@ -210,16 +210,16 @@ class neko_lens_self(nn.Module):
         return self.forward_dsz(feat, dsz)
 
 
-class neko_lens_self_bogotps(neko_lens_self):
+class NekoLensSelfBogotps(NekoLensSelf):
     def forward(self, feat):
         return self.forward_dsz(feat, self.scale)
 
 
-class neko_lens_fuse(nn.Module):
+class NekoLensFuse(nn.Module):
     def __init__(self, channel, hardness=0.5, dbg=False):
-        super(neko_lens_fuse, self).__init__()
-        self.hidense = neko_dense_calc(channel)
-        self.lodense = neko_dense_calc(channel)
+        super(NekoLensFuse, self).__init__()
+        self.hidense = NekoDenseCalc(channel)
+        self.lodense = NekoDenseCalc(channel)
         # allow it to oversample
 
         self.dbg = dbg

@@ -12,8 +12,8 @@ import torch.nn.functional as F
 from torch.distributions import constraints
 
 from neko_sdk.encoders.feat_networks.irevnet_utils import MaxMinGroup
-from neko_sdk.encoders.feat_networks.irevnet_utils import injective_pad, ActNorm2D, Split
-from neko_sdk.encoders.feat_networks.irevnet_utils import squeeze as Squeeze
+from neko_sdk.encoders.feat_networks.irevnet_utils import InjectivePad, ActNorm2D, Split
+from neko_sdk.encoders.feat_networks.irevnet_utils import NekoSqueeze as Squeeze
 from neko_sdk.encoders.feat_networks.matrix_utils import power_series_matrix_logarithm_trace
 from neko_sdk.encoders.feat_networks.spectral_norm_conv import spectral_norm_conv
 from neko_sdk.encoders.feat_networks.spectral_norm_fc import spectral_norm_fc
@@ -53,7 +53,7 @@ def downsample_shape(shape):
     return (shape[0] * 4, shape[1] // 2, shape[2] // 2)
 
 
-class conv_iresnet_block(nn.Module):
+class ConvIresnetBlock(nn.Module):
     def __init__(self, in_shape, int_ch, numTraceSamples=0, numSeriesTerms=0,
                  stride=1, coeff=.97, input_nonlin=True,
                  actnorm=True, n_power_iter=5, nonlin="elu"):
@@ -68,10 +68,10 @@ class conv_iresnet_block(nn.Module):
         :param n_power_iter: number of iterations for spectral normalization
         :param nonlin: the nonlinearity to use
         """
-        super(conv_iresnet_block, self).__init__()
+        super(ConvIresnetBlock, self).__init__()
         assert stride in (1, 2)
         self.stride = stride
-        self.squeeze = Squeeze(stride)
+        self.squeeze = NekoSqueeze(stride)
         self.coeff = coeff
         self.numTraceSamples = numTraceSamples
         self.numSeriesTerms = numSeriesTerms
@@ -156,14 +156,14 @@ class conv_iresnet_block(nn.Module):
                                       n_power_iterations=self.n_power_iter)
 
 
-class scale_block(nn.Module):
+class ScaleBlock(nn.Module):
     def __init__(self, steps, in_shape, int_dim, squeeze=True, n_terms=0, n_samples=0,
                  coeff=.9, input_nonlin=True, actnorm=True, split=True,
                  n_power_iter=5, nonlin="relu"):
-        super(scale_block, self).__init__()
+        super(ScaleBlock, self).__init__()
         self.in_shape = in_shape
         if squeeze:
-            self.squeeze = Squeeze(2)
+            self.squeeze = NekoSqueeze(2)
             conv_shape = downsample_shape(in_shape)
         else:
             self.squeeze = None
@@ -188,10 +188,10 @@ class scale_block(nn.Module):
         """ Create stack of iresnet blocks """
         block_list = nn.ModuleList()
         for i in range(steps):
-            block_list.append(conv_iresnet_block(in_shape, int_dim, n_samples, n_terms,
-                                                 stride=1, input_nonlin=True if input_nonlin else i > 0,
-                                                 coeff=coeff, actnorm=actnorm,
-                                                 n_power_iter=n_power_iter, nonlin=nonlin))
+            block_list.append(ConvIresnetBlock(in_shape, int_dim, n_samples, n_terms,
+                                               stride=1, input_nonlin=True if input_nonlin else i > 0,
+                                               coeff=coeff, actnorm=actnorm,
+                                               n_power_iter=n_power_iter, nonlin=nonlin))
 
         return block_list
 
@@ -231,21 +231,21 @@ class scale_block(nn.Module):
             return self.squeeze.inverse(x)
 
 
-class multiscale_conv_iResNet(nn.Module):
+class MultiscaleConvIResnet(nn.Module):
     def __init__(self, in_shape, nBlocks, nStrides, nChannels, init_squeeze=False, inj_pad=0,
                  coeff=.9, density_estimation=False, nClasses=None,
                  numTraceSamples=1, numSeriesTerms=1,
                  n_power_iter=5,
                  actnorm=True, learn_prior=True, nonlin="relu"):
-        super(multiscale_conv_iResNet, self).__init__()
+        super(MultiscaleConvIResnet, self).__init__()
         assert len(nBlocks) == len(nStrides) == len(nChannels)
         if init_squeeze:
-            self.init_squeeze = Squeeze(2)
+            self.init_squeeze = NekoSqueeze(2)
         else:
             self.init_squeeze = None
 
         if inj_pad > 0:
-            self.inj_pad = injective_pad(inj_pad)
+            self.inj_pad = InjectivePad(inj_pad)
         else:
             self.inj_pad = None
 
@@ -290,12 +290,12 @@ class multiscale_conv_iResNet(nn.Module):
         n_blocks = len(nSteps)
         in_shapes = [in_shape]
         for i, (steps, stride, channels) in enumerate(zip(nSteps, nStrides, nChannels)):
-            block = scale_block(steps, in_shape, channels,
-                                stride == 2, n_terms, n_samples,
-                                coeff, i > 0, actnorm,
-                                i < n_blocks - 1,
-                                n_power_iter,
-                                nonlin)  # split on all but last layer
+            block = ScaleBlock(steps, in_shape, channels,
+                               stride == 2, n_terms, n_samples,
+                               coeff, i > 0, actnorm,
+                               i < n_blocks - 1,
+                               n_power_iter,
+                               nonlin)  # split on all but last layer
             in_shape = block.out_shapes[-1]
             in_shapes.append(in_shape)
             blocks.append(block)
@@ -415,15 +415,15 @@ class multiscale_conv_iResNet(nn.Module):
                 layer.numSeriesTerms = n_terms
 
 
-class conv_iResNet(nn.Module):
+class ConvIResNet(nn.Module):
     def __init__(self, in_shape, nBlocks, nStrides, nChannels, init_ds=2, inj_pad=0,
                  coeff=.9, density_estimation=False, nClasses=None,
                  numTraceSamples=1, numSeriesTerms=1,
                  n_power_iter=5,
-                 block=conv_iresnet_block,
+                 block=ConvIresnetBlock,
                  actnorm=True, learn_prior=True,
                  nonlin="relu"):
-        super(conv_iResNet, self).__init__()
+        super(ConvIResNet, self).__init__()
         assert len(nBlocks) == len(nStrides) == len(nChannels)
         assert init_ds in (1, 2), "can only squeeze by 2"
         self.init_ds = init_ds
@@ -438,8 +438,8 @@ class conv_iResNet(nn.Module):
 
         print('')
         print(' == Building iResNet %d == ' % (sum(nBlocks) * 3 + 1))
-        self.init_squeeze = Squeeze(self.init_ds)
-        self.inj_pad = injective_pad(inj_pad)
+        self.init_squeeze = NekoSqueeze(self.init_ds)
+        self.inj_pad = InjectivePad(inj_pad)
         if self.init_ds == 2:
             in_shape = downsample_shape(in_shape)
         in_shape = (in_shape[0] + inj_pad, in_shape[1], in_shape[2])  # adjust channels
@@ -596,6 +596,6 @@ class conv_iResNet(nn.Module):
 
 if __name__ == "__main__":
     in_shape = [3, 32, 32]
-    resnet = conv_iResNet(in_shape[1:], [2, 2, 2, 2], [1, 2, 2, 2], [32, 32, 32, 32],
-                          init_ds=2, density_estimation=False, actnorm=True)
+    resnet = ConvIResNet(in_shape[1:], [2, 2, 2, 2], [1, 2, 2, 2], [32, 32, 32, 32],
+                         init_ds=2, density_estimation=False, actnorm=True)
     print(resnet.final_shape)

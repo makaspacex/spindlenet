@@ -12,10 +12,10 @@ Decoupled Text Decoder
 
 # 这个类的名字被写死在了pth文件中
 
-class neko_os_CFDTD_mk5(nn.Module):
+class NekoOSCFDTDMk5(nn.Module):
 
     def __init__(self):
-        super(neko_os_CFDTD_mk5, self).__init__()
+        super(NekoOSCFDTDMk5, self).__init__()
         self.setup_modules()
         self.baseline = 0
 
@@ -58,7 +58,7 @@ class neko_os_CFDTD_mk5(nn.Module):
         return out_emb
 
 
-class NekoOsCfdtdMk6(neko_os_CFDTD_mk5):
+class NekoOsCfdtdMk6(NekoOSCFDTDMk5):
     def sample(self, feature, A):
         nB, nC, nH, nW = feature.size()
         nT = A.size()[1]

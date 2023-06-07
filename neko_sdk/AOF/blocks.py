@@ -1,6 +1,6 @@
 from torch import nn
 
-from neko_sdk.AOF.neko_lens import neko_lens_fuse
+from neko_sdk.AOF.neko_lens import NekoLensFuse
 
 
 def conv1x1(in_planes, out_planes, stride=1):
@@ -43,12 +43,12 @@ class BasicBlockNoLens(nn.Module):
         return out, None
 
 
-class neko_LensBlock(nn.Module):
+class NekoLensblock(nn.Module):
     expansion = 1
 
     def __init__(self, inplanes, planes, stride=1):
 
-        super(neko_LensBlock, self).__init__()
+        super(NekoLensblock, self).__init__()
         if inplanes != planes:
             self.residule_hack = conv1x1(inplanes, planes)
         else:
@@ -58,7 +58,7 @@ class neko_LensBlock(nn.Module):
         self.relu = nn.ReLU(inplace=True)
         self.conv2 = conv3x3(planes, planes, stride)
         self.bn2 = nn.BatchNorm2d(planes)
-        self.fuser = neko_lens_fuse(planes)
+        self.fuser = NekoLensFuse(planes)
         self.stride = stride
 
     def forward(self, x):

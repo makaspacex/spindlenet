@@ -4,7 +4,7 @@ import shutil
 from data_root import find_data_root
 
 def testready(argv, taskcfg, temeta, itr_override=None, miter=10000, rot=0, auf=None, maxT_overrider=None):
-    from neko_sdk.MJT.neko_abstract_jtr import neko_abstract_modular_joint_eval
+    from neko_sdk.MJT.neko_abstract_jtr import NekoAbstractModularJointEval
     if (len(argv) > 2):
         export_path = argv[1]
         if (export_path == "None"):
@@ -18,7 +18,7 @@ def testready(argv, taskcfg, temeta, itr_override=None, miter=10000, rot=0, auf=
     if (itr_override is not None):
         itk = itr_override
     if (maxT_overrider is None):
-        trainer = neko_abstract_modular_joint_eval(
+        trainer = NekoAbstractModularJointEval(
             taskcfg(
                 root,
                 find_data_root(),
@@ -28,7 +28,7 @@ def testready(argv, taskcfg, temeta, itr_override=None, miter=10000, rot=0, auf=
             ), miter
         )
     else:
-        trainer = neko_abstract_modular_joint_eval(
+        trainer = NekoAbstractModularJointEval(
             taskcfg(
                 root,
                 find_data_root(),
@@ -50,7 +50,7 @@ def testready(argv, taskcfg, temeta, itr_override=None, miter=10000, rot=0, auf=
 def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=None, maxT_overrider=None,
                batch_size_override=None,
                export_path="/home/lasercat/ssddata/export/"):
-    from neko_sdk.MJT.neko_abstract_jtr import neko_abstract_modular_joint_eval
+    from neko_sdk.MJT.neko_abstract_jtr import NekoAbstractModularJointEval
     if (len(argv) > 2):
         itk = argv[2]
         root = argv[3]
@@ -61,7 +61,7 @@ def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=None, ma
     if (itr_override is not None):
         itk = itr_override
     if (maxT_overrider is None):
-        trainer = neko_abstract_modular_joint_eval(
+        trainer = NekoAbstractModularJointEval(
             modcfg(
                 root,
                 find_data_root(),
@@ -70,7 +70,7 @@ def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=None, ma
             ), miter
         )
     else:
-        trainer = neko_abstract_modular_joint_eval(
+        trainer = NekoAbstractModularJointEval(
             modcfg(
                 root,
                 find_data_root(),
@@ -89,7 +89,7 @@ def launchtest(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=None, ma
 
 
 def launchtest_chr_rej(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=None, maxT_overrider=None):
-    from neko_sdk.MJT.neko_abstract_jtr import neko_abstract_modular_joint_eval
+    from neko_sdk.MJT.neko_abstract_jtr import NekoAbstractModularJointEval
     if (len(argv) > 2):
         export_path = argv[1]
         if (export_path == "None"):
@@ -103,7 +103,7 @@ def launchtest_chr_rej(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=
     if (itr_override is not None):
         itk = itr_override
     if (maxT_overrider is None):
-        trainer = neko_abstract_modular_joint_eval(
+        trainer = NekoAbstractModularJointEval(
             modcfg(
                 root,
                 find_data_root(),
@@ -113,7 +113,7 @@ def launchtest_chr_rej(argv, modcfg, itr_override=None, miter=10000, rot=0, auf=
             ), miter
         )
     else:
-        trainer = neko_abstract_modular_joint_eval(
+        trainer = NekoAbstractModularJointEval(
             modcfg(
                 root,
                 find_data_root(),

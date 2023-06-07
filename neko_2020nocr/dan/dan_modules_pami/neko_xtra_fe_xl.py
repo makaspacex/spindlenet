@@ -27,9 +27,9 @@ class NekoFeatureExtractorThicc(nn.Module):
         return [feat.size()[1:] for feat in features]
 
 
-class neko_cco_Feature_Extractor(nn.Module):
+class NekoCCOFeatureExtractor(nn.Module):
     def __init__(self, strides, compress_layer, input_shape, hardness=2, oupch=512, expf=1):
-        super(neko_cco_Feature_Extractor, self).__init__()
+        super(NekoCCOFeatureExtractor, self).__init__()
         self.model = rescco.res_naive_lens45(strides, compress_layer, hardness, oupch=oupch, inpch=input_shape[0],
                                              expf=expf)
         self.input_shape = input_shape
@@ -52,9 +52,9 @@ class neko_cco_Feature_Extractor(nn.Module):
         return [feat.size()[1:] for feat in features]
 
 
-class neko_cco_Feature_Extractor_thicc(nn.Module):
+class NekoCCOFeatureExtractorThicc(nn.Module):
     def __init__(self, strides, compress_layer, input_shape, hardness=2, oupch=512, expf=1.5):
-        super(neko_cco_Feature_Extractor_thicc, self).__init__()
+        super(NekoCCOFeatureExtractorThicc, self).__init__()
         self.model = rescco.res_naive_lens45_thicc(strides, compress_layer, hardness, oupch=oupch, inpch=input_shape[0])
         self.input_shape = input_shape
 
@@ -76,9 +76,9 @@ class neko_cco_Feature_Extractor_thicc(nn.Module):
         return [feat.size()[1:] for feat in features]
 
 
-class neko_cco_se_Feature_Extractor(nn.Module):
+class NekoCCOSeFeatureExtractor(nn.Module):
     def __init__(self, strides, compress_layer, input_shape, hardness=2, oupch=512):
-        super(neko_cco_se_Feature_Extractor, self).__init__()
+        super(NekoCCOSeFeatureExtractor, self).__init__()
         self.model = rescco.res_naive_lens45SE(strides, compress_layer, hardness, oupch=oupch, inpch=input_shape[0])
         self.input_shape = input_shape
 

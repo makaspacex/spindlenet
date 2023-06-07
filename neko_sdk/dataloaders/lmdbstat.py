@@ -11,7 +11,7 @@ from torch.utils.data import Dataset
 from neko_sdk.ocr_modules.io.data_tiding import neko_DAN_padding
 
 
-class lmdbDataset(Dataset):
+class Lmdbdataset(Dataset):
     def init_etc(self):
         pass
 

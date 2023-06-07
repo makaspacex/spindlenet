@@ -2,9 +2,9 @@ import torch
 from torch import nn
 
 
-class neko_pystat(nn.Module):
+class NekoPystat(nn.Module):
     def __init__(self, max_capacity=900000):
-        super(neko_pystat, self).__init__()
+        super(NekoPystat, self).__init__()
         self.cnts = torch.nn.Parameter(torch.zeros(max_capacity), requires_grad=False)
         self.total = torch.nn.Parameter(torch.tensor(1e-9), requires_grad=False)
         self.lclipping_freq = 0.01
@@ -12,13 +12,13 @@ class neko_pystat(nn.Module):
 
     def _save_to_state_dict(self, destination, prefix, keep_vars):
         destination[prefix + "cdict"] = self.cdict
-        super(neko_pystat, self)._save_to_state_dict(destination, prefix, keep_vars)
+        super(NekoPystat, self)._save_to_state_dict(destination, prefix, keep_vars)
 
     def _load_from_state_dict(self, state_dict, prefix, local_metadata, strict,
                               missing_keys, unexpected_keys, error_msgs):
         self.cdict = state_dict[prefix + "cdict"]
         del state_dict[prefix + "cdict"]
-        super(neko_pystat, self)._load_from_state_dict(state_dict, prefix, local_metadata, strict,
+        super(NekoPystat, self)._load_from_state_dict(state_dict, prefix, local_metadata, strict,
                                                        missing_keys, unexpected_keys, error_msgs)
 
     def forward_train(self, flatten_label, gdict, llen):
@@ -48,9 +48,9 @@ class neko_pystat(nn.Module):
 
 
 if __name__ == '__main__':
-    a = neko_pystat(9)
+    a = NekoPystat(9)
     a.cdict["a"] = 9
     torch.save(a.state_dict(), "test.pt")
-    b = neko_pystat(9)
+    b = NekoPystat(9)
     b.load_state_dict(torch.load("test.pt"))
     print(b.cdict["a"])

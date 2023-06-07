@@ -2,7 +2,7 @@ import torch
 
 
 # inflates the feature by trimming blanks.
-class neko_inflater(object):
+class NekoInflater(object):
     def out_attns(self, text_length, A, nB, nH, nW):
         lenText = int(text_length.sum())
         start = 0
@@ -17,7 +17,7 @@ class neko_inflater(object):
         out_length = torch.zeros(nB)
         for i in range(0, nsteps):
             tens = out_res[i, :, :]
-            tmp_result = tens.topk(1)[1].squeeze(-1)
+            tmp_result = tens.topk(1)[1].NekoSqueeze(-1)
             for j in range(nB):
                 if out_length[j].item() == 0 and tmp_result[j] == 0:
                     out_length[j] = i + 1

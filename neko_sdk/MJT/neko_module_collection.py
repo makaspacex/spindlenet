@@ -1,9 +1,9 @@
 from torch import nn
 
 
-class neko_module_collection(nn.Module):
+class NekoModuleCollection(nn.Module):
     def __init__(self, **kwargs):
-        super(neko_module_collection, self).__init__()
+        super(NekoModuleCollection, self).__init__()
         self.build_layers(**kwargs)
 
     def __getitem__(self, item):

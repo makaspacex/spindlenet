@@ -21,9 +21,9 @@ def merge(x1, x2):
     return torch.cat((x1, x2), 1)
 
 
-class injective_pad(nn.Module):
+class InjectivePad(nn.Module):
     def __init__(self, pad_size):
-        super(injective_pad, self).__init__()
+        super(InjectivePad, self).__init__()
         self.pad_size = pad_size
         self.pad = nn.ZeroPad2d((0, 0, 0, pad_size))
 
@@ -50,9 +50,9 @@ class Split(nn.Module):
         return torch.cat((x1, x2), 1)
 
 
-class squeeze(nn.Module):
+class NekoSqueeze(nn.Module):
     def __init__(self, block_size):
-        super(squeeze, self).__init__()
+        super(NekoSqueeze, self).__init__()
         self.block_size = block_size
         self.block_size_sq = block_size * block_size
 

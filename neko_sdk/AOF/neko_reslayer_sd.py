@@ -1,14 +1,14 @@
 import torch.nn as nn
 
 from neko_sdk.AOF.blocks import BasicBlockNoLens
-from neko_sdk.AOF.neko_std import neko_spatial_transform_deform_conv_3x3, neko_spatial_transform_deform_conv_3x3_lr
+from neko_sdk.AOF.neko_std import NekoSpatialTransformDeformConv3x3, NekoSpatialTransformDeformConv3x3Lr
 
 
 # fall back to scaling only.
 class NekoSdWrapper(nn.Module):
     def __init__(self, ifc, ofc):
         super(NekoSdWrapper, self).__init__()
-        self.core = neko_spatial_transform_deform_conv_3x3(ifc, ofc)
+        self.core = NekoSpatialTransformDeformConv3x3(ifc, ofc)
 
     def forward(self, x):
         return self.core(x), None
@@ -17,7 +17,7 @@ class NekoSdWrapper(nn.Module):
 class NekoSdlrWrapper(nn.Module):
     def __init__(self, ifc, ofc):
         super(NekoSdlrWrapper, self).__init__()
-        self.core = neko_spatial_transform_deform_conv_3x3_lr(ifc, ofc)
+        self.core = NekoSpatialTransformDeformConv3x3Lr(ifc, ofc)
 
     def forward(self, x):
         return self.core(x), None

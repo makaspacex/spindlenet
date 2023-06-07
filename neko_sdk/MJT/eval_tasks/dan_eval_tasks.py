@@ -15,7 +15,7 @@ from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_label_sampler import neko_pr
 from neko_sdk.ocr_modules.result_renderer import render_words
 
 
-class neko_abstract_eval_tasks(neko_module_set):
+class NekoAbstractEvalTasks(neko_module_set):
     def setupthis(self, cfgs):
         pass
 
@@ -68,7 +68,7 @@ class neko_abstract_eval_tasks(neko_module_set):
         pass
 
 
-class neko_odan_eval_tasks(neko_abstract_eval_tasks):
+class NekoOdanEvalTasks(NekoAbstractEvalTasks):
     def setupthis(self, cfgs):
         self.temeta_args = cfgs["temeta"]
         self.protoname = cfgs["protoname"]

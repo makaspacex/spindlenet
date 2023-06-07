@@ -6,9 +6,9 @@ from torch.nn import functional as trnf
 from torchvision import ops as tvop
 
 
-class neko_scaling_deform_conv_3x3(nn.Module):
+class NekoScalingDeformConv3x3(nn.Module):
     def __init__(self, ifc, ofc, s_hardness=2):
-        super(neko_scaling_deform_conv_3x3, self).__init__()
+        super(NekoScalingDeformConv3x3, self).__init__()
         self.offsets = nn.Parameter(torch.tensor([
             [-1, -1], [-1, 0], [-1, -1],
             [0, -1], [0, 0], [0, 1],
@@ -37,7 +37,7 @@ class neko_scaling_deform_conv_3x3(nn.Module):
 # Low res: scale and orientation is unlikely to change frequently in a image.
 # if they ever change, they change in a contigous way.
 
-class neko_scaling_deform_conv_3x3_lr(neko_scaling_deform_conv_3x3):
+class NekoScalingDeformConv3x3Lr(NekoScalingDeformConv3x3):
     def forward(self, input_feat):
         N, C, H, W = input_feat.shape
         H_ = max(H // 4, 1)
@@ -48,7 +48,7 @@ class neko_scaling_deform_conv_3x3_lr(neko_scaling_deform_conv_3x3):
 
 
 if __name__ == '__main__':
-    magic = neko_scaling_deform_conv_3x3_lr(256, 256)
+    magic = NekoScalingDeformConv3x3Lr(256, 256)
     a = torch.rand([64, 256, 16, 32])
     b = magic(a)
     pass

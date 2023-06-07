@@ -13,7 +13,7 @@ def get_opt():
     parser.add_argument("--dataset_name", default="tkhmth2200")
     parser.add_argument("--save_name", default=None)
     parser.add_argument("--log_each", default=200)
-    parser.add_argument("--bsize", default=32)
+    parser.add_argument("--bsize", type=int, default=32)
     parser.add_argument("--force", action="store_true", default=False)
 
     opt = parser.parse_args()

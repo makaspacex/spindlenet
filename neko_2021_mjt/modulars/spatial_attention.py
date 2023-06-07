@@ -31,7 +31,7 @@ class SpatialAttentionMk2(SpatialAttention):
         return self.core(x)
 
 
-class spatial_attention_mk3(SpatialAttention):
+class SpatialAttentionMk3(SpatialAttention):
     def forward(self, input):
         x = input[0]
         d = input[-1]

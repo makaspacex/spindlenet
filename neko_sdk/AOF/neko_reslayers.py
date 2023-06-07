@@ -3,9 +3,9 @@ import torch.nn as nn
 from neko_sdk.AOF.blocks import BasicBlockNoLens
 
 
-class neko_reslayer(nn.Module):
+class NekoReslayer(nn.Module):
     def __init__(self, in_planes, planes, blocks=1, stride=1):
-        super(neko_reslayer, self).__init__()
+        super(NekoReslayer, self).__init__()
         self.in_planes = in_planes
         self.downsample = None
         if stride != 1 or in_planes != planes * BasicBlockNoLens.expansion:

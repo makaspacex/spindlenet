@@ -2,13 +2,13 @@ import math
 
 import torch.nn as nn
 
-from neko_sdk.AOF.neko_lens import neko_lens, neko_lensnn, vis_lenses
-from neko_sdk.AOF.neko_reslayers import neko_reslayer
+from neko_sdk.AOF.neko_lens import NekoLens, NekoLensnn, vis_lenses
+from neko_sdk.AOF.neko_reslayers import NekoReslayer
 
 
 class DanResnet(nn.Module):
-    LAYER = neko_reslayer
-    LENS = neko_lens
+    LAYER = NekoReslayer
+    LENS = NekoLens
 
     def freezebn(self):
         for m in self.modules():
@@ -110,7 +110,7 @@ class DanResnet(nn.Module):
 
 
 class DanResnetnn(DanResnet):
-    LENS = neko_lensnn
+    LENS = NekoLensnn
 
 
 def res_naive_lens45(strides, compress_layer, hardness, inpch=1, oupch=512, expf=1):

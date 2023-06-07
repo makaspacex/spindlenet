@@ -4,7 +4,7 @@ import torch
 import torch.nn
 from torch.nn import functional as trnf
 
-from neko_2021_mjt.modulars.neko_inflater import neko_inflater
+from neko_2021_mjt.modulars.neko_inflater import NekoInflater
 from neko_sdk.torchtools.seqkit import length_to_mask
 
 
@@ -32,9 +32,9 @@ class PositionalEncoding(torch.nn.Module):
 
 
 # This version needs no parameter
-class neko_v2s_basic(torch.nn.Module):
+class NekoV2sBasic(torch.nn.Module):
     def __init__(self):
-        super(neko_v2s_basic, self).__init__()
+        super(NekoV2sBasic, self).__init__()
         pass
 
     # compacted sembs correspond to the visual prototypes, which inevitably contains
@@ -57,9 +57,9 @@ from torch.nn import TransformerEncoder, Transformer
 from neko_sdk.seq2seq.neko_fixed_torch_transformer import neko_TransformerEncoderLayer, neko_TransformerDecoderLayer
 
 
-class neko_ctx_basic(torch.nn.Module):
+class NekoCtxBasic(torch.nn.Module):
     def __init__(self, feat_ch, numh=8, num_l=4):
-        super(neko_ctx_basic, self).__init__()
+        super(NekoCtxBasic, self).__init__()
         encoder_layer = neko_TransformerEncoderLayer(d_model=feat_ch, nhead=numh)
         # welp let's abuse the setup here.
         self.core = TransformerEncoder(encoder_layer, num_layers=num_l)
@@ -70,9 +70,9 @@ class neko_ctx_basic(torch.nn.Module):
         return cf
 
 
-class neko_ctx_encdec(torch.nn.Module):
+class NekoCtxEncdec(torch.nn.Module):
     def __init__(self, feat_ch, numh=8, num_l=4):
-        super(neko_ctx_encdec, self).__init__()
+        super(NekoCtxEncdec, self).__init__()
         self.core = Transformer(d_model=feat_ch, nhead=numh, custom_encoder=neko_TransformerEncoderLayer,
                                 custom_decoder=neko_TransformerDecoderLayer)
         pass
@@ -82,12 +82,12 @@ class neko_ctx_encdec(torch.nn.Module):
         return cf
 
 
-class mao_magic_semantic_module(torch.nn.Module):
+class MaoMagicSemanticModule(torch.nn.Module):
     def __init__(self, feat_ch, nhead=8, nlay=4):
-        super(mao_magic_semantic_module, self).__init__()
-        self.indexmod = neko_v2s_basic()
-        self.ctxmod = neko_ctx_basic(feat_ch, nhead, nlay)
-        self.inflator = neko_inflater()
+        super(MaoMagicSemanticModule, self).__init__()
+        self.indexmod = NekoV2sBasic()
+        self.ctxmod = NekoCtxBasic(feat_ch, nhead, nlay)
+        self.inflator = NekoInflater()
 
     def forward(self, logits_raw, lengths, compact_sembs, semb, maxT):
         sbatch, masks, tlen = self.indexmod(logits_raw, lengths, compact_sembs, maxT)

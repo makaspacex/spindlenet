@@ -12,7 +12,7 @@ from neko_sdk.MJT.utils import update
 from neko_sdk.thirdparty.mmdetapply import multi_apply
 
 
-class neko_abstract_modular_joint_training(neko_module_set):
+class NekoAbstractModularJointTraining(neko_module_set):
 
     def set_routines(self, routine_cfgs):
         self.routines = []
@@ -199,7 +199,7 @@ class neko_abstract_modular_joint_training(neko_module_set):
                 self.modular_dict[modk].save(nEpoch)
 
 
-class neko_abstract_modular_joint_eval(neko_module_set):
+class NekoAbstractModularJointEval(neko_module_set):
 
     def set_val_tasks(self, val_cfgs, mitr):
         self.val_tasks = []
@@ -269,7 +269,7 @@ class neko_abstract_modular_joint_eval(neko_module_set):
 
 
 # some routines may change shared module state.
-class neko_modular_joint_training_semipara(neko_abstract_modular_joint_training):
+class NekoModularJointTrainingSemipara(NekoAbstractModularJointTraining):
     def tr_iter(self, nEpoch, batch_idx, sample_batched):
         # torch.autograd.set_detect_anomaly(True)
         # data prepare
@@ -318,7 +318,7 @@ class neko_modular_joint_training_semipara(neko_abstract_modular_joint_training)
             self.modular_dict[modk].save_if_needed(nEpoch, batch_idx)
 
 
-class neko_modular_joint_training_para(neko_abstract_modular_joint_training):
+class NekoModularJointTrainingPara(NekoAbstractModularJointTraining):
     def tr_iter(self, nEpoch, batch_idx, sample_batched):
         # torch.autograd.set_detect_anomaly(True)
         # data prepare
@@ -365,7 +365,7 @@ class neko_modular_joint_training_para(neko_abstract_modular_joint_training):
             self.modular_dict[modk].save_if_needed(nEpoch, batch_idx)
 
 
-class neko_modular_joint_training_para2(neko_abstract_modular_joint_training):
+class NekoModularJointTrainingPara2(NekoAbstractModularJointTraining):
     def launch(self, rot, sample_batched, nEpoch, batch_idx):
         l = rot.fp(sample_batched, self.modular_dict, nEpoch, batch_idx, "cuda")
         return [l]
@@ -415,7 +415,7 @@ class neko_modular_joint_training_para2(neko_abstract_modular_joint_training):
             self.modular_dict[modk].save_if_needed(nEpoch, batch_idx)
 
 
-class neko_modular_joint_training_para3(neko_abstract_modular_joint_training):
+class NekoModularJointTrainingPara3(NekoAbstractModularJointTraining):
     def launch(self, rot, sample_batched, nEpoch, batch_idx):
         l = rot.fp(sample_batched, self.modular_dict, nEpoch, batch_idx, "cuda")
         return [l]

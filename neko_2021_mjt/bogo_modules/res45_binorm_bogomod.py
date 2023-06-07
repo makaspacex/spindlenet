@@ -1,4 +1,4 @@
-class neko_res45_binorm_bogo:
+class NekoRes45BinormBogo:
     def cuda(self):
         pass
 
@@ -27,7 +27,7 @@ class neko_res45_binorm_bogo:
         return self.model(x)
 
 
-class neko_res45cco_binorm_bogo:
+class NekoRes45CCO_BinormBogo:
     def cuda(self):
         pass
 

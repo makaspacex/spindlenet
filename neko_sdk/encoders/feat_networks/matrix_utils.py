@@ -90,7 +90,7 @@ def power_series_matrix_logarithm_trace(Fx, x, k, n):
             trLn += summand / np.float32(j)
         else:
             trLn -= summand / np.float32(j)
-    trace = trLn.mean(dim=1).squeeze()
+    trace = trLn.mean(dim=1).NekoSqueeze()
     return trace
 
 

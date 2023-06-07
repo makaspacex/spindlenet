@@ -32,7 +32,7 @@ class neko_prototype_sampler_gl(neko_prototype_sampler_static):
 
     def debug(self, normpids, labels):
         normprotos = [self.norm_protos[i - self.sp_cnt] for i in normpids]
-        protos = ((torch.cat(normprotos, dim=-1).squeeze(0).squeeze(0) + 1) * 127.5).detach().cpu().numpy().astype(
+        protos = ((torch.cat(normprotos, dim=-1).squeeze(0).NekoSqueeze(0) + 1) * 127.5).detach().cpu().numpy().astype(
             np.uint8)
         import cv2
         cv2.imshow(labels, protos[:, :32 * 32])

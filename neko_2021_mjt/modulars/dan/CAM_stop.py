@@ -8,9 +8,9 @@ Convolutional Alignment Module
 
 # Current version only supports input whose size is a power of 2, such as 32, 64, 128 etc.
 # You can adapt it to any input size by changing the padding or stride.
-class neko_CAM_stop(nn.Module):
+class NekoCAMStop(nn.Module):
     def __init__(self, scales, maxT, depth, num_channels):
-        super(neko_CAM_stop, self).__init__()
+        super(NekoCAMStop, self).__init__()
         # cascade multiscale features
         fpn = []
         for i in range(1, len(scales)):

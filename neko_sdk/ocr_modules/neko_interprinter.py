@@ -2,15 +2,15 @@
 import torch
 from torch import nn
 
-from neko_sdk.encoders.feat_networks.ires import conv_iResNet
+from neko_sdk.encoders.feat_networks.ires import ConvIResNet
 from neko_sdk.encoders.ocr_networks.neko_pyt_resnet_np import resnet18np
 # from  torchvision.models import resnet18,resnet34
 from neko_sdk.encoders.tv_res_nip import resnet18, resnet34
 
 
-class neko_visual_only_interprinter(nn.Module):
+class NekoVisualOnlyInterprinter(nn.Module):
     def __init__(self, feature_cnt, core=None):
-        super(neko_visual_only_interprinter, self).__init__()
+        super(NekoVisualOnlyInterprinter, self).__init__()
         if core is None:
             self.core = resnet18(num_classes=feature_cnt)
         else:
@@ -24,11 +24,11 @@ class neko_visual_only_interprinter(nn.Module):
         return vp
 
 
-class magic_core(nn.Module):
+class MagicCore(nn.Module):
     def __init__(self, feature_cnt):
-        super(magic_core, self).__init__()
-        self.c = conv_iResNet([3, 32, 32], [2, 2, 2, 2], [1, 2, 2, 2], [32, 32, 32, 32],
-                              init_ds=2, density_estimation=False, actnorm=True)
+        super(MagicCore, self).__init__()
+        self.c = ConvIResNet([3, 32, 32], [2, 2, 2, 2], [1, 2, 2, 2], [32, 32, 32, 32],
+                             init_ds=2, density_estimation=False, actnorm=True)
         self.f = torch.nn.Linear(768, feature_cnt, False)
         self.d = torch.nn.Dropout(0.1)
 
@@ -52,9 +52,9 @@ class magic_core(nn.Module):
 #
 #         # print(nvp.norm(dim=1))
 #         return vp
-class neko_visual_only_interprinterHD(nn.Module):
+class NekoVisualOnlyInterprinterHD(nn.Module):
     def __init__(self, feature_cnt, core=None):
-        super(neko_visual_only_interprinterHD, self).__init__()
+        super(NekoVisualOnlyInterprinterHD, self).__init__()
         if core is None:
             self.core = resnet18np(outch=feature_cnt)
         else:
@@ -67,9 +67,9 @@ class neko_visual_only_interprinterHD(nn.Module):
         return vp
 
 
-class neko_visual_only_interprinterR34(nn.Module):
+class NekoVisualOnlyInterprinterR34(nn.Module):
     def __init__(self, feature_cnt, core=None):
-        super(neko_visual_only_interprinterR34, self).__init__()
+        super(NekoVisualOnlyInterprinterR34, self).__init__()
         if core is None:
             self.core = resnet34(num_classes=feature_cnt)
         else:
@@ -82,9 +82,9 @@ class neko_visual_only_interprinterR34(nn.Module):
         return vp
 
 
-class neko_structural_visual_only_interprinter(nn.Module):
+class NekoStructuralVisualOnlyInterprinter(nn.Module):
     def __init__(self, feature_cnt, core=None):
-        super(neko_structural_visual_only_interprinter, self).__init__()
+        super(NekoStructuralVisualOnlyInterprinter, self).__init__()
         if core is None:
             self.core = resnet18np(outch=feature_cnt)
         else:

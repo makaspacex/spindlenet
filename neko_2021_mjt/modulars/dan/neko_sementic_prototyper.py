@@ -8,9 +8,9 @@ from torch.nn import functional as trnf
 # This class allows you to get a subset via the sid given by the label sampler, if applicable.
 # However, FSL datasets may sample label in dataloaders, which means the sid is needed to be provided by the loader, if necessary.
 
-class neko_sampled_sementic_branch(torch.nn.Module):
+class NekoSampledSementicBranch(torch.nn.Module):
     def __init__(self, feat_ch, capacity, spks):
-        super(neko_sampled_sementic_branch, self).__init__()
+        super(NekoSampledSementicBranch, self).__init__()
         self.weights = torch.nn.Parameter(torch.rand([capacity, feat_ch]) * 2 - 1)
 
     def sample(self, sids):

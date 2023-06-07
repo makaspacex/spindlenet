@@ -434,6 +434,7 @@ class ColoredLmdbDataset(LmdbDataset):
         bmask[start_x: start_x + img.shape[0], start_y: start_y + img.shape[1]] = 1
         img = mask
         return img, bmask
+
 def resize_v_align(cur_ratio,target_ratio,img_height,img_width):
     if cur_ratio < target_ratio:
         cur_target_height=img_height;

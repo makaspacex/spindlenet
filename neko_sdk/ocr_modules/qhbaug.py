@@ -502,6 +502,56 @@ def qhbwarp(img, ang, use_tia=True, prob=0.4):
     return new_img
 
 
+def qhbwarp_v(img, ang, use_tia=True, prob=0.4):
+    """
+    warp 针对垂直词条的增强处理
+    """
+    # if isinstance(img, np.array):
+    #     pass
+    img = np.transpose(img, [1,0,2])
+    
+    
+    h, w, _ = img.shape
+    config = Config(use_tia=use_tia)
+    config.make(w, h, ang)
+    new_img = img
+
+    if config.distort:  # 扭曲
+        img_height, img_width = img.shape[0:2]
+        if random.random() <= prob and img_height >= 20 and img_width >= 20:
+            new_img = tia_distort(new_img, random.randint(3, 6))
+
+    if config.stretch:  # 拉伸
+        img_height, img_width = img.shape[0:2]
+        if random.random() <= prob and img_height >= 20 and img_width >= 20:
+            new_img = tia_stretch(new_img, random.randint(3, 6))
+
+    if config.perspective:  # 透视变换
+        if random.random() <= prob:
+            new_img = tia_perspective(new_img)
+
+    if config.crop:  # 随机裁剪
+        img_height, img_width = img.shape[0:2]
+        if random.random() <= prob and img_height >= 20 and img_width >= 20:
+            new_img = get_crop(new_img)
+
+    if config.blur:  # 高斯模糊
+        if random.random() <= prob:
+            new_img = blur(new_img)
+    if config.color:
+        if random.random() <= prob:
+            new_img = cvtColor(new_img)
+    if config.jitter:
+        new_img = jitter(new_img)
+    if config.noise:  # 添加高斯噪声
+        if random.random() <= prob:
+            new_img = add_gasuss_noise(new_img)
+    if config.reverse:  # 颜色翻转
+        if random.random() <= prob:
+            new_img = 255 - new_img
+    new_img = np.transpose(new_img, [1,0,2])
+    return new_img
+
 if __name__ == '__main__':
     image = cv2.imread('./sample.jpg')
     print(image.shape)

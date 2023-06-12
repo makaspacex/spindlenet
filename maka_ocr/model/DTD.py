@@ -1,19 +1,8 @@
 import torch
 from torch import nn
 
-'''
-Decoupled Text Decoder
-'''
-
-
-# these dtds does not decode prediction according to prev timestamp classifications.
-# this is to get less bloating code. This starts from mk5.
-# to support conventional APIs, go for GPDTDs
-
-# 这个类的名字被写死在了pth文件中
-
 class NekoOSCFDTDMk5(nn.Module):
-
+    
     def __init__(self):
         super(NekoOSCFDTDMk5, self).__init__()
         self.setup_modules()
@@ -56,20 +45,3 @@ class NekoOSCFDTDMk5(nn.Module):
         out_emb = self.loop(C, nsteps, nB)
         # out_emb= trnf.dropout(self.loop(C,nsteps, nB),self.drop,self.training)
         return out_emb
-
-
-class NekoOsCfdtdMk6(NekoOSCFDTDMk5):
-    def sample(self, feature, A):
-        nB, nC, nH, nW = feature.size()
-        nT = A.size()[1]
-        # at the very least watch at some gosh darn thing.
-        # Yet why the model may refuse to focus is still a question to ask.
-        normf = torch.clip(A.view(nB, nT, -1).sum(2).view(nB, nT, 1, 1), min=1)
-        # Normalize
-        A = A / normf
-        # weighted sum
-        C = self.getC(feature, A, nB, nC, nH, nW, nT)
-        return A, C
-        pass
-
-neko_os_CFDTD_mk5 = NekoOSCFDTDMk5

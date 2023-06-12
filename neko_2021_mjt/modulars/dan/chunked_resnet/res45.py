@@ -1,9 +1,14 @@
 import torch
 from torch import nn
 
-from neko_2021_mjt.modulars.dan.chunked_resnet.neko_block_fe import \
-    make_init_layer_wo_bn, make_init_layer_bn, InitLayer, \
-    make_body_layer_wo_bn, make_body_layer_bn, DanReslayer
+from neko_2021_mjt.modulars.dan.chunked_resnet.neko_block_fe import (
+    make_init_layer_wo_bn,
+    make_init_layer_bn,
+    InitLayer,
+    make_body_layer_wo_bn,
+    make_body_layer_bn,
+    DanReslayer,
+)
 from neko_sdk.AOF.neko_lens import NekoLens
 
 
@@ -11,8 +16,15 @@ from neko_sdk.AOF.neko_lens import NekoLens
 def res45tpt_wo_bn(inpch, oupch, strides, frac=1, ochs=None):
     retlayers = {}
     blkcnt = [None, 3, 4, 6, 6, 3]
-    if (ochs is None):
-        ochs = [int(32 * frac), int(32 * frac), int(64 * frac), int(128 * frac), int(256 * frac), oupch]
+    if ochs is None:
+        ochs = [
+            int(32 * frac),
+            int(32 * frac),
+            int(64 * frac),
+            int(128 * frac),
+            int(256 * frac),
+            oupch,
+        ]
     retlayers["0"] = make_init_layer_wo_bn(inpch[0], ochs[0], strides[0])
     retlayers["1"] = make_body_layer_wo_bn(ochs[0], blkcnt[1], ochs[1], 1, strides[1])
     retlayers["2"] = make_body_layer_wo_bn(ochs[1], blkcnt[2], ochs[2], 1, strides[2])
@@ -25,8 +37,15 @@ def res45tpt_wo_bn(inpch, oupch, strides, frac=1, ochs=None):
 def res45_wo_bn(inpch, oupch, strides, frac=1, ochs=None):
     retlayers = {}
     blkcnt = [None, 3, 4, 6, 6, 3]
-    if (ochs is None):
-        ochs = [int(32 * frac), int(32 * frac), int(64 * frac), int(128 * frac), int(256 * frac), oupch]
+    if ochs is None:
+        ochs = [
+            int(32 * frac),
+            int(32 * frac),
+            int(64 * frac),
+            int(128 * frac),
+            int(256 * frac),
+            oupch,
+        ]
     retlayers["0"] = make_init_layer_wo_bn(inpch[0], ochs[0], strides[0])
     retlayers["1"] = make_body_layer_wo_bn(ochs[0], blkcnt[1], ochs[1], 1, strides[1])
     retlayers["2"] = make_body_layer_wo_bn(ochs[1], blkcnt[2], ochs[2], 1, strides[2])
@@ -39,7 +58,14 @@ def res45_wo_bn(inpch, oupch, strides, frac=1, ochs=None):
 def res45_bn(inpch, oupch, strides, frac=1, ochs=None):
     blkcnt = [None, 3, 4, 6, 6, 3]
     if ochs is None:
-        ochs = [int(32 * frac), int(32 * frac), int(64 * frac), int(128 * frac), int(256 * frac), oupch]
+        ochs = [
+            int(32 * frac),
+            int(32 * frac),
+            int(64 * frac),
+            int(128 * frac),
+            int(256 * frac),
+            oupch,
+        ]
     retlayers = {}
     retlayers["0"] = make_init_layer_bn(ochs[0])
     retlayers["1"] = make_body_layer_bn(ochs[0], blkcnt[1], ochs[1], 1, strides[1])
@@ -55,8 +81,15 @@ def res45_bn(inpch, oupch, strides, frac=1, ochs=None):
 def res45ptpt_wo_bn(inpch, oupch, strides, frac=1, ochs=None):
     retlayers = {}
     blkcnt = [None, 3, 4, 6, 6, 3]
-    if (ochs is None):
-        ochs = [int(32 * frac), int(32 * frac), int(64 * frac), int(128 * frac), int(256 * frac), oupch]
+    if ochs is None:
+        ochs = [
+            int(32 * frac),
+            int(32 * frac),
+            int(64 * frac),
+            int(128 * frac),
+            int(256 * frac),
+            oupch,
+        ]
     retlayers["0"] = make_init_layer_wo_bn(inpch[0], ochs[0], strides[0])
     retlayers["1"] = make_body_layer_wo_bn(ochs[0], blkcnt[1], ochs[1], 1, strides[1])
     retlayers["2"] = make_body_layer_wo_bn(ochs[1], blkcnt[2], ochs[2], 1, strides[2])
@@ -69,8 +102,15 @@ def res45ptpt_wo_bn(inpch, oupch, strides, frac=1, ochs=None):
 def res45p_wo_bn(inpch, oupch, strides, frac=1, ochs=None):
     retlayers = {}
     blkcnt = [None, 3, 4, 6, 6, 3]
-    if (ochs is None):
-        ochs = [int(32 * frac), int(64 * frac), int(128 * frac), int(256 * frac), int(512 * frac), oupch]
+    if ochs is None:
+        ochs = [
+            int(32 * frac),
+            int(64 * frac),
+            int(128 * frac),
+            int(256 * frac),
+            int(512 * frac),
+            oupch,
+        ]
     retlayers["0"] = make_init_layer_wo_bn(inpch[0], ochs[0], strides[0])
     retlayers["1"] = make_body_layer_wo_bn(ochs[0], blkcnt[1], ochs[1], 1, strides[1])
     retlayers["2"] = make_body_layer_wo_bn(ochs[1], blkcnt[2], ochs[2], 1, strides[2])
@@ -83,7 +123,14 @@ def res45p_wo_bn(inpch, oupch, strides, frac=1, ochs=None):
 def res45p_bn(inpch, oupch, strides, frac=1, ochs=None):
     blkcnt = [None, 3, 4, 6, 6, 3]
     if ochs is None:
-        ochs = [int(32 * frac), int(64 * frac), int(128 * frac), int(256 * frac), int(512 * frac), oupch]
+        ochs = [
+            int(32 * frac),
+            int(64 * frac),
+            int(128 * frac),
+            int(256 * frac),
+            int(512 * frac),
+            oupch,
+        ]
     retlayers = {}
     retlayers["0"] = make_init_layer_bn(ochs[0])
     retlayers["1"] = make_body_layer_bn(ochs[0], blkcnt[1], ochs[1], 1, strides[1])
@@ -236,18 +283,18 @@ class Res45NetPtpt:
 class NekoR45Binorm(nn.Module):
     def setup_modules(self, mdict, prefix):
         for k in mdict:
-            if (type(mdict[k]) is dict):
+            if type(mdict[k]) is dict:
                 self.setup_modules(mdict[k], prefix + "_" + k)
             else:
                 self.add_module(prefix + "_" + k, mdict[k])
 
     def setup_bn_modules(self, mdict, prefix):
         for k in mdict:
-            if (type(mdict[k]) is dict):
+            if type(mdict[k]) is dict:
                 self.setup_bn_modules(mdict[k], prefix + "_" + k)
             else:
                 id = len(self.bns)
-                if (prefix not in self.bn_dict):
+                if prefix not in self.bn_dict:
                     self.bn_dict[prefix] = []
                 self.bn_dict[prefix].append(id)
                 self.add_module(prefix + "_" + k, mdict[k])
@@ -269,17 +316,31 @@ class NekoR45Binorm(nn.Module):
         for i in self.bns:
             i.train()
 
-    def __init__(self, strides, compress_layer, input_shape, bogo_names, bn_names, hardness=2, oupch=512, expf=1):
+    def __init__(
+        self,
+        strides,
+        compress_layer,
+        input_shape,
+        bogo_names,
+        bn_names,
+        hardness=2,
+        oupch=512,
+        expf=1,
+    ):
         super(NekoR45Binorm, self).__init__()
         self.bogo_modules = {}
         self.bn_dict = {}
-        layers = res45_wo_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1)
+        layers = res45_wo_bn(
+            input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1
+        )
         self.setup_modules(layers, "shared_fe")
         self.bns = []
         for i in range(len(bogo_names)):
             name = bogo_names[i]
             bn_name = bn_names[i]
-            bns = res45_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1)
+            bns = res45_bn(
+                input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1
+            )
             self.bogo_modules[name] = Res45Net(layers, bns)
             self.setup_bn_modules(bns, bn_name)
 
@@ -288,7 +349,9 @@ class NekoR45Binorm(nn.Module):
         exit(9)
 
     def Iwantshapes(self):
-        pseudo_input = torch.rand(1, self.input_shape[0], self.input_shape[1], self.input_shape[2])
+        pseudo_input = torch.rand(
+            1, self.input_shape[0], self.input_shape[1], self.input_shape[2]
+        )
         features, grio = self.model(pseudo_input)
         return [feat.size()[1:] for feat in features]
 
@@ -303,11 +366,11 @@ class NekoR45BinormOrig(nn.Module):
             self.bns[i].train()
 
     def setup_bn_modules(self, mdict, prefix, gprefix):
-        if (gprefix not in self.named_bn_dicts):
+        if gprefix not in self.named_bn_dicts:
             self.named_bn_dicts[gprefix] = []
 
         for k in mdict:
-            if (type(mdict[k]) is dict):
+            if type(mdict[k]) is dict:
                 self.setup_bn_modules(mdict[k], prefix + "_" + k, gprefix)
             else:
                 self.add_module(prefix + "_" + k, mdict[k])
@@ -324,22 +387,42 @@ class NekoR45BinormOrig(nn.Module):
 
     def setup_modules(self, mdict, prefix):
         for k in mdict:
-            if (type(mdict[k]) is dict):
+            if type(mdict[k]) is dict:
                 self.setup_modules(mdict[k], prefix + "_" + k)
             else:
                 self.add_module(prefix + "_" + k, mdict[k])
 
-    def __init__(self, strides, compress_layer, input_shape, bogo_names, bn_names, hardness=2, oupch=512, expf=1):
+    def __init__(
+        self,
+        strides,
+        compress_layer,
+        input_shape,
+        bogo_names,
+        bn_names,
+        hardness=2,
+        oupch=512,
+        expf=1,
+    ):
         super(NekoR45BinormOrig, self).__init__()
         self.bogo_modules = {}
-        layers = res45_wo_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
+        layers = res45_wo_bn(
+            input_shape,
+            oupch,
+            [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)],
+            frac=expf,
+        )
         self.setup_modules(layers, "shared_fe")
         self.bns = []
         self.named_bn_dicts = {}
         for i in range(len(bogo_names)):
             name = bogo_names[i]
             bn_name = bn_names[i]
-            bns = res45_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
+            bns = res45_bn(
+                input_shape,
+                oupch,
+                [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)],
+                frac=expf,
+            )
             self.bogo_modules[name] = Res45NetOrig(layers, bns)
             self.setup_bn_modules(bns, bn_name, bn_name)
 
@@ -354,11 +437,11 @@ class NekoR45BinormTpt(nn.Module):
             self.bns[i].train()
 
     def setup_bn_modules(self, mdict, prefix, gprefix):
-        if (gprefix not in self.named_bn_dicts):
+        if gprefix not in self.named_bn_dicts:
             self.named_bn_dicts[gprefix] = []
 
         for k in mdict:
-            if (type(mdict[k]) is dict):
+            if type(mdict[k]) is dict:
                 self.setup_bn_modules(mdict[k], prefix + "_" + k, gprefix)
             else:
                 self.add_module(prefix + "_" + k, mdict[k])
@@ -375,15 +458,30 @@ class NekoR45BinormTpt(nn.Module):
 
     def setup_modules(self, mdict, prefix):
         for k in mdict:
-            if (type(mdict[k]) is dict):
+            if type(mdict[k]) is dict:
                 self.setup_modules(mdict[k], prefix + "_" + k)
             else:
                 self.add_module(prefix + "_" + k, mdict[k])
 
-    def __init__(self, strides, compress_layer, input_shape, bogo_names, bn_names, hardness=2, oupch=512, expf=1):
+    def __init__(
+        self,
+        strides,
+        compress_layer,
+        input_shape,
+        bogo_names,
+        bn_names,
+        hardness=2,
+        oupch=512,
+        expf=1,
+    ):
         super(NekoR45BinormTpt, self).__init__()
         self.bogo_modules = {}
-        layers = res45_wo_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
+        layers = res45_wo_bn(
+            input_shape,
+            oupch,
+            [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)],
+            frac=expf,
+        )
         self.setup_modules(layers, "shared_fe")
         self.bns = []
         self.tpt = NekoLens(int(32 * expf), 1, 1, hardness)
@@ -391,7 +489,12 @@ class NekoR45BinormTpt(nn.Module):
         for i in range(len(bogo_names)):
             name = bogo_names[i]
             bn_name = bn_names[i]
-            bns = res45_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
+            bns = res45_bn(
+                input_shape,
+                oupch,
+                [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)],
+                frac=expf,
+            )
             self.bogo_modules[name] = Res45NetOrig(layers, bns)
             self.setup_bn_modules(bns, bn_name, bn_name)
 
@@ -400,7 +503,9 @@ class NekoR45BinormTpt(nn.Module):
         exit(9)
 
     def Iwantshapes(self):
-        pseudo_input = torch.rand(1, self.input_shape[0], self.input_shape[1], self.input_shape[2])
+        pseudo_input = torch.rand(
+            1, self.input_shape[0], self.input_shape[1], self.input_shape[2]
+        )
         features, grio = self.model(pseudo_input)
         return [feat.size()[1:] for feat in features]
 
@@ -415,11 +520,11 @@ class NekoR45BinormPtpt(nn.Module):
             self.bns[i].train()
 
     def setup_bn_modules(self, mdict, prefix, gprefix):
-        if (gprefix not in self.named_bn_dicts):
+        if gprefix not in self.named_bn_dicts:
             self.named_bn_dicts[gprefix] = []
 
         for k in mdict:
-            if (type(mdict[k]) is dict):
+            if type(mdict[k]) is dict:
                 self.setup_bn_modules(mdict[k], prefix + "_" + k, gprefix)
             else:
                 self.add_module(prefix + "_" + k, mdict[k])
@@ -436,15 +541,30 @@ class NekoR45BinormPtpt(nn.Module):
 
     def setup_modules(self, mdict, prefix):
         for k in mdict:
-            if (type(mdict[k]) is dict):
+            if type(mdict[k]) is dict:
                 self.setup_modules(mdict[k], prefix + "_" + k)
             else:
                 self.add_module(prefix + "_" + k, mdict[k])
 
-    def __init__(self, strides, compress_layer, input_shape, bogo_names, bn_names, hardness=2, oupch=512, expf=1):
+    def __init__(
+        self,
+        strides,
+        compress_layer,
+        input_shape,
+        bogo_names,
+        bn_names,
+        hardness=2,
+        oupch=512,
+        expf=1,
+    ):
         super(NekoR45BinormPtpt, self).__init__()
         self.bogo_modules = {}
-        layers = res45p_wo_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
+        layers = res45p_wo_bn(
+            input_shape,
+            oupch,
+            [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)],
+            frac=expf,
+        )
         self.setup_modules(layers, "shared_fe")
         self.bns = []
         self.tpt = NekoLens(int(32 * expf), 1, 1, hardness)
@@ -452,7 +572,12 @@ class NekoR45BinormPtpt(nn.Module):
         for i in range(len(bogo_names)):
             name = bogo_names[i]
             bn_name = bn_names[i]
-            bns = res45p_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], frac=expf)
+            bns = res45p_bn(
+                input_shape,
+                oupch,
+                [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)],
+                frac=expf,
+            )
             self.bogo_modules[name] = Res45NetOrig(layers, bns)
             self.setup_bn_modules(bns, bn_name, bn_name)
 
@@ -461,7 +586,9 @@ class NekoR45BinormPtpt(nn.Module):
         exit(9)
 
     def Iwantshapes(self):
-        pseudo_input = torch.rand(1, self.input_shape[0], self.input_shape[1], self.input_shape[2])
+        pseudo_input = torch.rand(
+            1, self.input_shape[0], self.input_shape[1], self.input_shape[2]
+        )
         features, grio = self.model(pseudo_input)
         return [feat.size()[1:] for feat in features]
 
@@ -469,22 +596,47 @@ class NekoR45BinormPtpt(nn.Module):
 class NekoR45BinormHeavyHead(nn.Module):
     def setup_modules(self, mdict, prefix):
         for k in mdict:
-            if (type(mdict[k]) is dict):
+            if type(mdict[k]) is dict:
                 self.setup_modules(mdict[k], prefix + "_" + k)
             else:
                 self.add_module(prefix + "_" + k, mdict[k])
 
-    def __init__(self, strides, compress_layer, input_shape, bogo_names, bn_names, hardness=2, oupch=512, expf=1):
+    def __init__(
+        self,
+        strides,
+        compress_layer,
+        input_shape,
+        bogo_names,
+        bn_names,
+        hardness=2,
+        oupch=512,
+        expf=1,
+    ):
         super(NekoR45BinormHeavyHead, self).__init__()
         self.bogo_modules = {}
-        ochs = [int(64 * expf), int(64 * expf), int(64 * expf), int(128 * expf), int(256 * expf), oupch]
+        ochs = [
+            int(64 * expf),
+            int(64 * expf),
+            int(64 * expf),
+            int(128 * expf),
+            int(256 * expf),
+            oupch,
+        ]
 
-        layers = res45_wo_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1, ochs=ochs)
+        layers = res45_wo_bn(
+            input_shape,
+            oupch,
+            [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)],
+            1,
+            ochs=ochs,
+        )
         self.setup_modules(layers, "shared_fe")
         for i in range(len(bogo_names)):
             name = bogo_names[i]
             bn_name = bn_names[i]
-            bns = res45_bn(input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1)
+            bns = res45_bn(
+                input_shape, oupch, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1
+            )
             self.bogo_modules[name] = Res45NetOrig(layers, bns)
             self.setup_modules(bns, bn_name)
 
@@ -493,12 +645,17 @@ class NekoR45BinormHeavyHead(nn.Module):
         exit(9)
 
     def Iwantshapes(self):
-        pseudo_input = torch.rand(1, self.input_shape[0], self.input_shape[1], self.input_shape[2])
+        pseudo_input = torch.rand(
+            1, self.input_shape[0], self.input_shape[1], self.input_shape[2]
+        )
         features, grio = self.model(pseudo_input)
         return [feat.size()[1:] for feat in features]
 
 
-if __name__ == '__main__':
+# 兼容旧模型
+neko_r45_binorm_orig = NekoR45BinormOrig
+res45_net_orig = Res45NetOrig
+if __name__ == "__main__":
     layers = res45_wo_bn(3, 512, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1)
     bns = res45_bn(3, 512, [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)], 1)
     a = Res45Net(layers, bns)

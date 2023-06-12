@@ -4,15 +4,17 @@ from neko_sdk.encoders.ocr_networks.dan.dan_resnet import conv1x1, conv3x3
 
 
 def make_init_layer_cco_wo_bn(inpch, outplanes, stride):
-    conv = nn.Conv2d(inpch, outplanes, kernel_size=3, stride=stride, padding=1,
-                     bias=False)
+    conv = nn.Conv2d(
+        inpch, outplanes, kernel_size=3, stride=stride, padding=1, bias=False
+    )
     relu = nn.ReLU(inplace=True)
     return {"conv": conv, "relu": relu}
 
 
 def make_init_layer_wo_bn(inpch, outplanes, stride):
-    conv = nn.Conv2d(inpch, outplanes, kernel_size=3, stride=stride, padding=1,
-                     bias=False)
+    conv = nn.Conv2d(
+        inpch, outplanes, kernel_size=3, stride=stride, padding=1, bias=False
+    )
     relu = nn.ReLU(inplace=True)
     return {"conv": conv, "relu": relu}
 
@@ -57,7 +59,7 @@ class BasicBlock_ass:
         self.conv2 = layer_dict["conv2"]
         self.bn2 = bn_dict["bn2"]
         self.downsample = False
-        if ("downsample" in layer_dict):
+        if "downsample" in layer_dict:
             self.sample_conv = layer_dict["downsample"]["conv"]
             self.sample_bn = bn_dict["downsample"]["bn"]
             self.downsample = True
@@ -85,8 +87,11 @@ def make_dowsample_layer_bn(expansion, planes):
 
 
 def make_dowsample_layer(inplanes, expansion, planes, stride=1):
-    return {"conv": nn.Conv2d(inplanes, planes * expansion,
-                              kernel_size=1, stride=stride, bias=False)}
+    return {
+        "conv": nn.Conv2d(
+            inplanes, planes * expansion, kernel_size=1, stride=stride, bias=False
+        )
+    }
 
 
 # we only decouple at layer level---- Or it can get seriously messy.
@@ -95,7 +100,9 @@ def make_body_layer_wo_bn(inplanes, blocks, planes, expansion, stride=1):
     ret_weight["blocks"] = {}
     ret_weight["blocks"]["0"] = make_block_wo_bn(inplanes, planes, stride)
     if stride != 1 or inplanes != planes * expansion:
-        ret_weight["blocks"]["0"]["downsample"] = make_dowsample_layer(inplanes, expansion, planes, stride)
+        ret_weight["blocks"]["0"]["downsample"] = make_dowsample_layer(
+            inplanes, expansion, planes, stride
+        )
     for i in range(1, blocks):
         ret_weight["blocks"][str(i)] = make_block_wo_bn(planes, planes)
     return ret_weight
@@ -106,7 +113,9 @@ def make_body_layer_bn(inplanes, blocks, planes, expansion, stride=1):
     ret_weight["blocks"] = {}
     ret_weight["blocks"]["0"] = make_block_bn(planes)
     if stride != 1 or inplanes != planes * expansion:
-        ret_weight["blocks"]["0"]["downsample"] = make_dowsample_layer_bn(expansion, planes)
+        ret_weight["blocks"]["0"]["downsample"] = make_dowsample_layer_bn(
+            expansion, planes
+        )
     for i in range(1, blocks):
         ret_weight["blocks"][str(i)] = make_block_bn(planes)
     return ret_weight
@@ -123,3 +132,7 @@ class DanReslayer:
         for l in self.blocks:
             x = l(x)
         return x
+
+
+dan_reslayer = DanReslayer
+init_layer = InitLayer

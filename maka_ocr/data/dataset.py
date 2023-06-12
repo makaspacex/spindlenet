@@ -57,12 +57,8 @@ class OCRLmdbDataset(Dataset):
         img_key = "image-%09d" % index
         try:
             imgbuf = txn.get(img_key.encode())
-            img = cv2.imdecode(np.array(bytearray(imgbuf), dtype='uint8'), cv2.IMREAD_COLOR)
-            
-            # buf = six.BytesIO()
-            # buf.write(imgbuf)
-            # buf.seek(0)
-            # img = Image.open(buf)
+            img = cv2.imdecode(np.frombuffer(imgbuf, np.uint8),  cv2.IMREAD_COLOR)
+            # img = cv2.imdecode(np.array(bytearray(imgbuf), dtype='uint8'), cv2.IMREAD_COLOR)
         except:
             print("Corrupted image for %d" % index)
             return self[index + 1]
@@ -71,7 +67,7 @@ class OCRLmdbDataset(Dataset):
         label = str(txn.get(label_key.encode()).decode("utf-8"))
 
         if len(label) > self.maxT - 1:
-            print("sample too long")
+            print(f"sample too long: {label}")
             return self[index + 1]
 
         if len(img.shape) == 2:
@@ -80,7 +76,8 @@ class OCRLmdbDataset(Dataset):
         data = {"image": img, "label": label}
         
         # 处理数据
-        data = self.data_process(data)
+        if self.data_process:
+            data = self.data_process(data)
         
         # 处理图像的transform
         if self.transform:

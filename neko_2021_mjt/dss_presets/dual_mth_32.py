@@ -43,27 +43,30 @@ def get_dataloadercfgs(train_name, train_cfg):
         },
     }
 
-def get_mth1000_train_dss(dsroot, maxT, bsize, hw=[320, 32]):
+def get_mth1000_train_dss(dsroot, maxT, bsize, hw=[320, 32], qhb_aug=False):
     te_meta_path, eval_ds = get_mth1000_eval_dss(dsroot, maxT)
     tr_meta_path = get_mth1000_train_meta(dsroot)
     train_name = "dan_mth1000"
     dsroots = [ds_paths.get_mth1000_train(dsroot)]
-    dataloader_cfgs = get_train_dataloader_cfgs(train_name=train_name, dsroots=dsroots, maxT=maxT, bsize=bsize, hw=hw, qhb_aug=False )
+    dataloader_cfgs = get_train_dataloader_cfgs(train_name=train_name, dsroots=dsroots, maxT=maxT, bsize=bsize, hw=hw, qhb_aug=qhb_aug )
     return tr_meta_path, dataloader_cfgs, eval_ds, te_meta_path
 
-def get_mth1200_train_dss(dsroot, maxT, bsize, hw=[320, 32], random_aug=False):
+def get_mth1200_train_dss(dsroot, maxT, bsize, hw=[320, 32], qhb_aug=False):
     te_meta_path, eval_ds = get_mth1200_eval_dss(dsroot, maxT)
     tr_meta_path = get_mth1200_train_meta(dsroot)
-    dataloader_cfgs = {
-        "loadertype": NekoJointLoader,
-        "subsets": {
-            "dan_mth1200": _get_base_train_cfg(dsroots=[ds_paths.get_mth1200_train(dsroot)], maxT = maxT, bsize=bsize, hw=hw, qhb_aug=random_aug)
-        },
-    }
+    # dataloader_cfgs = {
+    #     "loadertype": NekoJointLoader,
+    #     "subsets": {
+    #         "dan_mth1200": _get_base_train_cfg(dsroots=[ds_paths.get_mth1200_train(dsroot)], maxT = maxT, bsize=bsize, hw=hw, qhb_aug=random_aug)
+    #     },
+    # }
+    train_name = "dan_mth1200"
+    dsroots = [ds_paths.get_mth1200_train(dsroot)]
+    dataloader_cfgs = get_train_dataloader_cfgs(train_name=train_name, dsroots=dsroots, maxT=maxT, bsize=bsize, hw=hw, qhb_aug=qhb_aug )
     return tr_meta_path, dataloader_cfgs, eval_ds, te_meta_path
 
 
-def get_tkh_train_dss(dsroot, maxT, bsize, hw=[320, 32]):
+def get_tkh_train_dss(dsroot, maxT, bsize, hw=[320, 32], qhb_aug=False):
     te_meta_path, eval_ds = get_tkh_eval_dss(dsroot, maxT)
     tr_meta_path = get_tkh_train_meta(dsroot)
     train_name = "dan_tkh"
@@ -71,10 +74,10 @@ def get_tkh_train_dss(dsroot, maxT, bsize, hw=[320, 32]):
     dataloader_cfgs = get_train_dataloader_cfgs(train_name=train_name, dsroots=dsroots, maxT=maxT, bsize=bsize, hw=hw, qhb_aug=False )
     return tr_meta_path, dataloader_cfgs, eval_ds, te_meta_path
 
-def get_tkhmth2200_train_dss(dsroot, maxT, bsize, hw=[320, 32]):
+def get_tkhmth2200_train_dss(dsroot, maxT, bsize, hw=[320, 32], qhb_aug=False):
     te_meta_path, eval_ds = get_tkhmth2200_eval_dss(dsroot, maxT)
     tr_meta_path = get_tkhmth2200_train_meta(dsroot)
     train_name = "dan_tkhmth2200"
     dsroots = [ds_paths.get_tkhmth2200_train(dsroot)]
-    dataloader_cfgs = get_train_dataloader_cfgs(train_name=train_name, dsroots=dsroots, maxT=maxT, bsize=bsize, hw=hw, qhb_aug=False )
+    dataloader_cfgs = get_train_dataloader_cfgs(train_name=train_name, dsroots=dsroots, maxT=maxT, bsize=bsize, hw=hw, qhb_aug=qhb_aug )
     return tr_meta_path, dataloader_cfgs, eval_ds, te_meta_path

@@ -8,11 +8,7 @@ class SpatialAttention(nn.Module):
         super(SpatialAttention, self).__init__()
         self.core = torch.nn.Sequential(
             torch.nn.Conv2d(
-                ifc,
-                ifc,
-                (3, 3),
-                (1, 1),
-                (1, 1),
+                ifc, ifc, (3, 3), (1, 1), (1, 1),
             ),
             torch.nn.ReLU(),
             torch.nn.BatchNorm2d(ifc),
@@ -24,12 +20,12 @@ class SpatialAttention(nn.Module):
         x = input[-1]
         return self.core(x)
 
-
 class SpatialAttentionMk2(SpatialAttention):
+
     def forward(self, input):
         x = input[-2]
         d = input[-1]
-        if x.shape[-1] != d.shape[-1]:
+        if (x.shape[-1] != d.shape[-1]):
             x = trnf.interpolate(x, [d.shape[-2], d.shape[-1]])
         return self.core(x)
 
@@ -38,17 +34,18 @@ class SpatialAttentionMk3(SpatialAttention):
     def forward(self, input):
         x = input[0]
         d = input[-1]
-        if x.shape[-1] != d.shape[-1]:
+        if (x.shape[-1] != d.shape[-1]):
             x = trnf.interpolate(x, [d.shape[-2], d.shape[-1]], mode="area")
         return self.core(x)
 
 
 class SpatialAttentionMk4(SpatialAttention):
+
     def forward(self, input):
         x = input[0]
         d = input[-1]
         y = self.core(x)
-        if y.shape[-1] != d.shape[-1]:
+        if (y.shape[-1] != d.shape[-1]):
             y = trnf.interpolate(y, [d.shape[-2], d.shape[-1]], mode="bilinear")
         return y
 
@@ -58,11 +55,7 @@ class SpatialAttentionMk5(SpatialAttention):
         super(SpatialAttention, self).__init__()
         self.core = torch.nn.Sequential(
             torch.nn.Conv2d(
-                ifc,
-                ifc,
-                (3, 3),
-                (1, 1),
-                (1, 1),
+                ifc, ifc, (3, 3), (1, 1), (1, 1),
             ),
             torch.nn.ReLU(),
             torch.nn.BatchNorm2d(ifc),
@@ -74,9 +67,6 @@ class SpatialAttentionMk5(SpatialAttention):
         x = input[0]
         d = input[-1]
         y = self.core(x)
-        if y.shape[-1] != d.shape[-1]:
+        if (y.shape[-1] != d.shape[-1]):
             y = trnf.interpolate(y, [d.shape[-2], d.shape[-1]], mode="bilinear")
         return y
-
-
-spatial_attention_mk3 = SpatialAttentionMk3

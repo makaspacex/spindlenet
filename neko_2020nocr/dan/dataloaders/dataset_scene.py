@@ -11,6 +11,7 @@ from PIL import Image
 from torch.utils.data import Dataset
 
 from neko_sdk.ocr_modules.qhbaug import qhbwarp
+from neko_sdk.ocr_modules.qhbaug import qhbwarp_v
 
 
 class LmdbDataset(Dataset):
@@ -445,8 +446,9 @@ def resize_v_align(cur_ratio,target_ratio,img_height,img_width):
         cur_target_height = int(img_width/cur_ratio);
     return cur_target_height,cur_target_width;
  
+
 class ColoredLmdbDatasetV(LmdbDataset_XJ):
-    #TODO 针对横向和
+    # 针对竖向词条的处理
     def keepratio_resize(self, img):
         cur_ratio = img.size[0] / float(img.size[1])
 
@@ -458,7 +460,7 @@ class ColoredLmdbDatasetV(LmdbDataset_XJ):
             img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
         if (self.qhb_aug):
             try:
-                img = qhbwarp(img, 10)
+                img = qhbwarp_v(img, 10)
             except:
                 pass
         cur_target_height,cur_target_width=resize_v_align(

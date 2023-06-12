@@ -27,3 +27,5 @@ class NekoOpensetLinearClassifier(torch.nn.Module):
 class NekoOpensetLinearClassifierK(NekoOpensetLinearClassifier):
     def get_unk_scr(self, flat_emb):
         return self.UNK_SCR * flat_emb.norm(dim=-1, keepdim=True)
+
+neko_openset_linear_classifierK = NekoOpensetLinearClassifierK

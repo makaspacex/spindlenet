@@ -23,6 +23,9 @@ def make_init_layer_bn(outplanes):
     bn = nn.BatchNorm2d(outplanes)
     return {"bn": bn}
 
+def make_init_layer_ln(outplanes):
+    ln = nn.LayerNorm(outplanes)
+    return {"bn": ln}
 
 class InitLayer:
     def __init__(self, layer_dict, bn_dict):
@@ -48,6 +51,11 @@ def make_block_bn(outplanes):
         "bn2": nn.BatchNorm2d(outplanes),
     }
 
+def make_block_ln(outplanes):
+    return {
+        "bn1": nn.LayerNorm(outplanes),
+        "bn2": nn.LayerNorm(outplanes),
+    }
 
 # assembles from dicts.
 # Generally this module does onw the modules---which means we do not save or load via it
@@ -85,6 +93,9 @@ class BasicBlock_ass:
 def make_dowsample_layer_bn(expansion, planes):
     return {"bn": nn.BatchNorm2d(planes * expansion)}
 
+def make_dowsample_layer_norm(expansion, planes):
+    return {"bn": nn.LayerNorm(planes * expansion)}
+
 
 def make_dowsample_layer(inplanes, expansion, planes, stride=1):
     return {
@@ -118,6 +129,19 @@ def make_body_layer_bn(inplanes, blocks, planes, expansion, stride=1):
         )
     for i in range(1, blocks):
         ret_weight["blocks"][str(i)] = make_block_bn(planes)
+    return ret_weight
+
+
+def make_body_layer_norm(inplanes, blocks, planes, expansion, stride=1):
+    ret_weight = {}
+    ret_weight["blocks"] = {}
+    ret_weight["blocks"]["0"] = make_block_ln(planes)
+    if stride != 1 or inplanes != planes * expansion:
+        ret_weight["blocks"]["0"]["downsample"] = make_dowsample_layer_norm(
+            expansion, planes
+        )
+    for i in range(1, blocks):
+        ret_weight["blocks"][str(i)] = make_block_ln(planes)
     return ret_weight
 
 

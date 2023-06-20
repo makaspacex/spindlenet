@@ -6,8 +6,7 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         argv = [
             "Meeeeooooowwww",
-            find_export_root()
-            + "/runtime/OSTR_C2J_DTA_Only_MTH/tkhmth2200_v1/logs_E1_tkhmth2200_test/",
+             "runtime/OSTR_C2J_DTA_Only_MTH/tkhmth2200_v1/logs_E1_tkhmth2200_test/",
             "_E1",
             "/home/izhangxm/Desktop/work/main/VSDF/runtime/OSTR_C2J_DTA_Only_MTH/tkhmth2200_v1/jtrmodels/",
         ]

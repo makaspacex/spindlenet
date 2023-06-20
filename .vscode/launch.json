@@ -15,7 +15,7 @@
                 "PYTHONPATH":"${workspaceFolder}:$PYTHONPATH",
                 "CUDA_VISIBLE_DEVICES":"0"
             },
-            "justMyCode": true
+            "justMyCode": false
         },
         {
             "name": "train: OSTR_C2J_DTA_Only_MTH",

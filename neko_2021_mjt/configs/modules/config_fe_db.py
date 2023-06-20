@@ -41,6 +41,7 @@ def get_dan_r45_binorm_orig(arg_dict, path, optim_path=None):
     args["bogo_names"] = arg_dict["bogo_names"]
     args["bn_names"] = arg_dict["bn_names"]
     args["expf"] = arg_dict["expf"]
+    args['ch_overid_num'] = arg_dict['ch_overid_num']
     return get_default_model(NekoR45BinormOrig, args, path, arg_dict["with_optim"], optim_path)
 
 
@@ -78,7 +79,7 @@ def config_fe_r45_binorm_ptpt(ich, feat_ch, input_shape=None, cnt=2, expf=1):
         }
 
 
-def config_fe_r45_binorm_orig(ich, feat_ch, input_shape=None, cnt=2, expf=1):
+def config_fe_r45_binorm_orig(ich, feat_ch, input_shape=None, cnt=2, expf=1,ch_overid_num=None):
     bogo_names = []
     bn_names = []
     for i in range(cnt):
@@ -100,5 +101,6 @@ def config_fe_r45_binorm_orig(ich, feat_ch, input_shape=None, cnt=2, expf=1):
                     "with_optim": True,
                     "input_shape": input_shape,
                     "strides": None,
+                    "ch_overid_num": ch_overid_num
                 }
         }

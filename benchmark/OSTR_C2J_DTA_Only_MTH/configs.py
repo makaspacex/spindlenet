@@ -1,8 +1,10 @@
 from neko_2021_mjt.configs.loadouts.base_module_set import arm_base_routine2
 from neko_2021_mjt.configs.loadouts.base_module_set import arm_base_task_default2
 from neko_2021_mjt.configs.loadouts.mk7.lsctt_module_set_mk7 import arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7
+from neko_2021_mjt.configs.loadouts.mk7.lsctt_module_set_mk7 import arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7_wide_64
 from neko_2021_mjt.configs.routines.ocr_routines.mk7.osdanmk7_routine_cfg import osdanmk7_eval_routine_cfg
 from neko_2021_mjt.configs.routines.ocr_routines.mk7.osdanmk7_routine_cfg import osdanmk7dt_ocr_routine
+from neko_2021_mjt.configs.routines.ocr_routines.mk7.osdanmk7_routine_cfg import osdanmk7_ocr_routine
 from neko_2021_mjt.dss_presets.dual_mth_32 import *
 
 def model_mod_cfg(tr_meta_path, maxT):
@@ -33,8 +35,11 @@ def _get_base_dan_single_model_train_cfg(prefix, ds_prefix, train_dss, save_root
                                        log_path)
 
     routines = {}
-    routines = arm_base_routine2(routines, prefix, osdanmk7dt_ocr_routine, maxT, log_path,log_each, ds_prefix)
-    modules = arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7(prefix=prefix, maxT=maxT, capacity=capacity, feat_ch=feat_ch, tr_meta_path=tr_meta_path, srcdst=None, wemb=0)
+    routines = arm_base_routine2(routines, prefix, osdanmk7_ocr_routine, maxT, log_path,log_each, ds_prefix)
+    # modules = arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7(prefix=prefix, maxT=maxT, capacity=capacity, feat_ch=feat_ch, tr_meta_path=tr_meta_path, srcdst=None, wemb=0)
+    
+    modules = arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7_wide_64(prefix=prefix, maxT=maxT, capacity=capacity, feat_ch=feat_ch, tr_meta_path=tr_meta_path, srcdst=None, wemb=0)
+    
     
     return {
             "root": save_root,

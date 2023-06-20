@@ -445,7 +445,7 @@ def resize_v_align(cur_ratio,target_ratio,img_height,img_width):
         cur_target_width = img_width
         cur_target_height = int(img_width/cur_ratio);
     return cur_target_height,cur_target_width;
- 
+
 
 class ColoredLmdbDatasetV(LmdbDataset_XJ):
     # 针对竖向词条的处理

@@ -9,7 +9,7 @@ class Compose(DataProcess):
     def __init__(self, processes: list[DataProcess]) -> None:
         self.processes = processes
 
-    def __call__(self, data):
+    def __call__(self, data:dict):
         for process in self.processes:
             data = process(data)
         return data

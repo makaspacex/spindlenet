@@ -71,7 +71,7 @@ def get_tkh_train_dss(dsroot, maxT, bsize, hw=[320, 32], qhb_aug=False):
     tr_meta_path = get_tkh_train_meta(dsroot)
     train_name = "dan_tkh"
     dsroots = [ds_paths.get_tkh_train(dsroot)]
-    dataloader_cfgs = get_train_dataloader_cfgs(train_name=train_name, dsroots=dsroots, maxT=maxT, bsize=bsize, hw=hw, qhb_aug=False )
+    dataloader_cfgs = get_train_dataloader_cfgs(train_name=train_name, dsroots=dsroots, maxT=maxT, bsize=bsize, hw=hw, qhb_aug=qhb_aug )
     return tr_meta_path, dataloader_cfgs, eval_ds, te_meta_path
 
 def get_tkhmth2200_train_dss(dsroot, maxT, bsize, hw=[320, 32], qhb_aug=False):

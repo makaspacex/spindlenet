@@ -1,5 +1,5 @@
 from neko_2020nocr.dan.configs.pipelines_pami import get_bl_fe_args
-from neko_2021_mjt.modulars.dan.chunked_resnet.res45 import NekoR45Binorm, NekoR45BinormOrig, NekoR45BinormPtpt
+from neko_2021_mjt.modulars.dan.chunked_resnet.res45 import NekoR45Binorm, NekoR45BinormOrig, NekoR45BinormPtpt, NekoR45BinormLayerNorm
 from neko_2021_mjt.modulars.default_config import get_default_model
 
 
@@ -44,6 +44,13 @@ def get_dan_r45_binorm_orig(arg_dict, path, optim_path=None):
     args['ch_overid_num'] = arg_dict['ch_overid_num']
     return get_default_model(NekoR45BinormOrig, args, path, arg_dict["with_optim"], optim_path)
 
+def get_dan_r45_binorm_LayerNorm(arg_dict, path, optim_path=None):
+    args = get_bl_fe_args(arg_dict["ouch"], arg_dict["ich"])
+    args["bogo_names"] = arg_dict["bogo_names"]
+    args["bn_names"] = arg_dict["bn_names"]
+    args["expf"] = arg_dict["expf"]
+    args['ch_overid_num'] = arg_dict['ch_overid_num']
+    return get_default_model(NekoR45BinormLayerNorm, args, path, arg_dict["with_optim"], optim_path)
 
 def get_dan_r45_binorm_ptpt(arg_dict, path, optim_path=None):
     args = get_bl_fe_args(arg_dict["ouch"], arg_dict["ich"])

@@ -2,20 +2,72 @@
 import glob
 from util.distance_tool import MakaLevenshtein
 
-def main(eval_dir:str):
-    res_path_list = glob.glob(f"{eval_dir}/*.txt")
+class MakaEval:
+    def __init__(self) -> None:
+        pass
+        self.total_len = 0
+        self.total_ins_e ,self.total_del_e, self.total_sub_e = 0,0,0
+        self.total_dis =0
+
+        self.total_samples=0
+        self.acc_nums=0
+
+        self.ACC, self.AR, self.CR =0, 0,0
+
+    def continue_eval(self, preds, gts, show_res=False):
+        if not isinstance(preds,list):
+            preds = [preds]
+        if not isinstance(gts,list):
+            gts = [gts]
+        
+        for pred, gt in zip(preds, gts):
+            self.total_len += len(gt)
+            self.total_samples += 1
+            if pred == gt:
+                self.acc_nums += 1
+            
+            maka_leven = MakaLevenshtein(pred, gt)
+            dis = maka_leven.distance()
+            self.total_dis += dis
+            
+            ins_e ,del_e,sub_e = maka_leven.numbers()
+            self.total_ins_e += ins_e
+            self.total_del_e += del_e
+            self.total_sub_e += sub_e
+        
+        self.CR = (self.total_len - self.total_del_e - self.total_sub_e) / self.total_len
+        self.AR = (self.total_len - self.total_dis) / self.total_len
+        self.ACC = self.acc_nums/self.total_samples
+
+        self.res = {'CR':self.CR, "AR":self.AR, "ACC":self.ACC, "total_samples":self.total_samples}
+        
+        if show_res:
+            self.show()
+        
+        return self.res
+    
+    def __str__(self) -> str:
+        return f"{self.total_samples} CR:{self.CR:.04f} AR:{self.AR:.04f} ACC:{self.ACC:.04f}"
+    
+    def show(self):
+        print(self)
+
+def main(res_path_list:list):
     total_len = 0
     total_ins_e ,total_del_e, total_sub_e = 0,0,0
     total_dis =0
+    maka_eval = MakaEval()
     
     for ii, p in enumerate(res_path_list):
         with open(p, "r") as f:
             lines = f.read().splitlines()
-            
+        
         gt, pred = lines[0],lines[1]
+        maka_eval.continue_eval(pred,gt)
+        
         total_len += len(gt)
         
-        maka_leven = MakaLevenshtein(gt, pred)
+        maka_leven = MakaLevenshtein(pred, gt)
         dis = maka_leven.distance()
         total_dis += dis
         
@@ -27,13 +79,16 @@ def main(eval_dir:str):
         cr = (total_len - total_del_e - total_sub_e) / total_len
         ar = (total_len - total_dis) / total_len
         
-        print(f"{ii+1}/{len(res_path_list)} cr:{cr:.04f} ar:{ar:.04f}")
-    
+        # maka_eval.show()
+        # print(f"{maka_eval.total_len} {maka_eval.total_del_e} {maka_eval.total_sub_e} {maka_eval.total_dis} ")
+        print(f"{ii+1}/{len(res_path_list)} cr:{cr:.04f} ar:{ar:.04f} maka: {maka_eval}")
 
 if __name__ == "__main__":
     # eval_dir = "runtime/OSTR_C2J_DTA_Only_MTH/mth_1200_new/logs_E1_1/closeset_benchmarks/MTH1200"
-    eval_dir = "runtime/OSTR_C2J_DTA_Only_MTH/tkhmth2200_v1/logs_E1_tkhmth2200_test/closeset_benchmarks/TKHMTH2200"
-    main(eval_dir=eval_dir)
+    eval_dir = "runtime/OSTR_C2J_DTA_Only_MTH/tkhmth2200/logs_E1_tkhmth2200_test/closeset_benchmarks/TKHMTH2200"
+    res_path_list = glob.glob(f"{eval_dir}/*.txt")
+    # res_path_list = res_path_list[:20]
+    main(res_path_list)
     
     
     

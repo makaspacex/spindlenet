@@ -13,6 +13,7 @@ from neko_sdk.ocr_modules.charset.chs_cset import t1_3755
 from neko_sdk.ocr_modules.charset.etc_cset import latin62
 from neko_sdk.ocr_modules.img_eval import keepratio_resize
 from neko_sdk.ocr_modules.neko_prototyper_gen2.neko_label_sampler import NekoPrototypeSamplerStatic
+from util.eval_res import MakaEval
 
 
 class NekoAbstractEvalTasks(NekoModuleSet):
@@ -33,8 +34,8 @@ class NekoAbstractEvalTasks(NekoModuleSet):
             cfg = self.datasets["datasets"][dsname]
             train_data_set = cfg['type'](**cfg['ds_args'])
             cfg['dl_args']['num_workers'] = 0
-            train_loader = DataLoader(train_data_set, **cfg['dl_args'])
-            self.test_dataset(train_loader, dsname, self.miter, rot=rot, debug=vdbg)
+            data_loader = DataLoader(train_data_set, **cfg['dl_args'])
+            self.test_dataset(data_loader, dsname, self.miter, rot=rot, debug=vdbg)
             print(dsname, "ends")
 
     def visualize(self, rot=0, vdbg=None):
@@ -191,24 +192,29 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
         fwdstart = time.time()
         idi = 0
         sum_labels = 0
+        
+        maka_eval = MakaEval()
+        
         for ii, sample_batched in enumerate(test_loader):
             if idi > miter:
                 break
             idi += 1
-            texts, etc, beams = self.eval_routine.test(input_dict={**sample_batched, **global_cache
-                                                                   }, modular_dict=self.modulars, vdbg=debug,
-                                                       )
+            texts, etc, beams = self.eval_routine.test(input_dict={**sample_batched, **global_cache}, 
+                                                       modular_dict=self.modulars, vdbg=debug)
+            label = sample_batched.get("label", None)
+            if not label:
+                label = sample_batched["labels"]
+            
             if (self.export_path is not None):
                 export_path = os.path.join(self.export_path, dsname)
                 os.makedirs(export_path, exist_ok=True)
                 self.export(sample_batched["image"], sample_batched["label"], [texts, etc, beams], sum_labels, export_path,
                             mdict)
-            if ("label" in sample_batched):
-                sum_labels += len(sample_batched["label"])
-            else:
-                sum_labels += len(sample_batched["labels"])
+            sum_labels += len(label)
+            maka_eval.continue_eval(preds=texts, gts=label)
+            
             fwdend = time.time()
-            print(f"{ii+1}/{len(test_loader)} {(fwdend - fwdstart) / sum_labels} {sum_labels} FPS:{1 / ((fwdend - fwdstart) / sum_labels)}")
+            print(f"{ii+1}/{len(test_loader)} cost:{(fwdend - fwdstart) / sum_labels} total:{sum_labels} FPS:{1 / ((fwdend - fwdstart) / sum_labels)} {maka_eval}")
         
         fwdend = time.time()
         print((fwdend - fwdstart) / sum_labels, sum_labels, "FPS:", 1 / ((fwdend - fwdstart) / sum_labels))

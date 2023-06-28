@@ -15,7 +15,7 @@ def get_opt():
     parser.add_argument("--log_each", default=200)
     parser.add_argument("--bsize", type=int, default=32)
     parser.add_argument("--capacity", type=int, default=512)
-    parser.add_argument("--feat_ch", type=int, default=512)
+    parser.add_argument("--feat_ch", type=int, default=768)
     parser.add_argument("--force", action="store_true", default=False)
 
     opt = parser.parse_args()
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     save_name = opt.save_name
     if save_name is None:
         save_name = opt.dataset_name
-    qhb_aug = True
+    qhb_aug = False
     
     save_root = f"{save_base}/{save_name}/jtrmodels"
     log_path = f"{save_base}/{save_name}/logs/"

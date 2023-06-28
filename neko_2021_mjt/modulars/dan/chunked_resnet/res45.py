@@ -56,25 +56,25 @@ def res45_wo_bn(inpch, oupch, strides, frac=1, ochs=None):
     retlayers["5"] = make_body_layer_wo_bn(ochs[4], blkcnt[5], ochs[5], 1, strides[5])
     return retlayers
 
-def res45_wo_bn_wide_64(inpch, oupch, strides, frac=1, ochs=None):
-    retlayers = {}
-    blkcnt = [None, 3, 4, 6, 6, 3]
-    if ochs is None:
-        ochs = [
-            int(32 * frac),
-            int(64 * frac),
-            int(64 * frac),
-            int(128 * frac),
-            int(256 * frac),
-            oupch,
-        ]
-    retlayers["0"] = make_init_layer_wo_bn(inpch[0], ochs[0], strides[0])
-    retlayers["1"] = make_body_layer_wo_bn(ochs[0], blkcnt[1], ochs[1], 1, strides[1])
-    retlayers["2"] = make_body_layer_wo_bn(ochs[1], blkcnt[2], ochs[2], 1, strides[2])
-    retlayers["3"] = make_body_layer_wo_bn(ochs[2], blkcnt[3], ochs[3], 1, strides[3])
-    retlayers["4"] = make_body_layer_wo_bn(ochs[3], blkcnt[4], ochs[4], 1, strides[4])
-    retlayers["5"] = make_body_layer_wo_bn(ochs[4], blkcnt[5], ochs[5], 1, strides[5])
-    return retlayers
+# def res45_wo_bn_wide_64(inpch, oupch, strides, frac=1, ochs=None):
+#     retlayers = {}
+#     blkcnt = [None, 3, 4, 6, 6, 3]
+#     if ochs is None:
+#         ochs = [
+#             int(32 * frac),
+#             int(64 * frac),
+#             int(64 * frac),
+#             int(128 * frac),
+#             int(256 * frac),
+#             oupch,
+#         ]
+#     retlayers["0"] = make_init_layer_wo_bn(inpch[0], ochs[0], strides[0])
+#     retlayers["1"] = make_body_layer_wo_bn(ochs[0], blkcnt[1], ochs[1], 1, strides[1])
+#     retlayers["2"] = make_body_layer_wo_bn(ochs[1], blkcnt[2], ochs[2], 1, strides[2])
+#     retlayers["3"] = make_body_layer_wo_bn(ochs[2], blkcnt[3], ochs[3], 1, strides[3])
+#     retlayers["4"] = make_body_layer_wo_bn(ochs[3], blkcnt[4], ochs[4], 1, strides[4])
+#     retlayers["5"] = make_body_layer_wo_bn(ochs[4], blkcnt[5], ochs[5], 1, strides[5])
+#     return retlayers
 
 
 def res45_bn(inpch, oupch, strides, frac=1, ochs=None):

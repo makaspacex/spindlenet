@@ -125,7 +125,11 @@ class NekoModuleSet(object):
                 mod, opt, opts = cfg["modular"](cfg["args"], modp, modp)
                 self.modular_dict[name] = NekoModular(modp, name, mod, cfg["save_each"])
                 w_full_path = os.path.join(root, f"{prefix}{name}{itrkey}.pth")
-                self.modular_dict[name].load(w_full_path)
+                try:
+                    self.modular_dict[name].load(w_full_path)
+                except Exception as e:
+                    print(e)
+                    
                 if (opt is not None):
                     self.optimizers.append(opt)
                     self.optnames.append(name)
@@ -195,7 +199,10 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
     def val(self, nEpoch, batch_idx, vdbg=None):
         self.eval_mode()
         # torch.cuda.empty_cache()
+        from neko_2021_mjt.eval_tasks.dan_eval_tasks import NekoOdanEvalTasks
+        
         for vt in self.val_tasks:
+            vt:NekoOdanEvalTasks = vt
             print(nEpoch, batch_idx)
             torch.cuda.empty_cache()
             with torch.no_grad():
@@ -294,7 +301,6 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
 
     def train(self, dbgpath, vdbg=None, flag=None):
         torch.backends.cudnn.benchmark = True
-
         for modk in self.modular_dict:
             self.modular_dict[modk].cuda()
         for modk in self.modular_dict:
@@ -323,14 +329,11 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
                 self.tr_iter(nEpoch, batch_idx, sample_batched)
                 itr_time = time.time() - itr_start
 
-                # print(torch.backends.cudnn.benchmark)
-                # if (batch_idx % 100 == 9):
-                #     print("datatime", data_time, "itrtime", itr_time, "all", time.time() - data_start)
-                
                 print(f"Epoch:{nEpoch+1}/{self.vepoch} Iter:{batch_idx+1}/{self.vitr} datatime {data_time} itrtime{itr_time} all {time.time() - data_start}")
-                
             Updata_Parameters(self.optimizer_schedulers, frozen=[])
-            self.val(nEpoch, "Final")
+            # if nEpoch % 2 ==0:
+                # self.val(nEpoch, f"{nEpoch}")
+            self.val(nEpoch, f"{nEpoch}")
             # torch.backends.cudnn.benchmark = False
             for modk in self.modular_dict:
                 self.modular_dict[modk].save(nEpoch)

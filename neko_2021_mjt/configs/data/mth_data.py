@@ -112,7 +112,7 @@ def get_test_mth1200_dsrgb(maxT=25, dsroot=None, dict_dir=None, batchsize=128, h
 
 def get_test_tkh_dsrgb(maxT=25, dsroot=None, dict_dir=None, batchsize=128, hw=(128, 32)):
     ds_root = ds_paths.get_tkh_test_all(dsroot)
-    ds_name = "TKH1200"
+    ds_name = "TKH"
     res_dict = _get_base_test_cfg(maxT=maxT, dict_dir=dict_dir, batchsize=batchsize, hw=hw, ds_name=ds_name, ds_root=ds_root)
     return res_dict
 

@@ -12,8 +12,8 @@
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
             "env": {
-                "PYTHONPATH":"${workspaceFolder}:$PYTHONPATH",
-                "CUDA_VISIBLE_DEVICES":"0"
+                "PYTHONPATH":".:$PYTHONPATH",
+                "CUDA_VISIBLE_DEVICES":"1"
             },
             "justMyCode": false
         },
@@ -24,7 +24,7 @@
             "program": "${workspaceFolder}/benchmark/OSTR_C2J_DTA_Only_MTH/train.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
-            "args": ["--dataset_name", "mth1200", "--save_name", "debug_temp", "--bsize", "4", "--force"],
+            "args": ["--dataset_name", "tkhmth2200", "--save_name", "debug_temp", "--bsize", "4", "--force"],
             "env": {
                 "PYTHONPATH":"${workspaceFolder}:$PYTHONPATH",
                 "CUDA_VISIBLE_DEVICES":"1"

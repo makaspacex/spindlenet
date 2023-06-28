@@ -83,30 +83,17 @@ def launchtest(argv, modcfg_func, itr_override=None, miter=10000, rot=0, auf=Tru
 
     if (itr_override is not None):
         itk = itr_override;
-
-    modscc = modcfg_func(
-        root,
-        find_data_root(),
-        export_path,
-        itk,
-    )
-    if only_conf:
-        import yaml
-        name = root.split('/')[7]
-        new_name_dict = {
-            "DUAL_a_Odancukmk7hdtfnp_r45_C_trinorm_dsa3": "OSTR_C2J_DTAOnly",
-            "DUAL_a_Odancukmk7hnp_r45_C_trinorm_dsa3": "OSTR_C2J_BaseModel",
-            "DUAL_a_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "OSTR_C2J_Full",
-            "DUAL_a_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3": "OSTR_C2J_FullLarge",
-            "DUAL_b_Odancukmk8ahdtfnp_r45pttpt_C_trinorm_dsa3": "CSTR_FullLarge",
-            "DUAL_ch_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "ZSCR_CTW_Full",
-            "DUAL_chhw_Odancukmk8ahdtfnp_r45_C_trinorm_dsa3": "ZSCR_Handwritten_Full"
-        }
-        new_name = new_name_dict[name]
-        save_conf_path = f"{BASE_DIR}/exp/{new_name}.yaml"
-        print(f"dumpping file {save_conf_path}")
-        yaml.dump(modscc, open(save_conf_path, 'w+'))
-        return
+    if isinstance(modcfg_func, dict):
+        modscc = modcfg_func
+    else:
+        modscc = modcfg_func(
+            root,
+            find_data_root(),
+            export_path,
+            itk,
+        )
+    
+    
 
     trainer = NekoAbstractModularJointEval(modscc, miter )
     if not auf:

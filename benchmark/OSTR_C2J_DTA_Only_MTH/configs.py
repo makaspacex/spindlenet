@@ -7,12 +7,21 @@ from neko_2021_mjt.configs.routines.ocr_routines.mk7.osdanmk7_routine_cfg import
 from neko_2021_mjt.configs.routines.ocr_routines.mk7.osdanmk7_routine_cfg import osdanmk7_ocr_routine
 from neko_2021_mjt.dss_presets.dual_mth_32 import *
 
-def model_mod_cfg(tr_meta_path, maxT):
-    capacity = 256 * 2
-    feat_ch = 512
+def model_mod_cfg(tr_meta_path, maxT, feat_ch = 768):
+    capacity = 512
     mods = {}
     prefix="base_mth1200_"
-    mods = arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7(
+    # mods = arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7(
+    #     prefix=prefix,
+    #     maxT=maxT,
+    #     capacity=capacity,
+    #     feat_ch=feat_ch,
+    #     tr_meta_path=tr_meta_path,
+    #     srcdst=None,
+    #     wemb=0,
+    # )
+    
+    mods = arm_module_set_r45trinorm_orig_dsa3hGTAnp_mk7_wide_64(
         prefix=prefix,
         maxT=maxT,
         capacity=capacity,
@@ -24,13 +33,13 @@ def model_mod_cfg(tr_meta_path, maxT):
     return mods
 
 
-def _get_base_dan_single_model_train_cfg(prefix, ds_prefix, train_dss, save_root, log_path, log_each, maxT = 40, itrk="Top Nep", bsize=48, tvitr=200000, capacity = 512, feat_ch = 512 ):
+def _get_base_dan_single_model_train_cfg(prefix, ds_prefix, train_dss, save_root, log_path, log_each, maxT = 40, itrk="Top Nep", bsize=48, tvitr=200000, capacity = 512, feat_ch = 768 ):
     # tr_meta_path, dataloader_cfgs, eval_ds, te_meta_path = get_mth1200_train_dss(dsroot, maxT, bsize)
     tr_meta_path, dataloader_cfgs, eval_ds, te_meta_path = train_dss
     task_dict = {}
     task_dict = arm_base_task_default2(task_dict, prefix, osdanmk7_eval_routine_cfg, 
                                        maxT, 
-                                       tr_meta_path,
+                                       te_meta_path,
                                        eval_ds,
                                        log_path)
 

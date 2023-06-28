@@ -3,6 +3,7 @@ from neko_2021_mjt.configs.common_subs.arm_post_fe_shared_prototyper import arm_
 from neko_2021_mjt.configs.common_subs.arm_postfe import arm_rest_commonwop
 from neko_2021_mjt.configs.modules.config_cam_stop import config_cam_stop
 from neko_2021_mjt.configs.modules.config_fe_db import config_fe_r45_binorm_orig
+from neko_2021_mjt.configs.modules.config_fe_db import get_dan_r45_binorm_LayerNorm
 from neko_2021_mjt.configs.modules.config_sa import config_sa_mk3
 
 

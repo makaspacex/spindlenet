@@ -1,5 +1,6 @@
 import torch
 import torch.nn.parallel
+import collections
 
 
 class NekoAbstractRoutine(object):
@@ -33,6 +34,7 @@ class NekoAbstractRoutine(object):
 
     def grab_nested(self, moduleterm, modular_dict):
         if (type(moduleterm) is list):
+        # if isinstance(moduleterm, collections.Sequence):
             return [self.grab_nested(n, modular_dict) for n in moduleterm]
         else:
             return modular_dict[moduleterm]

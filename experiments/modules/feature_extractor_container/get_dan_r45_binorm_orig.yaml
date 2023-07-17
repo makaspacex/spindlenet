@@ -1,0 +1,28 @@
+args:
+  bn_names:
+  - bn1
+  - bn2
+  - bn3
+  bogo_names:
+  - res1
+  - res2
+  - res3
+  ch_overid_num:
+  - 32
+  - 64
+  - 64
+  - 128
+  - 256
+  - 512
+  expf: 1
+  ich: 3
+  input_shape: null
+  ouch: 512
+  strides: null
+  with_optim: true
+modular: !!python/name:neko_2021_mjt.configs.modules.config_fe_db.get_dan_r45_binorm_orig ''
+provides_bogo_modules:
+  - res1
+  - res2
+  - res3
+save_each: 20000

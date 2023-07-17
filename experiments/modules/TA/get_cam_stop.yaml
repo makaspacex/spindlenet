@@ -1,0 +1,17 @@
+args:
+  cam_ch: 64
+  maxT: 40
+  num_channels: 512
+  scales:
+  - - 64
+    - 16
+    - 64
+  - - 128
+    - 8
+    - 32
+  - - 512
+    - 8
+    - 32
+  with_optim: true
+modular: !!python/name:neko_2021_mjt.configs.modules.config_cam_stop.get_cam_stop ''
+save_each: 20000

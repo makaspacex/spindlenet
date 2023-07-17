@@ -1,0 +1,6 @@
+args:
+  reduction: true
+  wcls: 1
+  wemb: 0
+modular: !!python/name:neko_2021_mjt.configs.modules.config_cls_emb_loss.get_loss_cls_emb2 ''
+save_each: 0

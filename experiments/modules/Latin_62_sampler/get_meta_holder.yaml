@@ -1,0 +1,11 @@
+args:
+  meta_args:
+    case_sensitive: false
+    meta_path: "error"
+  sampler_args:
+    max_batch_size: 512
+    neg_servant: true
+    val_frac: 0.8
+  with_optim: false
+modular: !!python/name:neko_2021_mjt.configs.modules.config_ocr_sampler.get_meta_holder ''
+save_each: 0

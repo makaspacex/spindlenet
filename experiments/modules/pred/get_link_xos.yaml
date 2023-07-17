@@ -1,0 +1,4 @@
+args:
+  with_optim: true
+modular: !!python/name:neko_2021_mjt.configs.modules.config_ospred.get_link_xos ''
+save_each: 20000

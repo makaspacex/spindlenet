@@ -6,6 +6,10 @@ from configs import *
 import argparse
 import configs
 
+from neko_2021_mjt.configs.modules.config_dtd_xos_mk5 import get_dtdmk5_xos
+from neko_2021_mjt.bogo_modules.res45_binorm_bogomod import NekoRes45BinormBogo
+
+
 
 def get_opt():
     parser = argparse.ArgumentParser()

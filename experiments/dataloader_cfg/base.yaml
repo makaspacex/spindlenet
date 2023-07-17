@@ -1,0 +1,18 @@
+loadertype: !!python/name:dataloaders.neko_joint_loader.NekoJointLoader ''
+subsets:
+  *db_name:
+    dl_args:
+      batch_size: ${bsize}
+      num_workers: 8
+      shuffle: true
+    ds_args:
+      global_state: Train
+      img_height: 320
+      img_width: 32
+      maxT: 40
+      qhb_aug: false
+      roots: []
+      transform: !!python/object:torchvision.transforms.transforms.Compose
+        transforms:
+        - !!python/object:torchvision.transforms.transforms.ToTensor {}
+    type: !!python/name:neko_2020nocr.dan.dataloaders.dataset_scene.ColoredLmdbDatasetV ''

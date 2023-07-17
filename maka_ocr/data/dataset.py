@@ -13,7 +13,7 @@ from maka_ocr.data.processes.data_process import DataProcess
 
 class OCRLmdbDataset(Dataset):
     def __init__(
-        self, db_root: str, meta_path: str, transform: list = None, maxT = 40, data_process:DataProcess=None
+        self, db_root: str, meta_path: str, transform: list = None, maxT:int = 40, data_process:DataProcess=None
     ) -> None:
         super().__init__()
         self.db_root = db_root
@@ -23,7 +23,7 @@ class OCRLmdbDataset(Dataset):
         self.set_dss(db_root)
         self.data_process = data_process
         
-    def set_dss(self, db_root: list[DataProcess]):
+    def set_dss(self, db_root: str):
         env = lmdb.open(
             db_root,
             max_readers=1,
@@ -51,7 +51,7 @@ class OCRLmdbDataset(Dataset):
     def __len__(self):
         return len(self.index_num_list)
 
-    def __getitem__(self, item):
+    def __getitem__(self, item:int):
         index = self.index_num_list[item]
         txn = self.txn
         img_key = "image-%09d" % index

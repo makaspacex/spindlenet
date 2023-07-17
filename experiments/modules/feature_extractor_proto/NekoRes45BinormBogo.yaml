@@ -1,0 +1,4 @@
+args:
+  container: feature_extractor_container
+  name: res2
+bogo_mod: !!python/name:neko_2021_mjt.bogo_modules.res45_binorm_bogomod.NekoRes45BinormBogo ''

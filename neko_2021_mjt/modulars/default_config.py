@@ -3,7 +3,7 @@ from torch import optim
 
 def get_default_optim(params, lr=1.0):
     optimizer = optim.Adadelta(params, lr=lr)
-    optimizer_sched = optim.lr_scheduler.MultiStepLR(optimizer, [3, 5], 0.1)
+    optimizer_sched = optim.lr_scheduler.MultiStepLR(optimizer, [256, 384], 0.1)
     return optimizer, optimizer_sched
 
 

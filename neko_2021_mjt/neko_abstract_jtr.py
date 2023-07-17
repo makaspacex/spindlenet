@@ -299,14 +299,14 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
         for modk in self.modular_dict:
             self.modular_dict[modk].save_if_needed(nEpoch, batch_idx)
 
-    def train(self, dbgpath, vdbg=None, flag=None):
+    def train(self, dbgpath, vdbg=None, flag=None, s_e=0, val_epoch=8):
         torch.backends.cudnn.benchmark = True
         for modk in self.modular_dict:
             self.modular_dict[modk].cuda()
         for modk in self.modular_dict:
             self.modular_dict[modk].train()
         
-        for nEpoch in range(0, self.vepoch):
+        for nEpoch in range(s_e, self.vepoch):
             # for batch_idx, sample_batched in enumerate(self.joint_dataloader):
             for batch_idx in range(self.vitr):
                 # if (flag is None or flag == False):
@@ -331,9 +331,9 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
 
                 print(f"Epoch:{nEpoch+1}/{self.vepoch} Iter:{batch_idx+1}/{self.vitr} datatime {data_time} itrtime{itr_time} all {time.time() - data_start}")
             Updata_Parameters(self.optimizer_schedulers, frozen=[])
-            # if nEpoch % 2 ==0:
-                # self.val(nEpoch, f"{nEpoch}")
-            self.val(nEpoch, f"{nEpoch}")
+            if (nEpoch + 1) % val_epoch ==0:
+                self.val(nEpoch, f"{nEpoch}")
+            # self.val(nEpoch, f"{nEpoch}")
             # torch.backends.cudnn.benchmark = False
             for modk in self.modular_dict:
                 self.modular_dict[modk].save(nEpoch)

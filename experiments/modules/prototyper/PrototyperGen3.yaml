@@ -1,0 +1,8 @@
+args:
+  backbone: feature_extractor_proto
+  cam: GA
+  capacity: 512
+  drop: null
+  force_proto_shape: null
+  sp_proto: sp_proto
+bogo_mod: !!python/name:neko_2021_mjt.bogo_modules.prototype_gen3.PrototyperGen3 ''

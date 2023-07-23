@@ -25,11 +25,12 @@ val_epoch: 8
 capacity: 512
 feat: 512
 iterkey: latest
+vepoch: 128
+
 
 se: 0
 force: False
 val_each: 10000
-vepoch: 128
 vitr: 200000
 
 ch_overid_num:

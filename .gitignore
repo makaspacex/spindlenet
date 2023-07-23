@@ -27,7 +27,7 @@ var/
 .installed.cfg
 *.egg
 logs/
-runtime/*
+runtime
 ddata/
 recdatassd
 outputs/

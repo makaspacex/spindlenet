@@ -30,6 +30,22 @@
                 "CUDA_VISIBLE_DEVICES":"0"
             },
             "justMyCode": true
-        }
+        },
+        {
+            "name": "test",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/test.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "args": ["--config-name", "spindle_ori_test"],
+            "env": {
+                "PYTHONPATH":"${workspaceFolder}:$PYTHONPATH",
+                "CUDA_VISIBLE_DEVICES":"0"
+            },
+            "justMyCode": true
+        },
+
+
     ]
 }

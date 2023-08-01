@@ -13,7 +13,7 @@ if __name__ == "__main__":
     data_set_name = "mth1200"
     data_set_name = "tkh"
     data_set_name = "mth1000"
-    exp_name="tkhmth2200_wide64"
+    exp_name="aaa"
     
     model_root =  f"/home/izhangxm/mnt/hotssd/vsdf/runtime/OSTR_C2J_DTA_Only_MTH/{exp_name}/jtrmodels/"
     export_path = f"runtime/OSTR_C2J_DTA_Only_MTH/{exp_name}/logs_test_{iter_k}/"
@@ -31,5 +31,6 @@ if __name__ == "__main__":
     save_conf_path = os.path.join(export_path, f"{data_set_name}.yaml")
     print(f"dumpping file {save_conf_path}")
     yaml.dump(modscc, open(save_conf_path, 'w+'))
+    # exit(0)
     
     launchtest(sys.argv, modscc, only_conf=False)

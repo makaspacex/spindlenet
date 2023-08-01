@@ -64,11 +64,14 @@ class MakaLevenshtein:
         dp = self.matrix_ed
         i = len(dp) - 1
         j = len(dp[0]) - 1
+        word1, word2 = self.str_a, self.str_b
         
         ins_w, del_w, sub_w = 1,1,1
         if use_weights:
             ins_w, del_w, sub_w = self.weights
         ins_e ,del_e,sub_e  = 0,0,0
+        # 更改的字符数
+        ins_cs, del_cs, sub_cs = [],[],[]
         while i > 0 or j > 0:
             a = dp[i - 1][j - 1] if i > 0 and j > 0 else float("inf")
             b = dp[i - 1][j] if i > 0 else float("inf")
@@ -84,27 +87,24 @@ class MakaLevenshtein:
                 i -= 1
                 j -= 1
                 sub_e += sub_w
+                sub_cs.append((i, i + 1, word1[i], word2[j], "sub"))
             elif b == min([a, b, c]):
                 i = i - 1
                 del_e += del_w
+                del_cs.append((i, i + 1, word1[i], "", "del"))
             else:
                 j = j - 1
                 ins_e += ins_w
+                ins_cs.append((i + 1, i + 1, "", word2[j], "ins"))
         
-        return ins_e ,del_e,sub_e
+        return ins_e ,del_e,sub_e, ins_cs, del_cs, sub_cs
 
 
 if __name__ == "__main__":
-    import Levenshtein  as lvens
-    
     str1 = "wesds"
     str2 = "wesdddd"
-    # (insertion, deletion, substitution)
     weights = (1,2,2)
-    
     maka_leven = MakaLevenshtein(str1, str2, weights=weights )
-    
-    print(lvens.distance(str1, str2, weights=weights))
 
     print(maka_leven.distance())
     print(maka_leven.numbers())

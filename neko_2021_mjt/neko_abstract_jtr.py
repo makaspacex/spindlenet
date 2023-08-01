@@ -357,12 +357,12 @@ class NekoAbstractModularJointEval(NekoModuleSet):
             for k in cfgs["tasks"]:
                 cfgs["tasks"][k]["export_path"] = cfgs["export_path"]
 
-        self.set_val_tasks(cfgs["tasks"], miter)
+        self.set_val_tasks(cfgs["tasks"], miter, all_cfgs=cfgs)
 
-    def set_val_tasks(self, val_cfgs, miter):
+    def set_val_tasks(self, val_cfgs, miter, all_cfgs=None):
         self.val_tasks = []
         for vk in val_cfgs:
-            self.val_tasks.append(val_cfgs[vk]["type"](None, None, self.modular_dict, val_cfgs[vk], miter))
+            self.val_tasks.append(val_cfgs[vk]["type"](None, None, self.modular_dict, val_cfgs[vk], miter,all_cfgs=all_cfgs))
 
     def test_img(self, id, image_path, globalcache, h=32, w=100):
         return self.val_tasks[id].test_image(image_path, globalcache)

@@ -1,0 +1,32 @@
+close_set_benchmarks:
+  datasets:
+    case_sensitive: false
+    dict_dir: null
+    te_case_sensitive: false
+  protoname: prototyper
+  routine_cfgs:
+    inp_cvt_dicts:
+      image: image
+      label: label
+      plabel: plabel
+      proto: proto
+      tdict: tdict
+    log_path: ??
+    maxT: 40
+    measure_rej: false
+    mod_cvt_dicts:
+      CAM: TA
+      feature_extractor: feature_extractor_cco
+      losses:
+      - loss_cls_emb
+      preds:
+      - pred
+      prototyper: prototyper
+      sampler: Latin_62_sampler
+      seq: DTD
+    name: close_set_benchmark
+    routine: !!python/name:neko_2021_mjt.routines.ocr_routines.mk7.osdan_routine_mk7.NekoHDOS2cEvalRoutineCfmk7 ''
+  temeta:
+    case_sensitive: false
+    meta_path: ??
+  type: !!python/name:neko_2021_mjt.eval_tasks.dan_eval_tasks.NekoOdanEvalTasks ''

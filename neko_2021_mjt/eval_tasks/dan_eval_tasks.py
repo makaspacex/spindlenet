@@ -47,7 +47,7 @@ class NekoAbstractEvalTasks(NekoModuleSet):
             self.vis_ds(train_loader, dsname, self.miter, rot=rot, debug=vdbg)
             print(dsname, "ends")
 
-    def __init__(self, root, itrkey, modulars, cfgs, miter):
+    def __init__(self, root, itrkey, modulars, cfgs, miter, all_cfgs=None):
         self.setupthis(cfgs)
         self.eval_routine = cfgs["routine_cfgs"]["routine"](cfgs["routine_cfgs"])
         self.datasets = cfgs["datasets"]
@@ -55,7 +55,8 @@ class NekoAbstractEvalTasks(NekoModuleSet):
             self.export_path = cfgs["export_path"]
         except:
             self.export_path = None
-
+        self.all_cfgs = all_cfgs
+        
         self.miter = miter
         if (modulars is None):
             self.arm_modules(root, cfgs["modules"], itrkey)
@@ -194,10 +195,11 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
         sum_labels = 0
         
         maka_eval = MakaEval()
-        
         for ii, sample_batched in enumerate(test_loader):
-            if idi > miter:
-                break
+            # if idi > 2:
+            #     break
+            # if idi > miter:
+            #     break
             idi += 1
             texts, etc, beams = self.eval_routine.test(input_dict={**sample_batched, **global_cache}, 
                                                        modular_dict=self.modulars, vdbg=debug)
@@ -216,12 +218,31 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
             fwdend = time.time()
             print(f"{ii+1}/{len(test_loader)} cost:{(fwdend - fwdstart) / sum_labels} total:{sum_labels} FPS:{1 / ((fwdend - fwdstart) / sum_labels)} {maka_eval}")
         
+        cfgs  = self.all_cfgs
+        maka_eval_save_path = f"{cfgs['save_base']}/eval_res/{cfgs['save_name']}_{cfgs['db_name']}_{cfgs['iterkey']}.pt"
+        os.makedirs(os.path.dirname(maka_eval_save_path), exist_ok=True)
+        print(f"saveing: {maka_eval_save_path}")
+        torch.save(maka_eval, maka_eval_save_path)
+        
+        csv_file_path = f"{cfgs['save_base']}/eval_res_{cfgs['save_name']}_{cfgs['db_name']}.csv"
+        os.makedirs(os.path.dirname(csv_file_path), exist_ok=True)
+        if not os.path.exists(csv_file_path):
+            with open(csv_file_path, 'w') as f:
+                _head = 'exp_name,ch_overid_num,feat,capacity,iterkey,bsize,CR,AR,ACC,length_acc,total_ins_cs,total_del_cs,total_sub_cs,others'
+                f.write(f"{_head}\n")
+        
+        with open(csv_file_path, 'a') as f:
+            # exp_name	ch_overid_num	feat	capacity	epoch	batch size	performance	CR	AR	ACC
+            leven_details = f'"{len(maka_eval.total_ins_cs)}","{len(maka_eval.total_del_cs)}","{len(maka_eval.total_sub_cs)}"'
+            _content = f'"{cfgs["save_name"]}","{cfgs["ch_overid_num"]}","{cfgs["feat"]}","{cfgs["capacity"]}","{cfgs["iterkey"]}","32","{maka_eval.CR}","{maka_eval.AR}","{maka_eval.ACC}","{maka_eval.length_acc}",{leven_details},"{maka_eval}"'
+            f.write(f"{_content}\n")
+        
         fwdend = time.time()
         print((fwdend - fwdstart) / sum_labels, sum_labels, "FPS:", 1 / ((fwdend - fwdstart) / sum_labels))
         print((fwdend - tmetastart) / sum_labels, sum_labels)
 
         return self.eval_routine.ret_log()
-
+    
 
 class NekoOdanEvalTasksMk8(NekoOdanEvalTasks):
     # I think this changed....

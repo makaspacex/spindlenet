@@ -7,11 +7,14 @@ class MakaEval:
         pass
         self.total_len = 0
         self.total_ins_e ,self.total_del_e, self.total_sub_e = 0,0,0
+        self.total_ins_cs ,self.total_del_cs, self.total_sub_cs = [],[],[]
         self.total_dis =0
 
         self.total_samples=0
         self.acc_nums=0
 
+        self.length_right_n,self.length_acc = 0,0
+        
         self.ACC, self.AR, self.CR =0, 0,0
 
     def continue_eval(self, preds, gts, show_res=False):
@@ -23,6 +26,9 @@ class MakaEval:
         for pred, gt in zip(preds, gts):
             self.total_len += len(gt)
             self.total_samples += 1
+            if len(pred) == len(gt):
+                self.length_right_n += 1
+            
             if pred == gt:
                 self.acc_nums += 1
             
@@ -30,16 +36,28 @@ class MakaEval:
             dis = maka_leven.distance()
             self.total_dis += dis
             
-            ins_e ,del_e,sub_e = maka_leven.numbers()
+            ins_e ,del_e,sub_e, ins_cs, del_cs, sub_cs = maka_leven.numbers()
             self.total_ins_e += ins_e
             self.total_del_e += del_e
             self.total_sub_e += sub_e
+            
+            self.total_ins_cs += ins_cs
+            self.total_del_cs += del_cs
+            self.total_sub_cs += sub_cs
         
         self.CR = (self.total_len - self.total_del_e - self.total_sub_e) / self.total_len
         self.AR = (self.total_len - self.total_dis) / self.total_len
         self.ACC = self.acc_nums/self.total_samples
+        
+        self.length_acc = self.length_right_n / self.total_samples
 
-        self.res = {'CR':self.CR, "AR":self.AR, "ACC":self.ACC, "total_samples":self.total_samples}
+        self.res = {'CR':self.CR, "AR":self.AR, "ACC":self.ACC, 
+                    "total_samples":self.total_samples,
+                    "length_acc":self.length_acc,
+                    "total_ins_cs": len(self.total_ins_cs),
+                    "total_del_cs": len(self.total_del_cs),
+                    "total_sub_cs": len(self.total_sub_cs)
+                    }
         
         if show_res:
             self.show()
@@ -47,7 +65,7 @@ class MakaEval:
         return self.res
     
     def __str__(self) -> str:
-        return f"{self.total_samples} CR:{self.CR:.04f} AR:{self.AR:.04f} ACC:{self.ACC:.04f}"
+        return f"TS:{self.total_samples} CR:{self.CR:.04f} AR:{self.AR:.04f} ACC:{self.ACC:.04f} L_ACC:{self.length_acc} L_ins_N:{len(self.total_ins_cs)} L_del_N:{len(self.total_del_cs)} L_sub_N:{len(self.total_sub_cs)}"
     
     def show(self):
         print(self)

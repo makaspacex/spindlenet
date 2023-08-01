@@ -1,0 +1,105 @@
+defaults:
+  - modules/DTD/get_dtdmk5_xos
+  - modules/GA/get_sa_mk3
+  - modules/Latin_62_sampler/get_meta_holder
+  - modules/TA/get_cam_stop
+  - modules/feature_extractor_cco/NekoRes45BinormBogo
+  - modules/feature_extractor_container/get_dan_r45_binorm_orig
+  - modules/feature_extractor_proto/NekoRes45BinormBogo
+  - modules/loss_cls_emb/get_loss_cls_emb2
+  - modules/pred/get_link_xos
+  - modules/prototyper/PrototyperGen3
+  - tasks: test_base
+  - _self_
+
+# ===========================================================================================
+# 参数设定
+save_base: /home/izhangxm/Desktop/work/main/VSDF/runtime/OSTR_C2J_DTA_Only_MTH
+db_name: &db_name TKHMTH2200
+db_root: /home/izhangxm/Desktop/work/main/VSDF/recdatassd
+bsize: 32
+save_name: ${db_name}_spindle_v3
+capacity: 512
+feat: 512
+iterkey: latest
+
+ch_overid_num:
+  - &on0 32
+  - &on1 128
+  - &on2 256
+  - &on3 512
+  - &on4 256
+  - ${feat}
+
+# ===========================================================================================
+# 组合参数
+out_base: ${save_base}/${save_name}
+root: ${out_base}/jtrmodels/
+log_path: ${out_base}/logs_test_${iterkey}/
+
+# ===========================================================================================
+hydra:
+  run:
+    dir: ${out_base}/logs_test_${iterkey}
+
+export_path: ${out_base}/logs_test_${iterkey}/closeset_benchmarks
+
+# 开始覆盖
+modules:
+  GA:
+    args:
+      num_channels: *on1
+  TA:
+    args:
+      num_channels: ${feat}
+      scales:
+          - - *on1
+            - 16
+            - 64
+          - - *on3
+            - 8
+            - 32
+          - - ${feat}
+            - 8
+            - 32
+  Latin_62_sampler:
+    args:
+      meta_args:
+        meta_path: ${db_root}/${db_name}_train/dict_train.pt
+  prototyper:
+    args:
+      capacity: ${capacity}
+  feature_extractor_container:
+    args:
+      ch_overid_num: ${ch_overid_num}
+      ouch: ${feat}
+tasks:
+  close_set_benchmarks:
+    datasets:
+      case_sensitive: false
+      datasets:
+        *db_name:
+          dl_args:
+            batch_size: ${bsize}
+            num_workers: 8
+            shuffle: false
+          ds_args:
+            global_state: Test
+            img_height: 320
+            img_width: 32
+            maxT: 40
+            roots:
+            - ${db_root}/${db_name}_test_all
+            transform: !!python/object:torchvision.transforms.transforms.Compose
+              transforms:
+              - !!python/object:torchvision.transforms.transforms.ToTensor {}
+          type: !!python/name:neko_2020nocr.dan.dataloaders.dataset_scene.ColoredLmdbDatasetTV ''
+      dict_dir: null
+      te_case_sensitive: false
+    protoname: prototyper
+    routine_cfgs:
+      log_path: ${log_path}
+    temeta:
+      case_sensitive: false
+      meta_path: ${db_root}/${db_name}_test_all/dict_test_all.pt
+    type: !!python/name:neko_2021_mjt.eval_tasks.dan_eval_tasks.NekoOdanEvalTasks ''

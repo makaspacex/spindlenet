@@ -8,6 +8,7 @@ from neko_2021_mjt.neko_abstract_jtr import NekoAbstractModularJointEval
 from data_root import find_data_root
 from data_root import find_export_root
 from data_root import BASE_DIR
+from omegaconf import DictConfig, OmegaConf
 
 def testready(argv, modcfg, temeta, itr_override=None, miter=10000, rot=0, auf=True, maxT_overrider=None):
     from neko_2021_mjt.neko_abstract_jtr import NekoAbstractModularJointEval
@@ -83,7 +84,7 @@ def launchtest(argv, modcfg_func, itr_override=None, miter=10000, rot=0, auf=Tru
 
     if (itr_override is not None):
         itk = itr_override;
-    if isinstance(modcfg_func, dict):
+    if isinstance(modcfg_func, (dict, DictConfig )):
         modscc = modcfg_func
     else:
         modscc = modcfg_func(

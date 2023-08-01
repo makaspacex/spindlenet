@@ -1,0 +1,29 @@
+defaults:
+  # - modules/DTD/get_dtdmk5_xos
+  # - modules/GA/get_sa_mk3
+  # - modules/Latin_62_sampler/get_meta_holder
+  # - modules/TA/get_cam_stop
+  # - modules/feature_extractor_cco/NekoRes45BinormBogo
+  # - modules/feature_extractor_container/get_dan_r45_binorm_orig
+  # - modules/feature_extractor_proto/NekoRes45BinormBogo
+  # - modules/loss_cls_emb/get_loss_cls_emb2
+  # - modules/pred/get_link_xos
+  # - modules/prototyper/PrototyperGen3
+  - routine_cfgs: NekoHDOS2cRoutineCfmk7
+  - dataloader_cfg: base
+  - tasks: base
+  - _self_
+
+# ===========================================================================================
+# 参数设定
+save_base: /home/izhangxm/mnt/hotssd/vsdf/runtime/OSTR_C2J_DTA_Only_MTH
+db_name: &db_name TKHMTH2200
+db_root: /home/izhangxm/mnt/hotssd/recdatassd
+bsize: 32
+save_name: ${db_name}_wide64_wo_qhb_feat512
+
+
+
+
+
+

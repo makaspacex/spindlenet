@@ -9,6 +9,8 @@ from neko_2021_mjt.modulars.dan.chunked_resnet.neko_block_fe import (
     make_body_layer_wo_bn,
     make_body_layer_bn,
     make_body_layer_norm,
+    make_body_wobn_by_identity,
+    make_init_layer_Identity,
     DanReslayer,
 )
 from neko_sdk.AOF.neko_lens import NekoLens
@@ -118,6 +120,25 @@ def res45_ln(inpch, oupch, strides, frac=1, ochs=None):
     retlayers["5"] = make_body_layer_norm(ochs[4], blkcnt[5], ochs[5], 1, strides[5])
     return retlayers
 
+def res45_wobn_by_identity(inpch, oupch, strides, frac=1, ochs=None):
+    blkcnt = [None, 3, 4, 6, 6, 3]
+    if ochs is None:
+        ochs = [
+            int(32 * frac),
+            int(32 * frac),
+            int(64 * frac),
+            int(128 * frac),
+            int(256 * frac),
+            oupch,
+        ]
+    retlayers = {}
+    retlayers["0"] = make_init_layer_Identity(ochs[0])
+    retlayers["1"] = make_body_wobn_by_identity(ochs[0], blkcnt[1], ochs[1], 1, strides[1])
+    retlayers["2"] = make_body_wobn_by_identity(ochs[1], blkcnt[2], ochs[2], 1, strides[2])
+    retlayers["3"] = make_body_wobn_by_identity(ochs[2], blkcnt[3], ochs[3], 1, strides[3])
+    retlayers["4"] = make_body_wobn_by_identity(ochs[3], blkcnt[4], ochs[4], 1, strides[4])
+    retlayers["5"] = make_body_wobn_by_identity(ochs[4], blkcnt[5], ochs[5], 1, strides[5])
+    return retlayers
 
 # OSOCR config. Seems they have much better perf due to the heavier layout
 # The called the method ``pami'' www
@@ -521,7 +542,7 @@ class NekoR45BinormLayerNorm(nn.Module):
         expf=1,
         ch_overid_num=None
     ):
-        super(NekoR45BinormOrig, self).__init__()
+        super(NekoR45BinormLayerNorm, self).__init__()
         self.bogo_modules = {}
         layers = res45_wo_bn(
             input_shape,
@@ -537,6 +558,80 @@ class NekoR45BinormLayerNorm(nn.Module):
             name = bogo_names[i]
             bn_name = bn_names[i]
             bns = res45_ln(
+                input_shape,
+                oupch,
+                [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)],
+                frac=expf,
+                ochs= ch_overid_num
+            )
+            self.bogo_modules[name] = Res45NetOrig(layers, bns)
+            self.setup_bn_modules(bns, bn_name, bn_name)
+
+
+class NekoR45BinormIdentity(nn.Module):
+    def freezebnprefix(self, prefix):
+        for i in self.named_bn_dicts[prefix]:
+            self.bns[i].eval()
+
+    def unfreezebnprefix(self, prefix):
+        for i in self.named_bn_dicts[prefix]:
+            self.bns[i].train()
+
+    def setup_bn_modules(self, mdict, prefix, gprefix):
+        if gprefix not in self.named_bn_dicts:
+            self.named_bn_dicts[gprefix] = []
+
+        for k in mdict:
+            if type(mdict[k]) is dict:
+                self.setup_bn_modules(mdict[k], prefix + "_" + k, gprefix)
+            else:
+                self.add_module(prefix + "_" + k, mdict[k])
+                self.named_bn_dicts[gprefix].append(len(self.bns))
+                self.bns.append(mdict[k])
+
+    def freezebn(self):
+        for i in self.bns:
+            i.eval()
+
+    def unfreezebn(self):
+        for i in self.bns:
+            i.train()
+
+    def setup_modules(self, mdict, prefix):
+        for k in mdict:
+            if type(mdict[k]) is dict:
+                self.setup_modules(mdict[k], prefix + "_" + k)
+            else:
+                self.add_module(prefix + "_" + k, mdict[k])
+
+    def __init__(
+        self,
+        strides,
+        compress_layer,
+        input_shape,
+        bogo_names,
+        bn_names,
+        hardness=2,
+        oupch=512,
+        expf=1,
+        ch_overid_num=None
+    ):
+        super(NekoR45BinormIdentity, self).__init__()
+        self.bogo_modules = {}
+        layers = res45_wo_bn(
+            input_shape,
+            oupch,
+            [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)],
+            frac=expf,
+            ochs=ch_overid_num
+        )
+        self.setup_modules(layers, "shared_fe")
+        self.bns = []
+        self.named_bn_dicts = {}
+        for i in range(len(bogo_names)):
+            name = bogo_names[i]
+            bn_name = bn_names[i]
+            bns = res45_wobn_by_identity(
                 input_shape,
                 oupch,
                 [(1, 1), (2, 2), (1, 1), (2, 2), (1, 1), (1, 1)],

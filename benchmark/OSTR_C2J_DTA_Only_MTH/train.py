@@ -9,7 +9,7 @@ import configs
 
 def get_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--save_base", default="/home/izhangxm/mnt/hotssd/vsdf/runtime/OSTR_C2J_DTA_Only_MTH")
+    parser.add_argument("--save_base", default="runtime/OSTR_C2J_DTA_Only_MTH")
     parser.add_argument("--dataset_name", default="tkhmth2200")
     parser.add_argument("--save_name", default=None)
     parser.add_argument("--log_each", default=200)
@@ -38,8 +38,8 @@ if __name__ == '__main__':
         save_name = opt.dataset_name
     qhb_aug = False
     
-    save_root = f"{save_base}/{save_name}/jtrmodels"
-    log_path = f"{save_base}/{save_name}/logs/"
+    save_root = f"{save_base}/{save_name}/jtrmodels2"
+    log_path = f"{save_base}/{save_name}/logs2/"
     
     if os.path.exists(save_root) and opt.force == False:
         raise Exception(f"{save_root} is existed.")
@@ -60,5 +60,5 @@ if __name__ == '__main__':
     yaml.dump(cfgs, open(save_conf_path, 'w+'))
     
     
-    trainer = NekoModularJointTrainingSemipara(cfgs=cfgs)
-    trainer.train(None, s_e=opt.se)
+    # trainer = NekoModularJointTrainingSemipara(cfgs=cfgs)
+    # trainer.train(None, s_e=opt.se)

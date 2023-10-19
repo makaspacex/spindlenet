@@ -19,14 +19,13 @@ save_base: /home/izhangxm/Desktop/work/main/VSDF/runtime/OSTR_C2J_DTA_Only_MTH
 db_name: &db_name TKHMTH2200
 db_root: /home/izhangxm/Desktop/work/main/VSDF/recdatassd
 bsize: 32
-save_name: ${db_name}_spindle_v3
+save_name: ${db_name}_spindle_v5
 log_each: 200
 val_epoch: 8
 capacity: 512
-feat: 512
+feat: 256
 iterkey: latest
-vepoch: 48
-
+vepoch: 64
 
 se: 0
 force: False

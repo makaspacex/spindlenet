@@ -9,8 +9,7 @@ defaults:
   - modules/loss_cls_emb/get_loss_cls_emb2
   - modules/pred/get_link_xos
   - modules/prototyper/PrototyperGen3
-  - routine_cfgs: NekoHDOS2cRoutineCfmk7
-  - tasks: base
+  - tasks: test_base
   - _self_
 
 # ===========================================================================================
@@ -18,39 +17,33 @@ defaults:
 save_base: /home/izhangxm/Desktop/work/main/VSDF/runtime/OSTR_C2J_DTA_Only_MTH
 db_name: &db_name TKHMTH2200
 db_root: /home/izhangxm/Desktop/work/main/VSDF/recdatassd
-bsize: 32
-save_name: ${db_name}_spindle_v3
-log_each: 200
-val_epoch: 8
+bsize: 256
+save_name: ${db_name}_spindle_v8
 capacity: 512
-feat: 512
+feat: 256
 iterkey: latest
-vepoch: 48
-
-
-se: 0
-force: False
-val_each: 10000
-vitr: 200000
+val_epoch: 2
 
 ch_overid_num:
   - &on0 32
-  - &on1 128
-  - &on2 256
-  - &on3 512
+  - &on1 64
+  - &on2 64
+  - &on3 128
   - &on4 256
   - ${feat}
 
 # ===========================================================================================
 # 组合参数
 out_base: ${save_base}/${save_name}
-root: ${out_base}/jtrmodels
-log_path: ${out_base}/logs/
+root: ${out_base}/jtrmodels/
+log_path: ${out_base}/logs_test_${iterkey}/
 
 # ===========================================================================================
 hydra:
   run:
-    dir: ${out_base}
+    dir: ${out_base}/logs_test_${iterkey}
+
+export_path: ${out_base}/logs_test_${iterkey}/closeset_benchmarks
 
 # 开始覆盖
 modules:
@@ -81,26 +74,15 @@ modules:
     args:
       ch_overid_num: ${ch_overid_num}
       ouch: ${feat}
-  
-
-routine_cfgs:
-  mjst:
-    inp_cvt_dicts:
-      image: ${db_name}_image
-      label: ${db_name}_label
-    log_path: ${log_path}
-    maxT: 40
-    routine: !!python/name:neko_2021_mjt.routines.ocr_routines.mk7.osdan_routine_mk7.NekoHDOS2cRoutineCfmk7 ''
-    stream: base_${db_name}_
-
 tasks:
   close_set_benchmarks:
     datasets:
+      case_sensitive: false
       datasets:
         *db_name:
           dl_args:
             batch_size: ${bsize}
-            num_workers: 8
+            num_workers: 32
             shuffle: false
           ds_args:
             global_state: Test
@@ -113,31 +95,12 @@ tasks:
               transforms:
               - !!python/object:torchvision.transforms.transforms.ToTensor {}
           type: !!python/name:neko_2020nocr.dan.dataloaders.dataset_scene.ColoredLmdbDatasetTV ''
+      dict_dir: null
+      te_case_sensitive: false
+    protoname: prototyper
     routine_cfgs:
       log_path: ${log_path}
     temeta:
+      case_sensitive: false
       meta_path: ${db_root}/${db_name}_test_all/dict_test_all.pt
-
-dataloader_cfg:
-  loadertype: !!python/name:dataloaders.neko_joint_loader.NekoJointLoader ''
-  subsets:
-    *db_name:
-      dl_args:
-        batch_size: ${bsize}
-        num_workers: 8
-        shuffle: true
-      ds_args:
-        global_state: Train
-        img_height: 320
-        img_width: 32
-        maxT: 40
-        qhb_aug: false
-        roots:
-        - ${db_root}/${db_name}_train
-        transform: !!python/object:torchvision.transforms.transforms.Compose
-          transforms:
-          - !!python/object:torchvision.transforms.transforms.ToTensor {}
-      type: !!python/name:neko_2020nocr.dan.dataloaders.dataset_scene.ColoredLmdbDatasetV ''
-
-
-
+    type: !!python/name:neko_2021_mjt.eval_tasks.dan_eval_tasks.NekoOdanEvalTasks ''

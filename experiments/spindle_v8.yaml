@@ -18,20 +18,24 @@ defaults:
 save_base: /home/izhangxm/Desktop/work/main/VSDF/runtime/OSTR_C2J_DTA_Only_MTH
 db_name: &db_name TKHMTH2200
 db_root: /home/izhangxm/Desktop/work/main/VSDF/recdatassd
-bsize: 32
-save_name: ${db_name}_spindle_v3
+bsize: 64
+save_name: ${db_name}_spindle_v8
 log_each: 200
 val_epoch: 8
 capacity: 512
-feat: 512
+feat: 256
 iterkey: latest
-vepoch: 48
-
+vepoch: 128
 
 se: 0
 force: False
 val_each: 10000
 vitr: 200000
+
+
+img_height: 320
+img_width: 32
+
 
 ch_overid_num:
   - &on0 32
@@ -104,8 +108,8 @@ tasks:
             shuffle: false
           ds_args:
             global_state: Test
-            img_height: 320
-            img_width: 32
+            img_height: ${img_height}
+            img_width: ${img_width}
             maxT: 40
             roots:
             - ${db_root}/${db_name}_test_all
@@ -128,8 +132,8 @@ dataloader_cfg:
         shuffle: true
       ds_args:
         global_state: Train
-        img_height: 320
-        img_width: 32
+        img_height: ${img_height}
+        img_width: ${img_width}
         maxT: 40
         qhb_aug: false
         roots:

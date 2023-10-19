@@ -20,7 +20,7 @@ class NekoAbstractEvalTasks(NekoModuleSet):
     def setupthis(self, cfgs):
         pass
 
-    def test_dataset(self, test_loader, dsname, miter=1000, debug=False, dbgpath=None, rot=0):
+    def test_dataset(self, test_loader, dsname, miter=1000, debug=False, dbgpath=None, rot=0, nEpoch=-1):
         print("wrong path")
         pass
 
@@ -28,14 +28,14 @@ class NekoAbstractEvalTasks(NekoModuleSet):
         print("wrong path")
         pass
 
-    def test(self, rot=0, vdbg=None):
+    def test(self, rot=0, vdbg=None, nEpoch=-1):
         for dsname in self.datasets["datasets"]:
             print(dsname, "starts")
             cfg = self.datasets["datasets"][dsname]
             train_data_set = cfg['type'](**cfg['ds_args'])
-            cfg['dl_args']['num_workers'] = 0
+            # cfg['dl_args']['num_workers'] = 0
             data_loader = DataLoader(train_data_set, **cfg['dl_args'])
-            self.test_dataset(data_loader, dsname, self.miter, rot=rot, debug=vdbg)
+            self.test_dataset(data_loader, dsname, self.miter, rot=rot, debug=vdbg,nEpoch=nEpoch)
             print(dsname, "ends")
 
     def visualize(self, rot=0, vdbg=None):
@@ -178,7 +178,7 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
         mdict = torch.load(self.temeta_args["meta_path"])
         return global_cache, mdict
 
-    def test_dataset(self, test_loader, dsname, miter=1000, debug=None, dbgpath=None, rot=0):
+    def test_dataset(self, test_loader, dsname, miter=1000, debug=None, dbgpath=None, rot=0, nEpoch=-1):
 
         tmetastart = time.time()
         global_cache, mdict = self.test_ready()
@@ -187,6 +187,12 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
         if (global_cache is None):
             global_cache = {}
 
+        cfgs  = self.all_cfgs
+        iterkey = cfgs['iterkey']
+        if nEpoch != -1:
+            iterkey = nEpoch
+        
+        
         tmetaend = time.time()
         self.eval_routine.clear_loggers()
 
@@ -195,14 +201,23 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
         sum_labels = 0
         
         maka_eval = MakaEval()
+        statis = []
+        
+        statis_res_save_dir = f"{cfgs['save_base']}/statis_res/{cfgs['save_name']}_{cfgs['db_name']}_{iterkey}"
+        os.makedirs(statis_res_save_dir, exist_ok=True)
+
+        
         for ii, sample_batched in enumerate(test_loader):
             # if idi > 2:
             #     break
             # if idi > miter:
             #     break
             idi += 1
-            texts, etc, beams = self.eval_routine.test(input_dict={**sample_batched, **global_cache}, 
-                                                       modular_dict=self.modulars, vdbg=debug)
+            
+            result = self.eval_routine.test(input_dict={**sample_batched, **global_cache}, modular_dict=self.modulars, vdbg=debug)
+            texts, etc, beams, _statis = result
+            statis.append(_statis)
+            
             label = sample_batched.get("label", None)
             if not label:
                 label = sample_batched["labels"]
@@ -212,17 +227,27 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
                 os.makedirs(export_path, exist_ok=True)
                 self.export(sample_batched["image"], sample_batched["label"], [texts, etc, beams], sum_labels, export_path,
                             mdict)
+            
             sum_labels += len(label)
             maka_eval.continue_eval(preds=texts, gts=label)
             
             fwdend = time.time()
             print(f"{ii+1}/{len(test_loader)} cost:{(fwdend - fwdstart) / sum_labels} total:{sum_labels} FPS:{1 / ((fwdend - fwdstart) / sum_labels)} {maka_eval}")
+            
+            if ii>0 and ii % 16 == 0:
+                statis_res_save_path = f"{statis_res_save_dir}/{ii}.pt"
+                print(f"saveing: {statis_res_save_path}")
+                torch.save(statis, statis_res_save_path)
+                statis = []
         
-        cfgs  = self.all_cfgs
-        maka_eval_save_path = f"{cfgs['save_base']}/eval_res/{cfgs['save_name']}_{cfgs['db_name']}_{cfgs['iterkey']}.pt"
+
+        maka_eval_save_path = f"{cfgs['save_base']}/eval_res/{cfgs['save_name']}_{cfgs['db_name']}_{iterkey}.pt"
+        
         os.makedirs(os.path.dirname(maka_eval_save_path), exist_ok=True)
         print(f"saveing: {maka_eval_save_path}")
         torch.save(maka_eval, maka_eval_save_path)
+        
+        
         
         csv_file_path = f"{cfgs['save_base']}/eval_res_{cfgs['save_name']}_{cfgs['db_name']}.csv"
         os.makedirs(os.path.dirname(csv_file_path), exist_ok=True)
@@ -234,7 +259,7 @@ class NekoOdanEvalTasks(NekoAbstractEvalTasks):
         with open(csv_file_path, 'a') as f:
             # exp_name	ch_overid_num	feat	capacity	epoch	batch size	performance	CR	AR	ACC
             leven_details = f'"{len(maka_eval.total_ins_cs)}","{len(maka_eval.total_del_cs)}","{len(maka_eval.total_sub_cs)}"'
-            _content = f'"{cfgs["save_name"]}","{cfgs["ch_overid_num"]}","{cfgs["feat"]}","{cfgs["capacity"]}","{cfgs["iterkey"]}","32","{maka_eval.CR}","{maka_eval.AR}","{maka_eval.ACC}","{maka_eval.length_acc}",{leven_details},"{maka_eval}"'
+            _content = f'"{cfgs["save_name"]}","{cfgs["ch_overid_num"]}","{cfgs["feat"]}","{cfgs["capacity"]}","{iterkey}","{cfgs["bsize"]}","{maka_eval.CR}","{maka_eval.AR}","{maka_eval.ACC}","{maka_eval.length_acc}",{leven_details},"{maka_eval}"'
             f.write(f"{_content}\n")
         
         fwdend = time.time()

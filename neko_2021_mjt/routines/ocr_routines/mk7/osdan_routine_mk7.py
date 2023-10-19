@@ -1,6 +1,7 @@
 # using mk5 DTD
 import regex
 import torch.nn.functional
+import numpy as np
 
 from neko_2020nocr.dan.common.common import flatten_label
 from neko_2020nocr.dan.utils import LossCounter, NekoOsAttentionArCounter, NekoOswrAttentionArCounter
@@ -133,13 +134,18 @@ class NekoHDOS2cEvalRoutineCfmk7(NekoAbstractEvalRoutine):
         beams_ = []
         probs = []
         # terms = []
-
+        logits = []
         loss = 0
+        
         for i in range(len(preds)):
             nT, nB = out_emb.shape[0], out_emb.shape[1]
-            logits = preds[i](out_emb.reshape([nT * nB, -1]), proto, plabel).reshape([nT, nB, -1])
-            logits, _ = self.inflater.inflate(logits, pred_length)
-            choutput, prdt_prob = sampler.model.decode(logits, pred_length, proto, plabel, tdict)
+            _logits = preds[i](out_emb.reshape([nT * nB, -1]), proto, plabel).reshape([nT, nB, -1])
+            
+            
+            logits.append(np.transpose(_logits.cpu().numpy(),axes=(1,0,2)))
+            _logits, _ = self.inflater.inflate(_logits, pred_length)
+            
+            choutput, prdt_prob = sampler.model.decode(_logits, pred_length, proto, plabel, tdict)
             beams_.append(choutput)
             probs.append(prdt_prob)
             # loss_, terms_ = module_dict["losses"][i](proto, preds, label_flatten)
@@ -164,7 +170,13 @@ class NekoHDOS2cEvalRoutineCfmk7(NekoAbstractEvalRoutine):
             flabel.append(s)
         logger_dict["accr"].add_iter(beams_[0], pred_length, flabel)
         rdict = {}
-        return beams_[0], rdict, beams
+        
+        statis  = {}
+        # statis['out_emb'] = np.transpose(out_emb.cpu().numpy(),axes=(1,0,2))
+        statis['logits'] = logits
+        statis['label'] = label
+        
+        return beams_[0], rdict, beams,statis
 
         # A.detach().reshape(A.shape[0], A.shape[1], A.shape[2], A.shape[3]).sum(2)
 

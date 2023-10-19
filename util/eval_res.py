@@ -16,6 +16,9 @@ class MakaEval:
         self.length_right_n,self.length_acc = 0,0
         
         self.ACC, self.AR, self.CR =0, 0,0
+        
+        self.all_preds = []
+        self.all_gts = []
 
     def continue_eval(self, preds, gts, show_res=False):
         if not isinstance(preds,list):
@@ -23,7 +26,15 @@ class MakaEval:
         if not isinstance(gts,list):
             gts = [gts]
         
+        self.all_preds += preds
+        self.all_gts += gts
+        
         for pred, gt in zip(preds, gts):
+            
+            # 忽略#字符
+            pred = pred.replace("#", "")
+            gt = gt.replace("#", "")
+            
             self.total_len += len(gt)
             self.total_samples += 1
             if len(pred) == len(gt):

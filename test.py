@@ -17,33 +17,14 @@ def main(cfg: DictConfig) -> None:
     if len(cfg) == 0:
         raise Exception("you must specific a config name")
     
-    root = cfg['root']
+    _cfg = cfg
+    OmegaConf.resolve(_cfg)
+    print(OmegaConf.to_yaml(_cfg))
+    _cfg = OmegaConf.to_object(_cfg)
     
-    pths = glob.glob(f"{root}*.pth")
-    max_e = -1
-    for p in pths:
-        # print(p)
-        name = os.path.basename(p)
-        _r =  re.match(r".*?_E([\d]{1,}).pth", name)
-        if _r:
-            _n = int(_r.group(1))
-            if _n > max_e:
-                max_e = _n
-            print(_r,name)
+    _cfg['export_path'] = None
+    launchtest({},_cfg , only_conf=False)
     
-    iters_keys = [f"_E{x}" for x in range(0, max_e+1)]
-    iters_keys += ["lastest"]
-    print(iters_keys)
-    for iterkey in iters_keys:
-        _cfg = copy.deepcopy(cfg)
-        _cfg['export_path'] = None
-        _cfg['iterkey'] = iterkey
-        
-        OmegaConf.resolve(_cfg)
-        print(OmegaConf.to_yaml(_cfg))
-        
-        _cfg = OmegaConf.to_object(_cfg)
-        launchtest({},_cfg , only_conf=False)
 
 if __name__ == "__main__":
     main()

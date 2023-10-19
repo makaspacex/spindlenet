@@ -32,13 +32,27 @@
             "justMyCode": true
         },
         {
+            "name": "train",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/train.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "args": ["--config-name", "spindle_v9"],
+            "env": {
+                "PYTHONPATH":"${workspaceFolder}:$PYTHONPATH",
+                "CUDA_VISIBLE_DEVICES":"0"
+            },
+            "justMyCode": true
+        },
+        {
             "name": "test",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/test.py",
             "console": "integratedTerminal",
             "cwd": "${workspaceFolder}",
-            "args": ["--config-name", "spindle_ori_test"],
+            "args": ["--config-name", "spindle_ori_vs_v8","bsize=128","iterkey=_E127"],
             "env": {
                 "PYTHONPATH":"${workspaceFolder}:$PYTHONPATH",
                 "CUDA_VISIBLE_DEVICES":"0"

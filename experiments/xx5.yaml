@@ -15,9 +15,9 @@ defaults:
 
 # ===========================================================================================
 # 参数设定
-save_base: /home/izhangxm/mnt/hotssd/vsdf/runtime/OSTR_C2J_DTA_Only_MTH
+save_base: /home/izhangxm/Desktop/work/main/VSDF/runtime/OSTR_C2J_DTA_Only_MTH
 db_name: &db_name TKHMTH2200
-db_root: /home/izhangxm/mnt/hotssd/recdatassd
+db_root: /home/izhangxm/Desktop/work/main/VSDF/recdatassd
 bsize: 23
 save_name: ${db_name}_wide64_wo_qhb_feat512
 log_each: 200

@@ -29,5 +29,5 @@ close_set_benchmarks:
     routine: !!python/name:neko_2021_mjt.routines.ocr_routines.mk7.osdan_routine_mk7.NekoHDOS2cEvalRoutineCfmk7 ''
   temeta:
     case_sensitive: false
-    meta_path: /home/izhangxm/mnt/hotssd/recdatassd/TKHMTH2200_test_all/dict_test_all.pt
+    meta_path: /home/izhangxm/Desktop/work/main/VSDF/recdatassd/TKHMTH2200_test_all/dict_test_all.pt
   type: !!python/name:neko_2021_mjt.eval_tasks.dan_eval_tasks.NekoOdanEvalTasks ''

@@ -27,6 +27,10 @@ def make_init_layer_ln(outplanes):
     ln = nn.LayerNorm(outplanes)
     return {"bn": ln}
 
+def make_init_layer_Identity(outplanes):
+    ln = nn.Identity(outplanes)
+    return {"bn": ln}
+
 class InitLayer:
     def __init__(self, layer_dict, bn_dict):
         self.conv = layer_dict["conv"]
@@ -56,6 +60,14 @@ def make_block_ln(outplanes):
         "bn1": nn.LayerNorm(outplanes),
         "bn2": nn.LayerNorm(outplanes),
     }
+    
+
+def make_block_wobn_by_identiry(outplanes):
+    return {
+        "bn1": nn.Identity(outplanes),
+        "bn2": nn.Identity(outplanes),
+    }
+
 
 # assembles from dicts.
 # Generally this module does onw the modules---which means we do not save or load via it
@@ -95,6 +107,10 @@ def make_dowsample_layer_bn(expansion, planes):
 
 def make_dowsample_layer_norm(expansion, planes):
     return {"bn": nn.LayerNorm(planes * expansion)}
+
+
+def make_dowsample_identity(expansion, planes):
+    return {"bn": nn.Identity(planes * expansion)}
 
 
 def make_dowsample_layer(inplanes, expansion, planes, stride=1):
@@ -142,6 +158,18 @@ def make_body_layer_norm(inplanes, blocks, planes, expansion, stride=1):
         )
     for i in range(1, blocks):
         ret_weight["blocks"][str(i)] = make_block_ln(planes)
+    return ret_weight
+
+def make_body_wobn_by_identity(inplanes, blocks, planes, expansion, stride=1):
+    ret_weight = {}
+    ret_weight["blocks"] = {}
+    ret_weight["blocks"]["0"] = make_block_wobn_by_identiry(planes)
+    if stride != 1 or inplanes != planes * expansion:
+        ret_weight["blocks"]["0"]["downsample"] = make_dowsample_identity(
+            expansion, planes
+        )
+    for i in range(1, blocks):
+        ret_weight["blocks"][str(i)] = make_block_wobn_by_identiry(planes)
     return ret_weight
 
 

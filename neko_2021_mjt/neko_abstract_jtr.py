@@ -178,10 +178,10 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
             self.routine_names.append(rcfg)
             self.routines.append(routine_cfgs[rcfg]["routine"](routine_cfgs[rcfg]))
 
-    def set_val_tasks(self, val_cfgs):
+    def set_val_tasks(self, val_cfgs, all_cfgs):
         self.val_tasks = []
         for vk in val_cfgs:
-            self.val_tasks.append(val_cfgs[vk]["type"](None, None, self.modular_dict, val_cfgs[vk], 1000))
+            self.val_tasks.append(val_cfgs[vk]["type"](None, None, self.modular_dict, val_cfgs[vk], 1000, all_cfgs=all_cfgs))
 
     def set_dataloader(self, datacfg, vitr):
         self.joint_dataloader = datacfg["loadertype"](datacfg, vitr)
@@ -194,7 +194,7 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
         self.vitr = len(self.joint_dataloader)
         self.arm_modules(root, cfgs["modules"], cfgs["iterkey"])
         self.set_routines(cfgs["routine_cfgs"])
-        self.set_val_tasks(cfgs["tasks"])
+        self.set_val_tasks(cfgs["tasks"],all_cfgs=cfgs)
 
     def val(self, nEpoch, batch_idx, vdbg=None):
         self.eval_mode()
@@ -206,7 +206,7 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
             print(nEpoch, batch_idx)
             torch.cuda.empty_cache()
             with torch.no_grad():
-                vt.test(vdbg=vdbg)
+                vt.test(vdbg=vdbg,nEpoch=nEpoch)
         torch.cuda.empty_cache()
         self.train_mode()
 
@@ -342,7 +342,7 @@ class NekoAbstractModularJointTraining(NekoModuleSet):
 class NekoAbstractModularJointEval(NekoModuleSet):
     def __init__(self, cfgs, miter):
 
-        self.ori_cfgs = copy.deepcopy(cfgs)
+        # self.ori_cfgs = copy.deepcopy(cfgs)
 
         root = cfgs["root"]
         # set to "latest" for resuming, whatever does not make sense to start fresh.
@@ -375,7 +375,10 @@ class NekoAbstractModularJointEval(NekoModuleSet):
 
     def val(self, nEpoch, batch_idx, rot=0):
         self.eval_mode()
+        from neko_2021_mjt.eval_tasks.dan_eval_tasks import NekoOdanEvalTasks
+        
         for vt in self.val_tasks:
+            vt:NekoOdanEvalTasks = vt
             print(nEpoch, batch_idx)
             torch.cuda.empty_cache()
             with torch.no_grad():
